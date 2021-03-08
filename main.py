@@ -62,7 +62,6 @@ worldselect.loadAssets()
 
 # Run until the user asks to quit
 while running:
-
     # Display the different menus according to state.
     if state == 0:
         menu.display()
