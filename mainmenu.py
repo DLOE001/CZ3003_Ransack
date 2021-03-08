@@ -111,7 +111,7 @@ class MainMenu:
         self.background1_position = [0,0]
         self.background2_position = [262,251]
         self.popup_position = [403,326]
-        
+     
         self.button1_position = self.button1_image.get_rect().move(360, 324)
         self.button2_position = self.button2_image.get_rect().move(569, 324)
         self.button3_position = self.button3_image.get_rect().move(770, 324)
