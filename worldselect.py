@@ -87,7 +87,7 @@ class WorldSelect:
             clicksound()
             return 0
         elif self.button2_position.collidepoint(pygame.mouse.get_pos()):
-            print("Query Button Pressed!")
+            print("World Button Pressed!")
             clicksound()
             return 1
         else:
