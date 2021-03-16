@@ -18,59 +18,57 @@ class Quiz:
         self.answers.append(dummy3)
         random.shuffle(self.answers)
         self.completed = False
-        # Text1 is for the question
-        # Text2 is for the answer A
-        # Text3 is for the answer B
-        # Text4 is for the answer C
-        # Text5 is for the answer D
+        # answer1 is for the answer A
+        # answer2 is for the answer B
+        # answer3 is for the answer C
+        # answer4 is for the answer D
         # Background1 is for the background
         #Texts
-        self.text1 = pygame.font.SysFont('Broadway', 50).render(self.question, True, (0, 0, 0))
-        self.text1_position = [120,620]
-        self.text2 = pygame.font.SysFont('Arial', 20, True).render("A) " + self.answers[0], True, (0, 0, 0))
-        self.text2_position = self.text2.get_rect().move(120,815)
-        self.text3 = pygame.font.SysFont('Arial', 20, True).render("B) " + self.answers[1], True, (0, 0, 0))
-        self.text3_position = self.text3.get_rect().move(self.text2_position.right + 150,815)
-        self.text4 = pygame.font.SysFont('Arial', 20, True).render("C) " + self.answers[2], True, (0, 0, 0))
-        self.text4_position = self.text4.get_rect().move(self.text3_position.right + 150,815)
-        self.text5 = pygame.font.SysFont('Arial', 20, True).render("D) " + self.answers[3], True, (0, 0, 0))
-        self.text5_position = self.text5.get_rect().move(self.text4_position.right + 150,815)
+        self.answer1 = pygame.font.SysFont('Arial', 20, True).render("A) " + self.answers[0], True, (0, 0, 0))
+        self.answer1_rect = self.answer1.get_rect().move(120,815)
+        self.answer2 = pygame.font.SysFont('Arial', 20, True).render("B) " + self.answers[1], True, (0, 0, 0))
+        self.answer2_rect = self.answer2.get_rect().move(self.answer1_rect.right + 150,815)
+        self.answer3 = pygame.font.SysFont('Arial', 20, True).render("C) " + self.answers[2], True, (0, 0, 0))
+        self.answer3_rect = self.answer3.get_rect().move(self.answer2_rect.right + 150,815)
+        self.answer4 = pygame.font.SysFont('Arial', 20, True).render("D) " + self.answers[3], True, (0, 0, 0))
+        self.answer4_rect = self.answer4.get_rect().move(self.answer3_rect.right + 150,815)
         #Background
         self.background1_image = pygame.image.load("quiz.png")
         self.background1_position = [0,0]
 
-        self.box_rect = pygame.Rect(102, 595, 1112, 806) 
+        self.box_rect = pygame.Rect(102, 595, 1000, 806) 
 
-    def draw(self, window, canvas):
+    def draw(self, canvas):
         # Copy of background image
         canvas.blit(self.background1_image, self.background1_position)
+        
         #Copy text
-        canvas.blit(self.text1, self.text1_position)
-        canvas.blit(self.text2, self.text2_position)
-        canvas.blit(self.text3, self.text3_position)
-        canvas.blit(self.text4, self.text4_position)
-        canvas.blit(self.text5, self.text5_position)
+        self.drawWrappedText(canvas, self.question, (0, 0, 0), self.box_rect, pygame.font.SysFont('Broadway', 50))
+        canvas.blit(self.answer1, self.answer1_rect)
+        canvas.blit(self.answer2, self.answer2_rect)
+        canvas.blit(self.answer3, self.answer3_rect)
+        canvas.blit(self.answer4, self.answer4_rect)
 
     def attempt(self, player):
-        if self.text2_position.collidepoint(pygame.mouse.get_pos()):
+        if self.answer1_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[0] == self.answer:
                 self.completed = True
                 player.monster.dead = True
             else:
                 player.playerDie()
-        elif self.text3_position.collidepoint(pygame.mouse.get_pos()):
+        elif self.answer2_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[1] == self.answer:
                 self.completed = True
                 player.monster.dead = True
             else:
                 player.playerDie()
-        elif self.text4_position.collidepoint(pygame.mouse.get_pos()):
+        elif self.answer3_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[2] == self.answer:
                 self.completed = True
                 player.monster.dead = True
             else:
                 player.playerDie()
-        elif self.text5_position.collidepoint(pygame.mouse.get_pos()):
+        elif self.answer4_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[3] == self.answer:
                 self.completed = True
                 player.monster.dead = True
@@ -80,7 +78,43 @@ class Quiz:
             pass
         player.monster = None
 
-    def display_message(surface, color, rect, font_name, size, text, xy, aa=False, bkg=None):
-        font = pygame.font.Font(font_name, size)
-        rendered_text = font.render(text, aa, (color))
-        screen.blit(rendered_text,(xy))
+    # draw some text into an area of a surface
+    # automatically wraps words
+    # returns any text that didn't get blitted
+    def drawWrappedText(self, surface, text, color, rect, font, aa=True, bkg=None):
+        rect = Rect(rect)
+        y = rect.top
+        lineSpacing = -2
+
+        # get the height of the font
+        fontHeight = font.size("Tg")[1]
+
+        while text:
+            i = 1
+
+            # determine if the row of text will be outside our area
+            if y + fontHeight > rect.bottom:
+                break
+
+            # determine maximum width of line
+            while font.size(text[:i])[0] < rect.width and i < len(text):
+                i += 1
+
+            # if we've wrapped the text, then adjust the wrap to the last word      
+            if i < len(text): 
+                i = text.rfind(" ", 0, i) + 1
+
+            # render the line and blit it to the surface
+            if bkg:
+                image = font.render(text[:i], 1, color, bkg)
+                image.set_colorkey(bkg)
+            else:
+                image = font.render(text[:i], aa, color)
+
+            surface.blit(image, (rect.left, y))
+            y += fontHeight + lineSpacing
+
+            # remove the text we just blitted
+            text = text[i:]
+
+        return text

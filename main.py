@@ -16,7 +16,7 @@ TARGET_FPS = 60
 ################################# LOAD SPRITESHEET PLAYER, MONSTERS AND QUIZ ###################################
 level1spritesheet = Spritesheet('level1spritesheet.png')
 player = Player()
-quiz1 = Quiz("Who is the leader?", "Daniel", "Tom", "Nicklaus", "Alex")
+quiz1 = Quiz("What is the name of our magnificent leader?", "Daniel", "Tom", "Nicklaus", "Alex")
 monster1 = Monster(750, 300, quiz1)
 quiz2 = Quiz("What is the name of our game?", "EyeLearnSE", "Mario", "Box Rush", "Final Fantasy")
 monster2 = Monster(225, 300, quiz2)
@@ -84,7 +84,7 @@ while running:
                 map.load_map()
         doorchanged = True
     if player.monster != None:
-        player.monster.quiz.draw(window, canvas)
+        player.monster.quiz.draw(canvas)
     window.blit(canvas, (0,0))
     pygame.display.update()
 
