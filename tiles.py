@@ -1,7 +1,7 @@
 import pygame, csv, os
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, spritesheet, flip, cancollide, hazard):
+    def __init__(self, image, x, y, spritesheet, flip, cancollide, hazard, finish):
         pygame.sprite.Sprite.__init__(self)
         if flip:
             self.image = pygame.transform.flip(spritesheet.parse_sprite(image), True, False)
@@ -11,6 +11,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = x, y
         self.cancollide = cancollide
         self.hazard = hazard
+        self.finish = finish
 
     def draw(self, surface):
         surface.blit(self.image, (self.rect.x, self.rect.y))
@@ -48,25 +49,28 @@ class TileMap():
             x = 0
             for tile in row:
                 if self.spritesheet.filename == 'level1spritesheet.png':
+                    # Finish Tile
+                    if tile == '29':
+                        tiles.append(Tile('sprite30', x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, False, True))
                     # Spike(Let player fall through)
-                    if tile == '49':
-                        tiles.append(Tile('sprite50', x * self.tile_size, y * self.tile_size, self.spritesheet, False, False, False))
+                    elif tile == '49':
+                        tiles.append(Tile('sprite50', x * self.tile_size, y * self.tile_size, self.spritesheet, False, False, False, False))
                     # Dirt(Set as hazard, below spike)
                     elif tile == '100':
-                        tiles.append(Tile('sprite101', x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, True))
+                        tiles.append(Tile('sprite101', x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, True, False))
                     # Water(Hazard)
                     elif tile == '93':
-                        tiles.append(Tile('sprite94', x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, True))
+                        tiles.append(Tile('sprite94', x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, True, False))
                     # Sign(Not collidable)
                     elif tile == '141':
-                        tiles.append(Tile('sprite142', x * self.tile_size, y * self.tile_size, self.spritesheet, False, False, False))
+                        tiles.append(Tile('sprite142', x * self.tile_size, y * self.tile_size, self.spritesheet, False, False, False, False))
                     # Flipped Sign
                     elif tile == '160':
-                        tiles.append(Tile('sprite142', x * self.tile_size, y * self.tile_size, self.spritesheet, True, False, False))
+                        tiles.append(Tile('sprite142', x * self.tile_size, y * self.tile_size, self.spritesheet, True, False, False, False))
                     elif tile != '-1':
                         imagestr = 'sprite'
                         imagestr += str(int(tile)+1)
-                        tiles.append(Tile(imagestr, x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, False))
+                        tiles.append(Tile(imagestr, x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, False, False))
                 # Move to next tile in current row
                 x += 1
 
