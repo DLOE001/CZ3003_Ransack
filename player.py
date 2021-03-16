@@ -113,6 +113,8 @@ class Player(pygame.sprite.Sprite):
             if monster.dead == False:
                 self.monster = monster
                 self.LEFT_KEY, self.RIGHT_KEY = False, False
+                self.velocity.x = 0
+                self.velocity.y = 0
 
     def playerDie(self):
         self.position.x = 0
