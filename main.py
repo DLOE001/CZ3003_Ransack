@@ -37,12 +37,17 @@ doorchanged = False
 player.position.x, player.position.y = 0, 800
 ################################# GAME LOOP ##########################
 while running:
+    windowmoved = False
     dt = clock.tick(60) * .001 * TARGET_FPS
     ################################# CHECK PLAYER INPUT #################################
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
+
+        if event.type == pygame.VIDEOEXPOSE:
+            player.acceleration = pygame.math.Vector2(0, 0)
+            windowmoved = True
+        elif event.type == pygame.KEYDOWN:
             if player.monster == None:
                 if event.key == pygame.K_LEFT:
                     player.LEFT_KEY = True
@@ -68,6 +73,8 @@ while running:
 
     ################################# UPDATE/ Animate SPRITE #################################
     player.update(dt, map.tiles, monsters)
+    if windowmoved == False:
+        player.acceleration = pygame.math.Vector2(0, player.gravity)
     ################################# UPDATE WINDOW AND DISPLAY #################################
     canvas.blit(background1_image, [0,0])
     map.draw_map(canvas)
