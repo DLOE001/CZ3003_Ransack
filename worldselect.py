@@ -49,15 +49,15 @@ class WorldSelect:
         self.text1_position = [364,8]
 
         # Graphics
-        self.background1_image = pygame.image.load("images/wstest.png")
-        self.button1_image = pygame.image.load("images/w18.png")
-        self.button2_image = pygame.image.load("images/w20.png")
+        self.background1_image = pygame.image.load("images/student_worldselect.jpg")
+        self.button1_image = pygame.image.load("images/w2.png")
+        self.button2_image = pygame.image.load("images/w2.png")
 
         # Graphics Positions
         self.background1_position = [0,0]
 
         self.button1_position = self.button1_image.get_rect().move(17, 23)
-        self.button2_position = self.button2_image.get_rect().move(1112, 13)
+        self.button2_position = self.button2_image.get_rect().move(280, 423)
 
     # Main Menu Display
     def display(self):
@@ -71,9 +71,15 @@ class WorldSelect:
         self.display_surface.blit(self.button1_image, self.button1_position)
         self.display_surface.blit(self.button2_image, self.button2_position)
 
+        '''
         # Mouseover Animation
         mouseover(self.button1_image, self.button1_position)
         mouseover(self.button2_image, self.button2_position)
+        '''
+
+        # Hide all buttons 
+        self.button1_image.set_alpha(0)
+        self.button2_image.set_alpha(0)
 
     # Main Menu Actions
     def action(self):
