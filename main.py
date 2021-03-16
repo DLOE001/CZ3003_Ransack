@@ -32,6 +32,7 @@ monsters.append(monster4)
 #################################### LOAD THE LEVEL #######################################
 background1_image = pygame.image.load('single_background.png')
 map = TileMap('level1.csv', level1spritesheet)
+doorchanged = False
 #monsters = TileMap('monster.csv', monsterspritesheet)
 player.position.x, player.position.y = 0, 800
 ################################# GAME LOOP ##########################
@@ -71,8 +72,17 @@ while running:
     canvas.blit(background1_image, [0,0])
     map.draw_map(canvas)
     player.draw(canvas)
+    allmonstersdead = True
     for monster in monsters:
+        if monster.dead == False:
+            allmonstersdead = False
         monster.draw(canvas)
+    if allmonstersdead and doorchanged == False:
+        for tile in map.tiles:
+            if tile.finish:
+                tile.image = Spritesheet('level1spritesheet.png').parse_sprite('sprite32')
+                map.load_map()
+        doorchanged = True
     if player.monster != None:
         player.monster.quiz.draw(window, canvas)
     window.blit(canvas, (0,0))
