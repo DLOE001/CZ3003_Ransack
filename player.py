@@ -73,6 +73,9 @@ class Player(pygame.sprite.Sprite):
                 if tile.cancollide:
                     if tile.hazard:
                         self.playerDie()
+                    elif tile.finish:
+                        pygame.quit()
+                        quit()
                     else:
                         if self.velocity.x > 0:  # Hit tile moving right
                             self.position.x = tile.rect.left - self.rect.w
@@ -89,6 +92,9 @@ class Player(pygame.sprite.Sprite):
             if tile.cancollide:
                 if tile.hazard:
                     self.playerDie()
+                elif tile.finish:
+                    pygame.quit()
+                    quit()
                 else:
                     if self.velocity.y > 0:  # Hit tile from the top
                         self.on_ground = True
