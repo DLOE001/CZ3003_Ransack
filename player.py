@@ -12,10 +12,13 @@ class Player(pygame.sprite.Sprite):
         self.position, self.velocity = pygame.math.Vector2(0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
         self.monster = None
+        self.hearts = 3
 
+    #Draws player on the screen
     def draw(self, display):
         display.blit(self.image, (self.rect.x, self.rect.y))
 
+    #Handles player movements and collisions
     def update(self, dt, tiles, monsters):
         self.horizontal_movement(dt)
         self.checkCollisionsx(tiles)
@@ -23,6 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.checkCollisionsy(tiles)
         self.checkMonsterCollision(monsters)
 
+    #Handle player horizontal movement
     def horizontal_movement(self, dt):
         self.acceleration.x = 0
         if self.LEFT_KEY:
@@ -36,6 +40,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = self.position.x
         self.rect.clamp_ip((0, 0), (1200, 900))
 
+    #Handle player vertical movement
     def vertical_movement(self, dt):
         self.velocity.y += self.acceleration.y * dt
         if self.velocity.y > 7: self.velocity.y = 7
@@ -43,17 +48,19 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom = self.position.y
         self.rect.clamp_ip((0, 0), (1200, 900))
 
-
+    #Limits the velocity of the player
     def limit_velocity(self, max_vel):
         self.velocity.x = max(-max_vel, min(self.velocity.x, max_vel))
         if abs(self.velocity.x) < .01: self.velocity.x = 0 
 
+    #Allows player to jump
     def jump(self):
         if self.on_ground:
             self.is_jumping = True
             self.velocity.y -= 9
             self.on_ground = False
 
+    #Check for tile collisions with player
     def get_hits(self, tiles):
         hits = []
         for tile in tiles:
@@ -61,6 +68,7 @@ class Player(pygame.sprite.Sprite):
                 hits.append(tile)
         return hits
 
+    #Handle tile collisions against player x axis
     def checkCollisionsx(self, tiles):
         if self.position.x < 0 or self.position.x > 1200 - self.rect.w:
             if self.velocity.x > 0:  # Hit wall moving right
@@ -74,7 +82,10 @@ class Player(pygame.sprite.Sprite):
             for tile in collisions:
                 if tile.cancollide:
                     if tile.hazard:
-                        self.playerDie()
+                        if tile.tileid == '100':
+                            self.playerRespawn2()
+                        elif tile.tileid == '93':
+                            self.playerRespawn3()
                     elif tile.finish:
                         pygame.quit()
                         quit()
@@ -86,6 +97,7 @@ class Player(pygame.sprite.Sprite):
                             self.position.x = tile.rect.right
                             self.rect.x = self.position.x
 
+    #Handle tile collisions against player y axis
     def checkCollisionsy(self, tiles):
         self.on_ground = False
         self.rect.bottom += 1
@@ -93,7 +105,10 @@ class Player(pygame.sprite.Sprite):
         for tile in collisions:
             if tile.cancollide:
                 if tile.hazard:
-                    self.playerDie()
+                    if tile.tileid == '100':
+                        self.playerRespawn2()
+                    elif tile.tileid == '93':
+                        self.playerRespawn3()
                 elif tile.finish:
                     pygame.quit()
                     quit()
@@ -109,6 +124,7 @@ class Player(pygame.sprite.Sprite):
                         self.position.y = tile.rect.bottom + self.rect.h
                         self.rect.bottom = self.position.y
 
+    #Check if player collided with a monster
     def checkMonsterCollision(self, monsters):
         collisions = self.get_hits(monsters)
         for monster in collisions:
@@ -118,8 +134,24 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.x = 0
                 self.velocity.y = 0
 
-    def playerDie(self):
+    #LEVEL 1 SPAWN POINTS
+    #Origin spawn point
+    def playerRespawn1(self):
         self.position.x = 0
         self.rect.x = self.position.x
         self.position.y = 800
+        self.rect.y = self.position.y
+
+    #When player dies to spike
+    def playerRespawn2(self):
+        self.position.x = 375
+        self.rect.x = self.position.x
+        self.position.y = 575
+        self.rect.y = self.position.y
+
+    #When player dies to water
+    def playerRespawn3(self):
+        self.position.x = 0
+        self.rect.x = self.position.x
+        self.position.y = 750
         self.rect.y = self.position.y
