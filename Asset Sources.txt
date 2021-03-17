@@ -6,3 +6,6 @@ https://master-blazter.itch.io/ghostspritepack
 
 Dungeon Door
 https://opengameart.org/content/dungeon-door
+
+Heart
+https://opengameart.org/content/heart-2
