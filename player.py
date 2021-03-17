@@ -17,9 +17,12 @@ class Player(pygame.sprite.Sprite):
         print("Current Score:" + str(self.score))
         print("Player Hearts:" + str(self.hearts))
 
-    #Draws player on the screen
+    #Draws player and player stats on the screen
     def draw(self, display):
         display.blit(self.image, (self.rect.x, self.rect.y))
+        self.scoreLabel = pygame.font.SysFont('Arial', 50, True).render("Score: " + str(self.score), True, (0, 0, 0))
+        self.scoreLabel_rect = self.scoreLabel.get_rect().move(0,0)
+        display.blit(self.scoreLabel, self.scoreLabel_rect) 
 
     #Handles player movements and collisions
     def update(self, dt, tiles, monsters):
