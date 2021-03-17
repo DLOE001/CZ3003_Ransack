@@ -13,6 +13,8 @@ class Player(pygame.sprite.Sprite):
         self.acceleration = pygame.math.Vector2(0, self.gravity)
         self.monster = None
         self.hearts = 3
+        self.score = 0
+        print("Player Hearts:" + str(self.hearts))
 
     #Draws player on the screen
     def draw(self, display):
@@ -20,6 +22,7 @@ class Player(pygame.sprite.Sprite):
 
     #Handles player movements and collisions
     def update(self, dt, tiles, monsters):
+        self.heartsChecker(monsters)
         self.horizontal_movement(dt)
         self.checkCollisionsx(tiles)
         self.vertical_movement(dt)
@@ -80,10 +83,13 @@ class Player(pygame.sprite.Sprite):
             for tile in collisions:
                 if tile.cancollide:
                     if tile.hazard:
+                        self.hearts -= 1
+                        print("Player Hearts Left:" + str(self.hearts))
                         if tile.tileid == '100':
                             self.playerRespawn2()
                         elif tile.tileid == '93':
                             self.playerRespawn3()
+                        break
                     elif tile.finish:
                         pygame.quit()
                         quit()
@@ -103,10 +109,13 @@ class Player(pygame.sprite.Sprite):
         for tile in collisions:
             if tile.cancollide:
                 if tile.hazard:
+                    self.hearts -= 1
+                    print("Player Hearts Left:" + str(self.hearts))
                     if tile.tileid == '100':
                         self.playerRespawn2()
                     elif tile.tileid == '93':
                         self.playerRespawn3()
+                    break
                 elif tile.finish:
                     pygame.quit()
                     quit()
@@ -132,16 +141,31 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.x = 0
                 self.velocity.y = 0
 
+    #Check if player is dead and handles on-death actions
+    def heartsChecker(self, monsters):
+        if self.hearts <= 0:
+            self.playerRespawn1()
+            self.score = 0
+            self.hearts = 3
+            for monster in monsters:
+                monster.dead = False
+            print("Player Hearts:" + str(self.hearts))
+        
+
     #LEVEL 1 SPAWN POINTS
     #Origin spawn point
     def playerRespawn1(self):
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.LEFT_KEY, self.RIGHT_KEY = False, False
         self.position.x = 0
         self.rect.x = self.position.x
-        self.position.y = 800
+        self.position.y = 825
         self.rect.y = self.position.y
 
     #When player dies to spike
     def playerRespawn2(self):
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.LEFT_KEY, self.RIGHT_KEY = False, False
         self.position.x = 375
         self.rect.x = self.position.x
         self.position.y = 525
@@ -149,6 +173,8 @@ class Player(pygame.sprite.Sprite):
 
     #When player dies to water
     def playerRespawn3(self):
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.LEFT_KEY, self.RIGHT_KEY = False, False
         self.position.x = 675
         self.rect.x = self.position.x
         self.position.y = 525

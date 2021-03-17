@@ -55,25 +55,29 @@ class Quiz:
                 self.completed = True
                 player.monster.dead = True
             else:
-                player.playerDie()
+                player.hearts -= 1
+                print("Player Hearts Left:" + str(player.hearts))
         elif self.answer2_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[1] == self.answer:
                 self.completed = True
                 player.monster.dead = True
             else:
-                player.playerDie()
+                player.hearts -= 1
+                print("Player Hearts Left:" + str(player.hearts))
         elif self.answer3_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[2] == self.answer:
                 self.completed = True
                 player.monster.dead = True
             else:
-                player.playerDie()
+                player.hearts -= 1
+                print("Player Hearts Left:" + str(player.hearts))
         elif self.answer4_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[3] == self.answer:
                 self.completed = True
                 player.monster.dead = True
             else:
-                player.playerDie()
+                player.hearts -= 1
+                print("Player Hearts Left:" + str(player.hearts))
         else:
             pass
         player.monster = None
