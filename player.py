@@ -151,7 +151,7 @@ class Player(pygame.sprite.Sprite):
 
     #When player dies to water
     def playerRespawn3(self):
-        self.position.x = 0
+        self.position.x = 375
         self.rect.x = self.position.x
         self.position.y = 750
         self.rect.y = self.position.y
