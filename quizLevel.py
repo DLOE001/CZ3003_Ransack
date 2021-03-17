@@ -42,7 +42,6 @@ class QuizLevel:
         background1_image = pygame.image.load('images/single_background.png')
         map = TileMap('level1.csv', level1spritesheet)
         doorchanged = False
-        #monsters = TileMap('monster.csv', monsterspritesheet)
         player.position.x, player.position.y = 0, 800
         ################################# GAME LOOP ##########################
         while running:
@@ -82,9 +81,10 @@ class QuizLevel:
         
             ################################# UPDATE/ Animate SPRITE #################################
             player.update(dt, map.tiles, monsters)
+            # Set back Y axis acceleration when game window is is not moving
             if windowmoved == False:
-                player.acceleration = pygame.math.Vector2(0, player.gravity)
-            ################################# UPDATE WINDOW AND DISPLAY #################################
+                player.acceleration.y = player.gravity
+            ################################# DRAW SURFACE OBJECTS #################################
             canvas.blit(background1_image, [0,0])
             map.draw_map(canvas)
             player.draw(canvas)
@@ -101,6 +101,7 @@ class QuizLevel:
                 doorchanged = True
             if player.monster != None:
                 player.monster.quiz.draw(canvas)
+            ############################ UPDATE WINDOW AND DISPLAY ###############################
             window.blit(canvas, (0,0))
             pygame.display.update()
         
