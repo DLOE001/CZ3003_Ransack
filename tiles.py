@@ -52,7 +52,7 @@ class TileMap():
                 if self.spritesheet.filename == 'level1spritesheet.png':
                     # Finish Tile
                     if tile == '29':
-                        tiles.append(Tile('29','sprite30', x * self.tile_size, y * self.tile_size, self.spritesheet, False, True, False, True))
+                        tiles.append(Tile('29','sprite30', x * self.tile_size, y * self.tile_size, self.spritesheet, False, False, False, True))
                     # Spike(Let player fall through)
                     elif tile == '49':
                         tiles.append(Tile('49','sprite50', x * self.tile_size, y * self.tile_size, self.spritesheet, False, False, False, False))

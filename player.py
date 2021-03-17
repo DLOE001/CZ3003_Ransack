@@ -1,5 +1,25 @@
+# Brings in all the pygame keywords we need
+from pygame.locals import *
+
+# Import and initialize the pygame library
 import pygame
+pygame.mixer.pre_init(44100, -16, 1, 512)
+pygame.init()
+pygame.font.init()
+
+# Import Spritesheet Class
 from spritesheet import Spritesheet
+
+# Mouseover animation(Makes the image transparent if cursor is touching)
+def mouseover(img, pos):
+    if pos.collidepoint(pygame.mouse.get_pos()):
+        img.set_alpha(50)
+    else:
+        img.set_alpha(255)
+
+# Click sound
+def clicksound():
+    pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio/Click.wav'), maxtime=2000)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -14,19 +34,59 @@ class Player(pygame.sprite.Sprite):
         self.monster = None
         self.hearts = 3
         self.score = 0
+        self.finished = False
+        #Graphics
         self.heartImage = pygame.image.load("images/heart.png")
+        self.victoryImage = pygame.image.load("images/victory.png")
+        self.starImage = pygame.image.load("images/star.png")
+        self.nostarImage = pygame.image.load("images/nostar.png")
+        self.okButton = pygame.image.load("images/ok.png")
+        #Graphics position(For static graphics)
+        self.victoryImage_position = (0,0)
+        self.okButton_rect = self.okButton.get_rect().move(572, 584)
         print("Current Score:" + str(self.score))
         print("Player Hearts:" + str(self.hearts))
 
     #Draws player and player stats on the screen
     def draw(self, display):
         self.scoreLabel = pygame.font.SysFont('Arial', 50, True).render("Score: " + str(self.score), True, (0, 0, 0))
-        self.scoreLabel_position = (0, 0)
+        self.scoreLabel_position = (0, 50)
         for i in range(self.hearts):
-            self.heartImage_position = (i*50, 50)
+            self.heartImage_position = (i*50, 0)
             display.blit(self.heartImage, self.heartImage_position)
         display.blit(self.scoreLabel, self.scoreLabel_position)
         display.blit(self.image, (self.rect.x, self.rect.y))
+
+    #Display victory popup
+    def victoryDisplay(self, display):
+        mouseover(self.okButton, self.okButton_rect)
+        display.blit(self.victoryImage, self.victoryImage_position)
+        display.blit(self.okButton, self.okButton_rect)
+        self.finalScore = pygame.font.SysFont('Arial', 50, True).render("Score: " + str(self.score), True, (0, 0, 0))
+        self.finalScore_position = (495, 265)
+        display.blit(self.finalScore, self.finalScore_position)
+        if self.score == 300:
+            for i in range(3):
+                self.starImage_position = (i*256+276, 390)
+                display.blit(self.starImage, self.starImage_position)
+        elif self.score == 275:
+            for i in range(2):
+                self.starImage_position = (i*256+276, 390)
+                display.blit(self.starImage, self.starImage_position)
+            self.nostarImage_position = (2*256+276, 390)
+            display.blit(self.nostarImage, self.nostarImage_position)
+        elif self.score == 250:
+            self.starImage_position = (276, 390)
+            display.blit(self.starImage, self.starImage_position)
+            for i in range(2):
+                self.nostarImage_position = ((i+1)*256+276, 390)
+                display.blit(self.nostarImage, self.nostarImage_position)
+        
+    #Handle victory popup
+    def victoryAction(self):
+        if self.okButton_rect.collidepoint(pygame.mouse.get_pos()):
+            print("OK button Clicked!")
+            clicksound()
 
     #Handles player movements and collisions
     def update(self, dt, tiles, monsters):
@@ -89,7 +149,11 @@ class Player(pygame.sprite.Sprite):
         else:
             collisions = self.get_hits(tiles)
             for tile in collisions:
-                if tile.cancollide:
+                if tile.finish:
+                    self.acceleration = pygame.math.Vector2(0, 0)
+                    self.freezePlayer()
+                    self.finished = True
+                elif tile.cancollide:
                     if tile.hazard:
                         self.hearts -= 1
                         print("Player Hearts Left:" + str(self.hearts))
@@ -99,8 +163,8 @@ class Player(pygame.sprite.Sprite):
                             self.playerRespawn3()
                         break
                     elif tile.finish:
-                        pygame.quit()
-                        quit()
+                        self.freezePlayer()
+                        self.finished = True
                     else:
                         if self.velocity.x > 0:  # Hit tile moving right
                             self.position.x = tile.rect.left - self.rect.w
@@ -115,7 +179,11 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom += 1
         collisions = self.get_hits(tiles)
         for tile in collisions:
-            if tile.cancollide:
+            if tile.finish:
+                self.acceleration = pygame.math.Vector2(0, 0)
+                self.freezePlayer()
+                self.finished = True
+            elif tile.cancollide:
                 if tile.hazard:
                     self.hearts -= 1
                     print("Player Hearts Left:" + str(self.hearts))
@@ -124,9 +192,6 @@ class Player(pygame.sprite.Sprite):
                     elif tile.tileid == '93':
                         self.playerRespawn3()
                     break
-                elif tile.finish:
-                    pygame.quit()
-                    quit()
                 else:
                     if self.velocity.y > 0:  # Hit tile from the top
                         self.on_ground = True
@@ -145,9 +210,7 @@ class Player(pygame.sprite.Sprite):
         for monster in collisions:
             if monster.dead == False:
                 self.monster = monster
-                self.LEFT_KEY, self.RIGHT_KEY = False, False
-                self.velocity.x = 0
-                self.velocity.y = 0
+                self.freezePlayer()
 
     #Check if player is dead and handles on-death actions
     def heartsChecker(self, monsters):
@@ -165,8 +228,7 @@ class Player(pygame.sprite.Sprite):
     #LEVEL 1 SPAWN POINTS
     #Origin spawn point
     def playerRespawn1(self):
-        self.velocity = pygame.math.Vector2(0, 0)
-        self.LEFT_KEY, self.RIGHT_KEY = False, False
+        self.freezePlayer()
         self.position.x = 0
         self.rect.x = self.position.x
         self.position.y = 825
@@ -174,8 +236,7 @@ class Player(pygame.sprite.Sprite):
 
     #When player dies to spike
     def playerRespawn2(self):
-        self.velocity = pygame.math.Vector2(0, 0)
-        self.LEFT_KEY, self.RIGHT_KEY = False, False
+        self.freezePlayer()
         self.position.x = 375
         self.rect.x = self.position.x
         self.position.y = 525
@@ -183,9 +244,12 @@ class Player(pygame.sprite.Sprite):
 
     #When player dies to water
     def playerRespawn3(self):
-        self.velocity = pygame.math.Vector2(0, 0)
-        self.LEFT_KEY, self.RIGHT_KEY = False, False
+        self.freezePlayer()
         self.position.x = 675
         self.rect.x = self.position.x
         self.position.y = 525
         self.rect.y = self.position.y
+
+    def freezePlayer(self):
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.LEFT_KEY, self.RIGHT_KEY = False, False

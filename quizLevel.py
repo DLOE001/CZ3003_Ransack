@@ -78,6 +78,8 @@ class QuizLevel:
                 if event.type == MOUSEBUTTONDOWN:
                     if player.monster != None:
                         player.monster.quiz.attempt(player)
+                    elif player.finished:
+                        player.victoryAction()
         
             ################################# UPDATE/ Animate SPRITE #################################
             player.update(dt, map.tiles, monsters)
@@ -101,6 +103,8 @@ class QuizLevel:
                 doorchanged = True
             if player.monster != None:
                 player.monster.quiz.draw(canvas)
+            elif player.finished:
+                player.victoryDisplay(canvas)
             ############################ UPDATE WINDOW AND DISPLAY ###############################
             window.blit(canvas, (0,0))
             pygame.display.update()
