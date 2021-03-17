@@ -38,7 +38,6 @@ class Player(pygame.sprite.Sprite):
         self.limit_velocity(4)
         self.position.x += self.velocity.x * dt + (self.acceleration.x * .5) * (dt * dt)
         self.rect.x = self.position.x
-        self.rect.clamp_ip((0, 0), (1200, 900))
 
     #Handle player vertical movement
     def vertical_movement(self, dt):
@@ -46,7 +45,6 @@ class Player(pygame.sprite.Sprite):
         if self.velocity.y > 7: self.velocity.y = 7
         self.position.y += self.velocity.y * dt + (self.acceleration.y * .5) * (dt * dt)
         self.rect.bottom = self.position.y
-        self.rect.clamp_ip((0, 0), (1200, 900))
 
     #Limits the velocity of the player
     def limit_velocity(self, max_vel):
