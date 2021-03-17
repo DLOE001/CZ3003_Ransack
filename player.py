@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.monster = None
         self.hearts = 3
         self.score = 0
+        print("Current Score:" + str(self.score))
         print("Player Hearts:" + str(self.hearts))
 
     #Draws player on the screen
@@ -149,6 +150,8 @@ class Player(pygame.sprite.Sprite):
             self.hearts = 3
             for monster in monsters:
                 monster.dead = False
+            print("YOU DIED")
+            print("Current Score:" + str(self.score))
             print("Player Hearts:" + str(self.hearts))
         
 
