@@ -1,0 +1,99 @@
+import mysql.connector
+from mysql.connector import Error
+
+# Extract the mySQLconnection for easier re-usability
+def __mySQLconnection():
+    mySQLconnection = mysql.connector.connect(host='localhost',
+                                 database='dbschema',
+                                 user='Admin',
+                                 password='cz3003ransack')
+    
+    return mySQLconnection
+
+### General Functions ###
+
+# Retrieves all Student account data
+def retrieveStudentAccountData():
+    listStore = []
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select * from student"
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listStore.append(row[3])
+           listStore.append(row[4])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    
+    return listReturn
+
+# Retrieves all Teacher account data
+def retrieveTeacherAccountData():
+    listStore = []
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select * from teacher"
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    
+    return listReturn
+
+### Student Specific Functions ###
+
+# Create a Student Account
+def createStudentAccount(username, password, email):
+    listStore = []
+    listReturn = []
+    title = "Software Newbie"
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "INSERT INTO student (username, password, email, title) VALUES (%s, %s, %s, %s)"
+       val = (username, password, email, title)
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery, val)
+       #records = cursor.fetchall()
+       mySQLconnection.commit()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+
+
