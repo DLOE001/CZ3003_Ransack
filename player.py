@@ -146,12 +146,12 @@ class Player(pygame.sprite.Sprite):
     def playerRespawn2(self):
         self.position.x = 375
         self.rect.x = self.position.x
-        self.position.y = 575
+        self.position.y = 525
         self.rect.y = self.position.y
 
     #When player dies to water
     def playerRespawn3(self):
-        self.position.x = 375
+        self.position.x = 675
         self.rect.x = self.position.x
-        self.position.y = 750
+        self.position.y = 525
         self.rect.y = self.position.y
