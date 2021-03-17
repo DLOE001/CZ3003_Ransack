@@ -14,15 +14,19 @@ class Player(pygame.sprite.Sprite):
         self.monster = None
         self.hearts = 3
         self.score = 0
+        self.heartImage = pygame.image.load("images/heart.png")
         print("Current Score:" + str(self.score))
         print("Player Hearts:" + str(self.hearts))
 
     #Draws player and player stats on the screen
     def draw(self, display):
-        display.blit(self.image, (self.rect.x, self.rect.y))
         self.scoreLabel = pygame.font.SysFont('Arial', 50, True).render("Score: " + str(self.score), True, (0, 0, 0))
-        self.scoreLabel_rect = self.scoreLabel.get_rect().move(0,0)
-        display.blit(self.scoreLabel, self.scoreLabel_rect) 
+        self.scoreLabel_position = (0, 0)
+        for i in range(self.hearts):
+            self.heartImage_position = (i*50, 50)
+            display.blit(self.heartImage, self.heartImage_position)
+        display.blit(self.scoreLabel, self.scoreLabel_position)
+        display.blit(self.image, (self.rect.x, self.rect.y))
 
     #Handles player movements and collisions
     def update(self, dt, tiles, monsters):
