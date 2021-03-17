@@ -15,13 +15,14 @@ pygame.init()
 pygame.display.set_caption("EyeLearnSE")
 
 class QuizLevel:
-    def display(self, worldSelected, levelSelected):
+    def display(self, username, worldSelected, levelSelected):
         DISPLAY_W, DISPLAY_H = 1200, 900
         canvas = pygame.Surface((DISPLAY_W,DISPLAY_H))
         window = pygame.display.set_mode(((DISPLAY_W,DISPLAY_H)))
         running = True
         clock = pygame.time.Clock()
         TARGET_FPS = 60
+        finished = False
         ################################# LOAD SPRITESHEET PLAYER, MONSTERS AND QUIZ ###################################
         level1spritesheet = Spritesheet('level1spritesheet.png')
         player = Player()
@@ -79,7 +80,9 @@ class QuizLevel:
                     if player.monster != None:
                         player.monster.quiz.attempt(player)
                     elif player.finished:
-                        player.victoryAction()
+                        finished = player.victoryAction(username)
+                        if finished:
+                            return True
         
             ################################# UPDATE/ Animate SPRITE #################################
             player.update(dt, map.tiles, monsters)

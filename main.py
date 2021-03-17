@@ -91,7 +91,8 @@ while running:
             state = 0
             #loggedIn = True
     elif state == 3:
-        quizLevel.display(getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected'))
+        if quizLevel.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
+            state = 1
     elif state == -1:
         running = False
 

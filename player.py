@@ -83,10 +83,11 @@ class Player(pygame.sprite.Sprite):
                 display.blit(self.nostarImage, self.nostarImage_position)
         
     #Handle victory popup
-    def victoryAction(self):
+    def victoryAction(self, username):
         if self.okButton_rect.collidepoint(pygame.mouse.get_pos()):
             print("OK button Clicked!")
             clicksound()
+            return True
 
     #Handles player movements and collisions
     def update(self, dt, tiles, monsters):
