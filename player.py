@@ -10,6 +10,9 @@ pygame.font.init()
 # Import Spritesheet Class
 from spritesheet import Spritesheet
 
+# Import SQL Connection 
+import mysqlConnection
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -44,22 +47,30 @@ class Player(pygame.sprite.Sprite):
         #Graphics position(For static graphics)
         self.victoryImage_position = (0,0)
         self.okButton_rect = self.okButton.get_rect().move(572, 584)
-        print("Current Score:" + str(self.score))
-        print("Player Hearts:" + str(self.hearts))
 
     #Draws player and player stats on the screen
     def draw(self, display):
+        #Update score label
         self.scoreLabel = pygame.font.SysFont('Arial', 50, True).render("Score: " + str(self.score), True, (0, 0, 0))
         self.scoreLabel_position = (0, 50)
+        #Update remaining hearts
         for i in range(self.hearts):
             self.heartImage_position = (i*50, 0)
             display.blit(self.heartImage, self.heartImage_position)
+        #Display score and hearts
         display.blit(self.scoreLabel, self.scoreLabel_position)
         display.blit(self.image, (self.rect.x, self.rect.y))
 
     #Display victory popup
     def victoryDisplay(self, display):
+        #Mouseover animation
         mouseover(self.okButton, self.okButton_rect)
+        #Display popup objects
+        #victoryImage = Background
+        #okButton = Button
+        #finalScore = Text
+        #starImage = Image
+        #nostarImage = Image
         display.blit(self.victoryImage, self.victoryImage_position)
         display.blit(self.okButton, self.okButton_rect)
         self.finalScore = pygame.font.SysFont('Arial', 50, True).render("Score: " + str(self.score), True, (0, 0, 0))
@@ -83,11 +94,18 @@ class Player(pygame.sprite.Sprite):
                 display.blit(self.nostarImage, self.nostarImage_position)
         
     #Handle victory popup
-    def victoryAction(self, username):
+    def victoryAction(self, username, level):
+        #Check if OK button is clicked
         if self.okButton_rect.collidepoint(pygame.mouse.get_pos()):
-            print("OK button Clicked!")
             clicksound()
+            score = mysqlConnection.retrieveUserQuizScore(username, level)
+            if len(score) > 0:
+                if score[0][0] < self.score:
+                    mysqlConnection.updateUserQuizScore(username, level, self.score)
+            elif len(score) == 0:
+                mysqlConnection.insertUserQuizScore(username, level, self.score)
             return True
+
 
     #Handles player movements and collisions
     def update(self, dt, tiles, monsters):
@@ -157,7 +175,6 @@ class Player(pygame.sprite.Sprite):
                 elif tile.cancollide:
                     if tile.hazard:
                         self.hearts -= 1
-                        print("Player Hearts Left:" + str(self.hearts))
                         if tile.tileid == '100':
                             self.playerRespawn2()
                         elif tile.tileid == '93':
@@ -187,7 +204,6 @@ class Player(pygame.sprite.Sprite):
             elif tile.cancollide:
                 if tile.hazard:
                     self.hearts -= 1
-                    print("Player Hearts Left:" + str(self.hearts))
                     if tile.tileid == '100':
                         self.playerRespawn2()
                     elif tile.tileid == '93':
@@ -222,8 +238,6 @@ class Player(pygame.sprite.Sprite):
             for monster in monsters:
                 monster.dead = False
             print("YOU DIED")
-            print("Current Score:" + str(self.score))
-            print("Player Hearts:" + str(self.hearts))
         
 
     #LEVEL 1 SPAWN POINTS
@@ -251,6 +265,7 @@ class Player(pygame.sprite.Sprite):
         self.position.y = 525
         self.rect.y = self.position.y
 
+    #Stop all player movements
     def freezePlayer(self):
         self.velocity = pygame.math.Vector2(0, 0)
         self.LEFT_KEY, self.RIGHT_KEY = False, False

@@ -80,7 +80,7 @@ class QuizLevel:
                     if player.monster != None:
                         player.monster.quiz.attempt(player)
                     elif player.finished:
-                        finished = player.victoryAction(username)
+                        finished = player.victoryAction(username, levelSelected)
                         if finished:
                             return True
         

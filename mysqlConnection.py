@@ -134,5 +134,72 @@ def createStudentAccount(username, password, email):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()
             #print("\nMySQL connection is closed Now")
+            
+### Quiz Score Functions ###
+# Retrieve User Quiz Score
+def retrieveUserQuizScore(username, level):
+    listStore = []
+    listReturn = []
+    
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select score from storylevelscore \
+                   WHERE username = '%s' AND levelID = %d;" % (username, level)
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+    return listReturn
 
+# Update User Quiz Score
+def updateUserQuizScore(username, level, score):
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "UPDATE storylevelscore \
+                    SET score = %d \
+                    WHERE username = '%s' AND levelID = %d;" % (score, username, level)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+
+# Add User Quiz Score
+def insertUserQuizScore(username, level, score):
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "INSERT INTO storylevelscore \
+                    VALUES('%s', %d, %d);" % (username, level, score)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()    
 

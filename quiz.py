@@ -52,64 +52,36 @@ class Quiz:
     def attempt(self, player):
         if self.answer1_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[0] == self.answer:
-                print("Correct")
-                print("You have earned 100 points!")
                 player.score += 100
-                print("Current Score:" + str(player.score))
                 self.completed = True
                 player.monster.dead = True
             else:
                 player.hearts -= 1
-                print("Wrong")
-                print("You have lost 25 points!")
                 player.score -= 25
-                print("Current Score:" + str(player.score))
-                print("Player Hearts Left:" + str(player.hearts))
         elif self.answer2_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[1] == self.answer:
-                print("Correct")
-                print("You have earned 100 points!")
                 player.score += 100
-                print("Current Score:" + str(player.score))
                 self.completed = True
                 player.monster.dead = True
             else:
                 player.hearts -= 1
-                print("Wrong")
-                print("You have lost 25 points!")
                 player.score -= 25
-                print("Current Score:" + str(player.score))
-                print("Player Hearts Left:" + str(player.hearts))
         elif self.answer3_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[2] == self.answer:
-                print("Correct")
-                print("You have earned 100 points!")
                 player.score += 100
-                print("Current Score:" + str(player.score))
                 self.completed = True
                 player.monster.dead = True
             else:
                 player.hearts -= 1
-                print("Wrong")
-                print("You have lost 25 points!")
                 player.score -= 25
-                print("Current Score:" + str(player.score))
-                print("Player Hearts Left:" + str(player.hearts))
         elif self.answer4_rect.collidepoint(pygame.mouse.get_pos()):
             if self.answers[3] == self.answer:
-                print("Correct")
-                print("You have earned 100 points!")
                 player.score += 100
-                print("Current Score:" + str(player.score))
                 self.completed = True
                 player.monster.dead = True
             else:
                 player.hearts -= 1
-                print("Wrong")
-                print("You have lost 25 points!")
                 player.score -= 25
-                print("Current Score:" + str(player.score))
-                print("Player Hearts Left:" + str(player.hearts))
         else:
             pass
         player.monster = None
