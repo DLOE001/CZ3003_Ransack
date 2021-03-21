@@ -31,54 +31,39 @@ class Login:
         self.display_surface = display_surface
         self.screen = screen
 
-        # Text1 is to display page title
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
-        #Texts
-        self.text1 = None
-        self.text1_position = None
-        #Background
-        self.background1_image = None
-        self.background1_position = None
-        #Buttons
+    
+    # Set login 
+    def loadAssets(self):
+        
+        # Set background
+        self.background1_image = pygame.image.load("images\login.jpg")
+        self.background1_position = [0,0]
+
+        # Set login button
         self.login_rect = pygame.Rect(460, 714, 309, 64)
-        self.input_rect = pygame.Rect(566, 480, 309, 179)
         pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
-        self.input_box1 = InputBox(566, 480, 309, 65)
-        self.input_box2 = InputBox(566, 595, 309, 65)
+
+        self.login_rect_position = [0,0]
+
+        # Set register button
+        self.register_rect = pygame.Rect(517, 639, 69, 25)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
+        self.register_rect_position = [0,0]
+
+        #Set user and password input
+        self.input_rect = pygame.Rect(566, 480, 309, 179)
+        self.input_box1 = InputBox(568, 397, 309, 66)
+        self.input_box2 = InputBox(567, 497, 309, 66)
         self.done = False
         self.success = False
         self.input_boxes = [self.input_box1, self.input_box2]
-    def loadAssets(self):
-        # Text
-        self.text1 = pygame.font.SysFont('Broadway', 75).render("Login", True, (0, 0, 0))
-        self.text1 = pygame.transform.rotate(self.text1, 7)
         
-        # Test Positions
-        self.text1_position = [340,25]
 
-        # Graphics
-        self.background1_image = pygame.image.load("images\Refined Login Mockup.jpg")
-        
-        # Graphics Positions
-        self.background1_position = [0,0]
-        self.login_rect_position = [0,0]
-        
     # Login Display
     def display(self):
-        
-        # Copy of background image
-        #self.display_surface.blit(self.background1_image, self.background1_position)
-        
-        #Copy text
-        #self.screen.blit(self.text1, self.text1_position)
-        
-        # Copy of username rectangle
-        
-        
-        # Selection for login button
-        #pygame.draw.rect(self.screen, (100, 200, 70), self.login_rect)
 
         clock = pygame.time.Clock()        
         while not self.done:
@@ -94,19 +79,17 @@ class Login:
             #for box in self.input_boxes:
                 #box.update()
             
-            # Copy of background image
+            # Display background
             self.display_surface.blit(self.background1_image, self.background1_position)
-            #Copy text
-            self.screen.blit(self.text1, self.text1_position)
-            
-            # Copy of username rectangle
-            #pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
-            
-            # Selection for login button
+
+            # Display user and password input
             self.input_box1.draw(self.screen)
             self.input_box2.draw(self.screen)
             
-            #
+            # Copy of username rectangle
+            #pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
+        
+
             pygame.display.update()
             clock.tick(30)
             
@@ -121,6 +104,11 @@ class Login:
                 self.input_box1.resetText()
                 self.input_box2.resetText()
                 return False
+
+        if self.register_rect.collidepoint(pygame.mouse.get_pos()):
+            print("Register Button Pressed!")
+            clicksound()
+            return True
     """
     def onClickLogin(self):
         if self.login_rect.collidepoint(pygame.mouse.get_pos()):

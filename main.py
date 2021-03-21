@@ -12,6 +12,9 @@ import worldselect
 # Login Page Class
 import loginPage
 
+# Login Register Class
+import registerPage
+
 # Quiz Level Page Class
 import quizLevel
 
@@ -61,9 +64,13 @@ while user == "nil":
         print("Input 1 or 2 only!")
 """
 
-# Create Main Menu Object
+# Create Login Object
 login = loginPage.Login(username, user, screen, display_surface)
 login.loadAssets()
+
+# Create Login Object
+register = registerPage.Register(username, user, screen, display_surface)
+register.loadAssets()
 
 # Create Main Menu Object
 menu = mainmenu.MainMenu(username, user, screen, display_surface)
@@ -75,8 +82,6 @@ worldSelect.loadAssets()
 
 #Create World Select Object
 quizLevel = quizLevel.QuizLevel()
-
-
 
 # Run until the user asks to quit
 while running:
@@ -93,6 +98,8 @@ while running:
     elif state == 3:
         if quizLevel.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
             state = 1
+    elif state == 4:
+        register.display()
     elif state == -1:
         running = False
 

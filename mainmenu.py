@@ -32,53 +32,16 @@ class MainMenu:
         # Button 7 is logout button
         # Button 8-10 is popup logout comfirmation button
 
-        #Background
-        self.background1_image = None
-        self.background1_position = None
-
-        #popup
-        self.popup_image = None
-        self.popup_position = None
-
-        #Buttons
-        self.button1_image = None
-        self.button1_position = None
-        self.button2_image = None
-        self.button2_position = None
-        self.button3_image = None
-        self.button3_position = None
-        self.button4_image = None
-        self.button4_position = None
-        self.button5_image = None
-        self.button5_position = None
-        self.button6_image = None
-        self.button6_position = None
-
-        self.button7_image = None
-        self.button7_position = None
-        self.button8_image = None
-        self.button8_position = None
-        self.button9_image = None
-        self.button9_position = None
-        self.button10_image = None
-        self.button10_position = None
-        self.button11_image = None
-        self.button11_position = None
-    
+    # Set main menu for student and teacher respectively
     def loadAssets(self):
 
-        # Graphics
-        self.background1_image = pygame.image.load("images/student_mainmenu.jpg")
-
-        self.button7_image = pygame.image.load("images/w8.png")
-
-        #logout comfirmation
-        self.popup_image = pygame.image.load("images/w9.png")
-        self.button9_image = pygame.image.load("images/w10.png")
-        self.button10_image = pygame.image.load("images/w11.png")
-        self.button8_image = pygame.image.load("images/w12.png")
-
+        # Set main menu for student and teacher respectively
         if self.user == "Student":
+            #Set background for student
+            self.background1_image = pygame.image.load("images/student_mainmenu.jpg")
+            self.background1_position = [0,0]
+
+            #Set various main menu button for student
             tempimage = pygame.image.load("images/w2.png")
             self.button1_image = tempimage
             self.button2_image = tempimage
@@ -87,78 +50,73 @@ class MainMenu:
             self.button5_image = tempimage
             self.button6_image = tempimage
 
-        elif self.user == "Teacher":
-            self.button1_image = pygame.image.load("images/w13.png")
-            self.button2_image = pygame.image.load("images/w14.png")
-            self.button3_image = pygame.image.load("images/w15.png")
-            self.button4_image = pygame.image.load("images/w16.png")
-            self.button5_image = pygame.image.load("images/w17.png")
-
-        # Graphic Positions
-        self.background1_position = [0,0]
-
-        self.popup_position = [403,326]
-
-        self.button1_position = self.button1_image.get_rect().move(271, 293)
-        self.button2_position = self.button2_image.get_rect().move(581, 351)
-        self.button3_position = self.button3_image.get_rect().move(842 , 305)
-        self.button4_position = self.button4_image.get_rect().move(290, 636)
-        self.button5_position = self.button5_image.get_rect().move(611, 616)
-        if self.user == "Student":
+            self.button1_position = self.button1_image.get_rect().move(271, 293)
+            self.button2_position = self.button2_image.get_rect().move(581, 351)
+            self.button3_position = self.button3_image.get_rect().move(842 , 305)
+            self.button4_position = self.button4_image.get_rect().move(290, 636)
+            self.button5_position = self.button5_image.get_rect().move(611, 616)
             self.button6_position = self.button6_image.get_rect().move(843, 611)
-        self.button7_position = self.button7_image.get_rect().move(940, 237)
-        self.button8_position = self.button8_image.get_rect().move(812, 332)
-        self.button9_position = self.button9_image.get_rect().move(491, 514)
-        self.button10_position = self.button10_image.get_rect().move(691, 514)
 
-    # Main Menu Display
+            #Set logout button for student
+            self.logoutbutton7_image = pygame.image.load("images/w2.png")
+            self.logoutbutton7_position = self.logoutbutton7_image.get_rect().move(829, 93)
+
+            #Set logout popup confirmation for student
+            self.logoutpopup_image = pygame.image.load("images/w9.png")
+            self.button9_image = pygame.image.load("images/w10.png")
+            self.button10_image = pygame.image.load("images/w11.png")
+            self.button8_image = pygame.image.load("images/w12.png")
+
+            self.logoutpopup_position = [403,326]
+            self.button8_position = self.button8_image.get_rect().move(812, 332)
+            self.button9_position = self.button9_image.get_rect().move(491, 514)
+            self.button10_position = self.button10_image.get_rect().move(691, 514)
+
+        elif self.user == "Teacher":
+            #Set background for teacher
+            self.background1_image = pygame.image.load("images/teacher_mainmenu.jpg")
+            self.background1_position = [0,0]
+
+    # Display main menu for student and teacher respectively
     def display(self):
-        # Copy of background image
-        self.display_surface.blit(self.background1_image, self.background1_position)
 
-        
-        # Copy of menu buttons
-        self.display_surface.blit(self.button1_image, self.button1_position)
-        self.display_surface.blit(self.button2_image, self.button2_position)
-        self.display_surface.blit(self.button3_image, self.button3_position)
-        self.display_surface.blit(self.button4_image, self.button4_position)
-        self.display_surface.blit(self.button5_image, self.button5_position)
+        #Main Menu Display for Student
         if self.user == "Student":
+            #Display background for student
+            self.display_surface.blit(self.background1_image, self.background1_position)
+
+            #Display various main menu button for student
+            self.display_surface.blit(self.button1_image, self.button1_position)
+            self.display_surface.blit(self.button2_image, self.button2_position)
+            self.display_surface.blit(self.button3_image, self.button3_position)
+            self.display_surface.blit(self.button4_image, self.button4_position)
+            self.display_surface.blit(self.button5_image, self.button5_position)
             self.display_surface.blit(self.button6_image, self.button6_position)
-        self.display_surface.blit(self.button7_image, self.button7_position)
-        if self.logout:
-            self.display_surface.blit(self.popup_image, self.popup_position)
-            self.display_surface.blit(self.button8_image, self.button8_position)
-            self.display_surface.blit(self.button9_image, self.button9_position)
-            self.display_surface.blit(self.button10_image, self.button10_position)
+            # Hide above buttons 
+            self.button1_image.set_alpha(0)
+            self.button2_image.set_alpha(0)
+            self.button3_image.set_alpha(0)
+            self.button4_image.set_alpha(0)
+            self.button5_image.set_alpha(0)
+            self.button6_image.set_alpha(0)
 
-        # Hide all buttons 
-        self.button1_image.set_alpha(0)
-        self.button2_image.set_alpha(0)
-        self.button3_image.set_alpha(0)
-        self.button4_image.set_alpha(0)
-        self.button5_image.set_alpha(0)
-        self.button6_image.set_alpha(0)
+            #Display logout button for student
+            self.display_surface.blit(self.logoutbutton7_image, self.logoutbutton7_position)
+            # Hide logout buttons
+            self.logoutbutton7_image.set_alpha(0)
 
+            #Display logout popup confirmation for student
+            if self.logout:
+                self.display_surface.blit(self.logoutpopup_image, self.logoutpopup_position)
+                self.display_surface.blit(self.button8_image, self.button8_position)
+                self.display_surface.blit(self.button9_image, self.button9_position)
+                self.display_surface.blit(self.button10_image, self.button10_position)
+            
+        #Main Menu Display for Teacher
+        if self.user == "Teacher":
+            #Display background for student
+            self.display_surface.blit(self.background1_image, self.background1_position)
      
-    '''
-        # Mouseover Animation
-        if self.logout == False:
-            #mouseover(self.button1_image, self.button1_position)
-            mouseover(self.button2_image, self.button2_position)
-            mouseover(self.button3_image, self.button3_position)
-            mouseover(self.button4_image, self.button4_position)
-            mouseover(self.button5_image, self.button5_position)
-            if self.user == "Student":
-                mouseover(self.button6_image, self.button6_position)
-            mouseover(self.button7_image, self.button7_position)
-        elif self.logout:
-            mouseover(self.button8_image, self.button8_position)
-            mouseover(self.button9_image, self.button9_position)
-            mouseover(self.button10_image, self.button10_position)
-        mouseover(self.button11_image, self.button11_position)
-    '''
-
     # Main Menu Actions
     def action(self):
         if self.logout == False:
@@ -211,11 +169,11 @@ class MainMenu:
                 print("Problem Community Pressed!")
                 clicksound()
                 return 0
-            elif self.button7_position.collidepoint(pygame.mouse.get_pos()):
+            elif self.logoutbutton7_position.collidepoint(pygame.mouse.get_pos()):
                 print("Log Out Button Pressed!")
                 clicksound()
                 self.logout = True
-                return 
+                return 0
             else:
                 return 0
         elif self.logout:

@@ -29,56 +29,35 @@ class WorldSelect:
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
-        #Texts
-        self.text1 = None
-        self.text1_position = None
-        #Background
-        self.background1_image = None
-        self.background1_position = None
-        #Buttons
-        self.button1_image = None
-        self.button1_position = None
-        self.button2_image = None
-        self.button2_position = None
+
         self.defaultWorld = 1
         self.worldSelected = 0
         self.levelSelected = 0
     
     def loadAssets(self):
-        # Text
-        self.text1 = pygame.font.SysFont('Broadway', 75).render("World Select", True, (0, 0, 0))
-        
-        # Test Positions
-        self.text1_position = [364,8]
 
-        # Graphics
+        # Set background
         self.background1_image = pygame.image.load("images/student_worldselect.jpg")
-        self.button1_image = pygame.image.load("images/w2.png")
-        self.button2_image = pygame.image.load("images/w2.png")
-
-        # Graphics Positions
         self.background1_position = [0,0]
 
-        self.button1_position = self.button1_image.get_rect().move(17, 23)
-        self.button2_position = self.button2_image.get_rect().move(280, 423)
+        # Set world 1 button 
+        self.button1_image = pygame.image.load("images/w2.png")
+        self.button1_position = self.button1_image.get_rect().move(102, 379)
+
+        # Set world 2 button
+        self.button2_image = pygame.image.load("images/w2.png")
+        self.button2_position = self.button2_image.get_rect().move(718, 349)
 
     # Main Menu Display
     def display(self):
-        # Copy of background image
+        # Display background 
         self.display_surface.blit(self.background1_image, self.background1_position)
-        
-        #Copy text
-        self.screen.blit(self.text1, self.text1_position)
 
-        # Copy of back button
+        # Display world 1 button 
         self.display_surface.blit(self.button1_image, self.button1_position)
-        self.display_surface.blit(self.button2_image, self.button2_position)
 
-        '''
-        # Mouseover Animation
-        mouseover(self.button1_image, self.button1_position)
-        mouseover(self.button2_image, self.button2_position)
-        '''
+        # Set world 2 button
+        self.display_surface.blit(self.button2_image, self.button2_position)
 
         # Hide all buttons 
         self.button1_image.set_alpha(0)
@@ -88,11 +67,17 @@ class WorldSelect:
     def action(self):
         if(self.worldSelected == 0):
             self.worldSelected = self.defaultWorld
+        
+        # World 1 is selection
         if self.button1_position.collidepoint(pygame.mouse.get_pos()):
+            print("World Button 1 Pressed!")
+            self.levelSelected = 1
             clicksound()
-            return 0
+            return 3
+
+        # World 2 is selection
         elif self.button2_position.collidepoint(pygame.mouse.get_pos()):
-            print("World Button Pressed!")
+            print("World Button 2 Pressed!")
             self.levelSelected = 2
             clicksound()
             return 3
