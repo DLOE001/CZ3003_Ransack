@@ -108,7 +108,7 @@ class Login:
         if self.register_rect.collidepoint(pygame.mouse.get_pos()):
             print("Register Button Pressed!")
             clicksound()
-            return True
+            return 4
     """
     def onClickLogin(self):
         if self.login_rect.collidepoint(pygame.mouse.get_pos()):

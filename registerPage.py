@@ -37,12 +37,14 @@ class Register:
 
     def loadAssets(self):
         # Set background
-        self.background1_image = pygame.image.load("images/teacher_mainmenu.jpg")
+        self.background1_image = pygame.image.load("images/register.jpg")
         self.background1_position = [0,0]
+        print("loaded")
 
     def display(self):
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
-    
+        print("displayed")
+
     def action(self):
         print("testing")
