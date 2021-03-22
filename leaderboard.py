@@ -41,6 +41,18 @@ class Leaderboard:
         self.backbutton1_image = pygame.image.load("images/w2.png")
         self.backbutton1_position = self.backbutton1_image.get_rect().move(23, 23)
 
+        # Set Rank Text
+        self.ranktext1 = pygame.font.SysFont('Broadway', 75).render("Rank", True, (0, 0, 0))
+        self.ranktext1_position = [220,368]
+
+        # Set Username Text
+        self.usernametext2 = pygame.font.SysFont('Broadway', 75).render("Username", True, (0, 0, 0))
+        self.usernametext2_position = [384,368]
+
+        # Set Score Text
+        self.scoretext3 = pygame.font.SysFont('Broadway', 75).render("Score", True, (0, 0, 0))
+        self.scoretext3_position = [684,368]
+        
     def display(self):
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
@@ -50,6 +62,15 @@ class Leaderboard:
 
         # Hide all buttons 
         self.backbutton1_image.set_alpha(0)
+
+        # Display Rank Text
+        self.screen.blit(self.ranktext1, self.ranktext1_position)
+
+        # Display Username Text
+        self.screen.blit(self.usernametext2, self.usernametext2_position)
+
+        # Display Score Text
+        self.screen.blit(self.scoretext3, self.scoretext3_position)
 
     def action(self):
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):

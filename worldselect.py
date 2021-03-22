@@ -70,7 +70,7 @@ class WorldSelect:
         self.button1_image.set_alpha(0)
         self.button2_image.set_alpha(0)
         self.backbutton3_image.set_alpha(0)
-
+    
     # Main Menu Actions
     def action(self):
         if(self.worldSelected == 0):
