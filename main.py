@@ -51,24 +51,6 @@ white = [255, 255, 255]
 # Sample User Data
 username = ""
 user = ""
-loggedIn = False
-
-# Simulated Console Login
-# TODO: To be removed once Login page is done
-"""
-user = "nil"
-while user == "nil":
-    print("1: Student, 2: Teacher")
-    choice = input()
-    if choice == "1":
-        user = "Student"
-        print("Logged in as Student")
-    elif choice == "2":
-        user = "Teacher"
-        print("Logged in as Teacher")
-    else:
-        print("Input 1 or 2 only!")
-"""
 
 # Create Login Object
 login = loginPage.Login(username, user, screen, display_surface)
@@ -82,26 +64,30 @@ register.loadAssets()
 menu = mainmenu.MainMenu(username, user, screen, display_surface)
 menu.loadAssets()
     
-#Create World Select Object
+# Create World Select Object
 worldSelect = worldselect.WorldSelect(username, user, screen, display_surface)
 worldSelect.loadAssets()
 
-#Create Leaderboard Object
-leaderboard = leaderboard.Leaderboard(username, user, screen, display_surface)
-leaderboard.loadAssets()
+# Create Leaderboard Object
+leaderBoard = leaderboard.Leaderboard(username, user, screen, display_surface)
+leaderBoard.loadAssets()
 
-#Create Friends Object
-friends = friends.Friends(username, user, screen, display_surface)
-friends.loadAssets()
+# Create Friends Object
+friendMenu = friends.Friends(username, user, screen, display_surface)
+friendMenu.loadAssets()
 
-#Create Quiz Level Object
+# Create Quiz Level Object
 level = quizLevel.QuizLevel()
 
+# Recreates the objects passing in the logged in user's username
 def recreateUIObj(username, user):
     global login
     global menu
     global worldSelect
     global level
+    global leaderBoard
+    global friendMenu
+    
      # Create Login Object
     login = loginPage.Login(username, user, screen, display_surface)
     login.loadAssets()
@@ -114,6 +100,14 @@ def recreateUIObj(username, user):
     worldSelect = worldselect.WorldSelect(username, user, screen, display_surface)
     worldSelect.loadAssets()
                 
+    # Create Leaderboard Object
+    leaderBoard = leaderboard.Leaderboard(username, user, screen, display_surface)
+    leaderBoard.loadAssets()
+    
+    # Create Friends Object
+    friendMenu = friends.Friends(username, user, screen, display_surface)
+    friendMenu.loadAssets()
+    
     #Create Quiz Level Object
     level = quizLevel.QuizLevel()
 
@@ -133,7 +127,6 @@ while running:
             user = getattr(login, 'user')
             recreateUIObj(username, user)
             state = 0
-            #loggedIn = True
         elif (getattr(login, 'done') and getattr(login, 'registerClicked')):
             state = 6
     elif state == 3:
