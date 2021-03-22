@@ -79,7 +79,7 @@ friendMenu.loadAssets()
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
 
-# Recreates the objects passing in the logged in user's username
+# Recreates the UI Objects passing in the logged in user's username and user type
 def recreateUIObj(username, user):
     global login
     global menu
