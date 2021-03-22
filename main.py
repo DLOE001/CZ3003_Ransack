@@ -21,7 +21,7 @@ import quizLevel
 # Leadeboard  Class
 import leaderboard
 
-# Leadeboard  Class
+# Friends  Class
 import friends
 
 # Import and initialize the pygame library
@@ -49,14 +49,31 @@ display_surface = pygame.display.set_mode((screen_width, screen_height))
 white = [255, 255, 255]
 
 # Sample User Data
-username = "Daniel Loe"
-user = "Student"
+username = ""
+user = ""
 loggedIn = False
+
+# Simulated Console Login
+# TODO: To be removed once Login page is done
+"""
+user = "nil"
+while user == "nil":
+    print("1: Student, 2: Teacher")
+    choice = input()
+    if choice == "1":
+        user = "Student"
+        print("Logged in as Student")
+    elif choice == "2":
+        user = "Teacher"
+        print("Logged in as Teacher")
+    else:
+        print("Input 1 or 2 only!")
+"""
 
 # Create Login Object
 login = loginPage.Login(username, user, screen, display_surface)
 login.loadAssets()
-
+    
 # Create Login Object
 register = registerPage.Register(username, user, screen, display_surface)
 register.loadAssets()
@@ -64,7 +81,7 @@ register.loadAssets()
 # Create Main Menu Object
 menu = mainmenu.MainMenu(username, user, screen, display_surface)
 menu.loadAssets()
-
+    
 #Create World Select Object
 worldSelect = worldselect.WorldSelect(username, user, screen, display_surface)
 worldSelect.loadAssets()
@@ -77,8 +94,28 @@ leaderboard.loadAssets()
 friends = friends.Friends(username, user, screen, display_surface)
 friends.loadAssets()
 
-#Create World Select Object
-quizLevel = quizLevel.QuizLevel()
+#Create Quiz Level Object
+level = quizLevel.QuizLevel()
+
+def recreateUIObj(username, user):
+    global login
+    global menu
+    global worldSelect
+    global level
+     # Create Login Object
+    login = loginPage.Login(username, user, screen, display_surface)
+    login.loadAssets()
+                
+    # Create Main Menu Object
+    menu = mainmenu.MainMenu(username, user, screen, display_surface)
+    menu.loadAssets()
+                
+    #Create World Select Object
+    worldSelect = worldselect.WorldSelect(username, user, screen, display_surface)
+    worldSelect.loadAssets()
+                
+    #Create Quiz Level Object
+    level = quizLevel.QuizLevel()
 
 # Run until the user asks to quit
 while running:
@@ -90,10 +127,14 @@ while running:
     elif state == 2:
         login.display()
         if (getattr(login, 'done') and getattr(login, 'success')):
+            username = getattr(login, 'username')
+            user = getattr(login, 'user')
+            recreateUIObj(username, user)
+            
             state = 0
             #loggedIn = True
     elif state == 3:
-        if quizLevel.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
+        if level.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
             state = 1
     elif state == 4:
         leaderboard.display()
@@ -116,7 +157,7 @@ while running:
             elif state == 4:
                 state = leaderboard.action()
             elif state == 5:
-                state = friends.action() 
+                state = friends.action()
             #elif state == 2:
                 #state = login.action()
                 

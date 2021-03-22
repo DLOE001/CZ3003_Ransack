@@ -31,13 +31,7 @@ class Login:
         self.display_surface = display_surface
         self.screen = screen
 
-        # Background1 is for the header
-        # Button 1 is back button
-        # Button 2 is query button
-    
-    # Set login 
     def loadAssets(self):
-        
         # Set background
         self.background1_image = pygame.image.load("images\login.jpg")
         self.background1_position = [0,0]
@@ -61,10 +55,9 @@ class Login:
         self.success = False
         self.input_boxes = [self.input_box1, self.input_box2]
         
-
     # Login Display
     def display(self):
-
+    
         clock = pygame.time.Clock()        
         while not self.done:
             for event in pygame.event.get():
@@ -102,24 +95,14 @@ class Login:
             else:
                 self.input_box1.resetText()
                 self.input_box2.resetText()
-                return False
-
+                return False    
+            
         # @dan this part for linkage
         if self.register_rect.collidepoint(pygame.mouse.get_pos()):
             print("Register Button Pressed!")
             clicksound()
             return 4
-    """
-    def onClickLogin(self):
-        if self.login_rect.collidepoint(pygame.mouse.get_pos()):
-            clicksound()
-            print(self.input_box1.retrieveBoxValues())
-            print(self.input_box2.retrieveBoxValues())
-            self.authenticate(self.input_box1.retrieveBoxValues(), self.input_box2.retrieveBoxValues())
-            self.input_box1.resetText()
-            self.input_box2.resetText()
-    """       
-       
+        
     def authenticate(self, username, password):
         user = ""
         foundStudent = False
@@ -130,7 +113,8 @@ class Login:
         for i in allStudents:
             if((username == i[0]) and (password == i[1])):
                 foundStudent = True 
-                user = "Student"
+                self.username = i[0]
+                self.user = "Student"
                 self.success = True
                 break
         
@@ -139,12 +123,13 @@ class Login:
         else:
             for i in allTeachers:
                 if((username == i[0]) and (password == i[1])):
-                    user = "Teacher"
+                    self.username = i[0]
+                    self.user = "Teacher"
                     self.success = True
                     break
            
         if (self.success):
-            print("Success Login. Welcome : " + user + " " + username + "\n")
+            print("Success Login. Welcome : " + self.user + " " + username + "\n")
             return True
         else:
             print("Failed to login, Incorrect ID/Password \n")
