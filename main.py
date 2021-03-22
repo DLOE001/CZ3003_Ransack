@@ -53,23 +53,6 @@ username = "Daniel Loe"
 user = "Student"
 loggedIn = False
 
-# Simulated Console Login
-# TODO: To be removed once Login page is done
-"""
-user = "nil"
-while user == "nil":
-    print("1: Student, 2: Teacher")
-    choice = input()
-    if choice == "1":
-        user = "Student"
-        print("Logged in as Student")
-    elif choice == "2":
-        user = "Teacher"
-        print("Logged in as Teacher")
-    else:
-        print("Input 1 or 2 only!")
-"""
-
 # Create Login Object
 login = loginPage.Login(username, user, screen, display_surface)
 login.loadAssets()
