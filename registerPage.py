@@ -30,21 +30,41 @@ class Register:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-
+        
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
 
     def loadAssets(self):
+        self.backToLogin = False
+
         # Set background
         self.background1_image = pygame.image.load("images/register.jpg")
         self.background1_position = [0,0]
+        
+        # Set back button
+        self.backbutton3_image = pygame.image.load("images/w2.png")
+        self.backbutton3_position = self.backbutton3_image.get_rect().move(275, 260)
+        
+        # Hide Buttons
+        self.backbutton3_image.set_alpha(0)
         print("loaded")
 
     def display(self):
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
-        print("displayed")
 
+        # Set back button
+        self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
+
+    # Register Page Actions
     def action(self):
-        print("testing")
+        # Back button is selected
+        if self.backbutton3_position.collidepoint(pygame.mouse.get_pos()):
+            self.backToLogin = True
+            print("Back Button Pressed!")
+            clicksound()
+            return 2
+        else:
+            return 6
+        

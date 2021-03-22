@@ -63,7 +63,7 @@ class WorldSelect:
         # Set world 2 button
         self.display_surface.blit(self.button2_image, self.button2_position)
 
-        # Set world 2 button
+        # Set back button
         self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
 
         # Hide all buttons 

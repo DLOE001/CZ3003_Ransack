@@ -53,6 +53,7 @@ class Login:
         self.input_box2 = InputBox(567, 497, 309, 66)
         self.done = False
         self.success = False
+        self.registerClicked = False
         self.input_boxes = [self.input_box1, self.input_box2]
         
     # Login Display
@@ -97,11 +98,12 @@ class Login:
                 self.input_box2.resetText()
                 return False    
             
-        # @dan this part for linkage
+        # Transition to Register Page
         if self.register_rect.collidepoint(pygame.mouse.get_pos()):
-            print("Register Button Pressed!")
+            self.registerClicked = True
             clicksound()
-            return 4
+            return True
+            
         
     def authenticate(self, username, password):
         user = ""
