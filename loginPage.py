@@ -49,7 +49,7 @@ class Login:
         self.login_rect_position = [0,0]
 
         # Set register button
-        self.register_rect = pygame.Rect(517, 639, 69, 25)
+        self.register_rect = pygame.Rect(575, 639, 69, 25)
         pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
         self.register_rect_position = [0,0]
 
@@ -104,6 +104,7 @@ class Login:
                 self.input_box2.resetText()
                 return False
 
+        # @dan this part for linkage
         if self.register_rect.collidepoint(pygame.mouse.get_pos()):
             print("Register Button Pressed!")
             clicksound()
