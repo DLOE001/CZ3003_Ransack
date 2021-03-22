@@ -133,7 +133,7 @@ class MainMenu:
                 if self.user == "Student":
                     print("Friends Pressed!")
                     clicksound()
-                    return 0
+                    return 5
                 elif self.user == "Teacher":
                     print("Modify Quiz Button Pressed!")
                     clicksound()
@@ -142,7 +142,7 @@ class MainMenu:
                 if self.user == "Student":
                     print("View Leaderboard Pressed!")
                     clicksound()
-                    return 0
+                    return 4
                 elif self.user == "Teacher":
                     print("Remove Quiz Button Pressed!")
                     clicksound()

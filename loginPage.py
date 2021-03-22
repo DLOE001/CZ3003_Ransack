@@ -89,7 +89,6 @@ class Login:
             # Copy of username rectangle
             #pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
         
-
             pygame.display.update()
             clock.tick(30)
             

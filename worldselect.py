@@ -48,6 +48,10 @@ class WorldSelect:
         self.button2_image = pygame.image.load("images/w2.png")
         self.button2_position = self.button2_image.get_rect().move(718, 349)
 
+        # Set back button
+        self.backbutton3_image = pygame.image.load("images/w2.png")
+        self.backbutton3_position = self.backbutton3_image.get_rect().move(22, 21)
+
     # Main Menu Display
     def display(self):
         # Display background 
@@ -59,27 +63,37 @@ class WorldSelect:
         # Set world 2 button
         self.display_surface.blit(self.button2_image, self.button2_position)
 
+        # Set world 2 button
+        self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
+
         # Hide all buttons 
         self.button1_image.set_alpha(0)
         self.button2_image.set_alpha(0)
+        self.backbutton3_image.set_alpha(0)
 
     # Main Menu Actions
     def action(self):
         if(self.worldSelected == 0):
             self.worldSelected = self.defaultWorld
         
-        # World 1 is selection
+        # World 1 button is selected
         if self.button1_position.collidepoint(pygame.mouse.get_pos()):
             print("World Button 1 Pressed!")
             self.levelSelected = 1
             clicksound()
             return 3
 
-        # World 2 is selection
+        # World 2 button is selected
         elif self.button2_position.collidepoint(pygame.mouse.get_pos()):
             print("World Button 2 Pressed!")
             self.levelSelected = 2
             clicksound()
             return 3
+
+        # Back button is selected
+        elif self.backbutton3_position.collidepoint(pygame.mouse.get_pos()):
+            print("Back Button Pressed!")
+            clicksound()
+            return 0
         else:
             return 1

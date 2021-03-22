@@ -18,6 +18,12 @@ import registerPage
 # Quiz Level Page Class
 import quizLevel
 
+# Leadeboard  Class
+import leaderboard
+
+# Leadeboard  Class
+import friends
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -80,6 +86,14 @@ menu.loadAssets()
 worldSelect = worldselect.WorldSelect(username, user, screen, display_surface)
 worldSelect.loadAssets()
 
+#Create Leaderboard Object
+leaderboard = leaderboard.Leaderboard(username, user, screen, display_surface)
+leaderboard.loadAssets()
+
+#Create Friends Object
+friends = friends.Friends(username, user, screen, display_surface)
+friends.loadAssets()
+
 #Create World Select Object
 quizLevel = quizLevel.QuizLevel()
 
@@ -99,7 +113,9 @@ while running:
         if quizLevel.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
             state = 1
     elif state == 4:
-        register.display()
+        leaderboard.display()
+    elif state == 5:
+        friends.display()
     elif state == -1:
         running = False
 
@@ -114,6 +130,10 @@ while running:
                 state = menu.action()
             elif state == 1:
                 state = worldSelect.action()
+            elif state == 4:
+                state = leaderboard.action()
+            elif state == 5:
+                state = friends.action() 
             #elif state == 2:
                 #state = login.action()
                 
