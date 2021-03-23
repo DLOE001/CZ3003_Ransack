@@ -56,7 +56,11 @@ class MainMenu:
             self.button4_position = self.button4_image.get_rect().move(290, 636)
             self.button5_position = self.button5_image.get_rect().move(611, 616)
             self.button6_position = self.button6_image.get_rect().move(843, 611)
-
+            
+            # Set Username Text
+            self.studentUsername = pygame.font.SysFont('Courier New', 40).render(self.username, True, (0, 0, 0))
+            self.studentUsername_position = [835,95]
+        
             #Set logout button for student
             self.logoutbutton7_image = pygame.image.load("images/w2.png")
             self.logoutbutton7_position = self.logoutbutton7_image.get_rect().move(829, 93)
@@ -77,6 +81,10 @@ class MainMenu:
             self.background1_image = pygame.image.load("images/teacher_mainmenu.jpg")
             self.background1_position = [0,0]
 
+            # Set Username Text
+            self.teacherUsername = pygame.font.SysFont('Courier New', 40).render(self.username, True, (0, 0, 0))
+            self.teacherUsername_position = [835,95]
+            
     # Display main menu for student and teacher respectively
     def display(self):
 
@@ -92,6 +100,7 @@ class MainMenu:
             self.display_surface.blit(self.button4_image, self.button4_position)
             self.display_surface.blit(self.button5_image, self.button5_position)
             self.display_surface.blit(self.button6_image, self.button6_position)
+            
             # Hide above buttons 
             self.button1_image.set_alpha(0)
             self.button2_image.set_alpha(0)
@@ -100,6 +109,9 @@ class MainMenu:
             self.button5_image.set_alpha(0)
             self.button6_image.set_alpha(0)
 
+            # Display Student Username
+            self.screen.blit(self.studentUsername, self.studentUsername_position)
+        
             #Display logout button for student
             self.display_surface.blit(self.logoutbutton7_image, self.logoutbutton7_position)
             # Hide logout buttons
@@ -117,6 +129,9 @@ class MainMenu:
             #Display background for student
             self.display_surface.blit(self.background1_image, self.background1_position)
      
+            # Display Teacher Username
+            self.screen.blit(self.teacherUsername, self.teacherUsername_position)
+            
     # Main Menu Actions
     def action(self):
         if self.logout == False:
@@ -185,7 +200,7 @@ class MainMenu:
             elif self.button9_position.collidepoint(pygame.mouse.get_pos()):
                 print("Yes Button on Pop Up Pressed!")
                 clicksound()
-                return -1
+                return 2
             elif self.button10_position.collidepoint(pygame.mouse.get_pos()):
                 print("No Button on Pop Up Pressed!")
                 clicksound()

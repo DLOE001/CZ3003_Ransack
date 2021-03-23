@@ -42,16 +42,16 @@ class Leaderboard:
         self.backbutton1_position = self.backbutton1_image.get_rect().move(23, 23)
 
         # Set Rank Text
-        self.ranktext1 = pygame.font.SysFont('Broadway', 75).render("Rank", True, (0, 0, 0))
-        self.ranktext1_position = [220,368]
+        self.ranktext1 = pygame.font.SysFont('Broadway', 40).render("Rank", True, (0, 0, 0))
+        self.ranktext1_position = [210,350]
 
         # Set Username Text
-        self.usernametext2 = pygame.font.SysFont('Broadway', 75).render("Username", True, (0, 0, 0))
-        self.usernametext2_position = [384,368]
+        self.usernametext2 = pygame.font.SysFont('Broadway', 40).render("Username", True, (0, 0, 0))
+        self.usernametext2_position = [380,350]
 
         # Set Score Text
-        self.scoretext3 = pygame.font.SysFont('Broadway', 75).render("Score", True, (0, 0, 0))
-        self.scoretext3_position = [684,368]
+        self.scoretext3 = pygame.font.SysFont('Broadway', 40).render("Score", True, (0, 0, 0))
+        self.scoretext3_position = [684,350]
         
     def display(self):
         # Display background

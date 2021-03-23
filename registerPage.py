@@ -48,6 +48,17 @@ class Register:
         
         # Hide Buttons
         self.backbutton3_image.set_alpha(0)
+        
+        # Set register button
+        self.register_rect = pygame.Rect(460, 714, 309, 63)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.register_rect)
+        self.register_rect_position = [0,0]
+        
+        # Set the fields for user to key in
+        self.input_box1 = InputBox(557, 359, 309, 63)
+        self.input_box2 = InputBox(557, 470, 309, 63)
+        self.input_box2 = InputBox(557, 585, 309, 63)
+        self.input_boxes = [self.input_box1, self.input_box2]
         print("loaded")
 
     def display(self):

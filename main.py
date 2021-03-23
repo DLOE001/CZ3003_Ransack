@@ -135,7 +135,7 @@ while running:
     elif state == 4:
         leaderBoard.display()
     elif state == 5:
-        friends.display()
+        friendMenu.display()
     elif state == 6:
         register.display()
     elif state == -1:
