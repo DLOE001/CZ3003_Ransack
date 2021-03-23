@@ -59,7 +59,6 @@ class Register:
         self.input_box2 = InputBox(557, 470, 309, 63)
         self.input_box2 = InputBox(557, 585, 309, 63)
         self.input_boxes = [self.input_box1, self.input_box2]
-        print("loaded")
 
     def display(self):
         # Display background

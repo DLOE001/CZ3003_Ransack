@@ -44,7 +44,27 @@ class Friends:
         self.backbutton1_image = pygame.image.load("images/w2.png")
         self.backbutton1_position = self.backbutton1_image.get_rect().move(109, 78)
 
+        #Set friends input
+        self.friendsinput_box1 = InputBox(228, 667, 205, 35)
+        self.done = False
+        self.success = False
+        self.registerClicked = False
+        self.input_boxes = [self.friendsinput_box1]
+        
+
     def display(self):
+
+        clock = pygame.time.Clock() 
+        while not self.done:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == MOUSEBUTTONDOWN:
+                    self.done = self.action()
+                for box in self.input_boxes:
+                    box.handle_event(event)
+
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
         
@@ -54,7 +74,13 @@ class Friends:
         # Hide all buttons 
         self.backbutton1_image.set_alpha(0)
 
+        # Display user and password input
+        self.friendsinput_box1.draw(self.screen)
+
+        pygame.display.update()
+        clock.tick(30)
+        
     def action(self):
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
             clicksound()
-            return 0
+            return False
