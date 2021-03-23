@@ -39,22 +39,21 @@ class Login:
         # Set login button
         self.login_rect = pygame.Rect(460, 714, 309, 64)
         pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
-
         self.login_rect_position = [0,0]
 
         # Set register button
         self.register_rect = pygame.Rect(575, 639, 69, 25)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.register_rect)
         self.register_rect_position = [0,0]
 
         #Set user and password input
         self.input_rect = pygame.Rect(566, 480, 309, 179)
-        self.input_box1 = InputBox(568, 397, 309, 66)
-        self.input_box2 = InputBox(567, 497, 309, 66)
+        self.username_box1 = InputBox(568, 397, 309, 66)
+        self.password_box2 = InputBox(567, 497, 309, 66)
         self.done = False
         self.success = False
         self.registerClicked = False
-        self.input_boxes = [self.input_box1, self.input_box2]
+        self.input_boxes = [self.username_box1, self.password_box2]
         
     # Login Display
     def display(self):
@@ -77,24 +76,25 @@ class Login:
             self.display_surface.blit(self.background1_image, self.background1_position)
 
             # Display user and password input
-            self.input_box1.draw(self.screen)
-            self.input_box2.draw(self.screen)
+            self.username_box1.draw(self.screen)
+            self.password_box2.draw(self.screen)
             
-            # Copy of username rectangle
-            #pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
+            # Refresh Login Page
             pygame.display.update()
             clock.tick(30)
             
     # Login Page Actions
     def action(self):
         if self.login_rect.collidepoint(pygame.mouse.get_pos()):
+            username = self.username_box1.retrieveBoxValues()
+            password = self.password_box2.retrieveBoxValues()
             #self.input_box1.draw(self.screen)
             #self.input_box2.draw(self.screen)
-            if(self.authenticate(self.input_box1.retrieveBoxValues(), self.input_box2.retrieveBoxValues())):
+            if(self.authenticate(username, password)):
                 return True
             else:
-                self.input_box1.resetText()
-                self.input_box2.resetText()
+                self.username_box1.resetText()
+                self.password_box2.resetText()
                 return False    
             
         # Transition to Register Page

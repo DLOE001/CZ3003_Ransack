@@ -119,7 +119,7 @@ while running:
     elif state == 1:
         worldSelect.display()
     elif state == 2:
-        if(getattr(register, 'backToLogin')):
+        if(getattr(register, 'backToLogin') or getattr(register, 'successfulRegister')):
             setattr(login, 'done', False)
         login.display()
         if (getattr(login, 'done') and getattr(login, 'success')):
@@ -128,6 +128,7 @@ while running:
             recreateUIObj(username, user)
             state = 0
         elif (getattr(login, 'done') and getattr(login, 'registerClicked')):
+            setattr(register, 'done', False)
             state = 6
     elif state == 3:
         if level.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
@@ -138,6 +139,9 @@ while running:
         friendMenu.display()
     elif state == 6:
         register.display()
+        if (getattr(register, 'done')):
+            state = 2
+            
     elif state == -1:
         running = False
  
@@ -156,8 +160,8 @@ while running:
                 state = leaderBoard.action()
             elif state == 5:
                 state = friendMenu.action()
-            elif state == 6:
-                state = register.action()
+            #elif state == 6:
+                #state = register.action()
             #elif state == 2:
                 #state = login.action()
                 

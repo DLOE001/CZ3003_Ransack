@@ -117,14 +117,16 @@ def retrieveQuizLevelData(worldSelected, levelSelected):
 def createStudentAccount(username, password, email):
     listStore = []
     listReturn = []
+    worldsCleared = 0
     title = "Software Newbie"
     try:
        mySQLconnection = __mySQLconnection()
-       sqlQuery = "INSERT INTO student (username, password, email, title) VALUES (%s, %s, %s, %s)"
-       val = (username, password, email, title)
+       sqlQuery = "INSERT INTO student (username, password, email, title, worldsCleared) \
+                    VALUES ('%s', '%s', '%s', '%s', %d);" % (username, password, email, title, worldsCleared)
+                    
+    
        cursor = mySQLconnection.cursor()
-       cursor.execute(sqlQuery, val)
-       #records = cursor.fetchall()
+       cursor.execute(sqlQuery)
        mySQLconnection.commit()
     
     except Error as e :

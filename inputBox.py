@@ -4,7 +4,7 @@ pygame.init()
 screen = pygame.display.set_mode((640, 480))
 COLOR_INACTIVE = pygame.Color('lightskyblue3')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
-FONT = pygame.font.Font(None, 60)
+FONT = pygame.font.Font(None, 45)
 
 
 class InputBox():
@@ -48,7 +48,7 @@ class InputBox():
     
     def draw(self, screen):
         # Blit the text.
-        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
+        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+15))
         # Blit the rect.
         pygame.draw.rect(screen, self.color, self.rect, 2)
 

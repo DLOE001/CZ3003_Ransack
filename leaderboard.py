@@ -50,7 +50,7 @@ class Leaderboard:
         self.usernametext2_position = [380,350]
 
         # Set Score Text
-        self.scoretext3 = pygame.font.SysFont('Broadway', 40).render("Score", True, (0, 0, 0))
+        self.scoretext3 = pygame.font.SysFont('Broadway', 40).render("Total Score", True, (0, 0, 0))
         self.scoretext3_position = [684,350]
 
         # Set Row 1 data

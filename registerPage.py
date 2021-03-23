@@ -30,7 +30,7 @@ class Register:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-        
+        self.successfulRegister = False
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
@@ -55,27 +55,117 @@ class Register:
         self.register_rect_position = [0,0]
         
         # Set the fields for user to key in
-        self.input_box1 = InputBox(557, 359, 309, 63)
-        self.input_box2 = InputBox(557, 470, 309, 63)
-        self.input_box2 = InputBox(557, 585, 309, 63)
-        self.input_boxes = [self.input_box1, self.input_box2]
-        print("loaded")
+        self.username_box1 = InputBox(557, 359, 309, 64)
+        self.email_box2 = InputBox(556, 470, 309, 66)
+        self.password_box3 = InputBox(556, 585, 309, 65)
+
+        self.done = False
+        self.errorMessage = ""
+        self.successMessage = "Successfully Registered"
+        self.input_boxes = [self.username_box1, self.email_box2, self.password_box3]
 
     def display(self):
-        # Display background
-        self.display_surface.blit(self.background1_image, self.background1_position)
+        
+        clock = pygame.time.Clock()        
+        while not self.done:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == MOUSEBUTTONDOWN:
+                    self.done = self.action()
+                for box in self.input_boxes:
+                    box.handle_event(event)
+                    
+            # Display background
+            self.display_surface.blit(self.background1_image, self.background1_position)
 
-        # Set back button
-        self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
+            # Set back button
+            self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
 
+            # Display user and password input
+            self.username_box1.draw(self.screen)
+            self.email_box2.draw(self.screen)
+            self.password_box3.draw(self.screen)
+        
+            # Refresh Register Page on key press
+            pygame.display.update()
+            clock.tick(30)
+            
     # Register Page Actions
     def action(self):
+        # Register button is selected
+        if self.register_rect.collidepoint(pygame.mouse.get_pos()):
+            username = self.username_box1.retrieveBoxValues()
+            email = self.email_box2.retrieveBoxValues()
+            password = self.password_box3.retrieveBoxValues()
+            if(self.checkInputFields(username, password, email)):
+                mysqlConnection.createStudentAccount(username, password, email)
+                self.successfulRegister = True
+                print(self.successMessage)
+                return True
+            else:
+                print(self.errorMessage)
+                self.username_box1.resetText()
+                self.email_box2.resetText()
+                self.password_box3.resetText()
+                return False
+         
         # Back button is selected
         if self.backbutton3_position.collidepoint(pygame.mouse.get_pos()):
             self.backToLogin = True
             print("Back Button Pressed!")
             clicksound()
             return 2
+    
+    # Method to check whether input fields have been properly filled 
+    def checkInputFields(self, username, password, email):
+        passCheck = False
+        self.errorMessage = ""
+        if(len(username) <= 0 or len(password) <= 0 or len(email) <=0):
+            if(len(username) <= 0):
+                if(len(self.errorMessage) <= 0):
+                    self.errorMessage = "Username field not filled\n"
+                else:
+                    self.errorMessage += "Username field not filled\n"
+            if(len(password) <= 0):
+                if(len(self.errorMessage) <= 0):
+                    self.errorMessage = "Password field not filled\n"
+                else:
+                    self.errorMessage += "Password field not filled\n"
+            if(len(email) <= 0):
+                if(len(self.errorMessage) <= 0):
+                    self.errorMessage = "Email field not filled\n"
+                else:
+                    self.errorMessage += "Email field not filled\n"
         else:
-            return 6
+            # Check for duplicate username
+            duplicatedUsername = False
+            foundDuplicate = False
+            allStudents = mysqlConnection.retrieveStudentAccountData()
+            allTeachers = mysqlConnection.retrieveTeacherAccountData()
+            
+            for i in allStudents:
+                if(username == i[0]):
+                    duplicatedUsername = True
+                    foundDuplicate = True
+                    break
+            
+            if (foundDuplicate):
+                pass
+            else:
+                for i in allTeachers:
+                    if(username == i[0]):
+                        duplicatedUsername = True
+                        break
+            if(duplicatedUsername):
+                if(len(self.errorMessage) <= 0):
+                    self.errorMessage = username + " is already taken\n"
+                else:
+                    self.errorMessage += username + " is already taken\n" 
+            else:
+                passCheck = True
+        return passCheck
+        
+        
         
