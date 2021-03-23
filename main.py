@@ -133,7 +133,7 @@ while running:
         if level.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
             state = 1
     elif state == 4:
-        leaderboard.display()
+        leaderBoard.display()
     elif state == 5:
         friends.display()
     elif state == 6:
