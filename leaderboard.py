@@ -52,6 +52,56 @@ class Leaderboard:
         # Set Score Text
         self.scoretext3 = pygame.font.SysFont('Broadway', 40).render("Score", True, (0, 0, 0))
         self.scoretext3_position = [684,350]
+
+        # Set Row 1 data
+        self.row1Rank = pygame.font.SysFont('Broadway', 40).render("1", True, (0, 0, 0))
+        self.row1Rank_position = [210,415]
+
+        self.row1Username = pygame.font.SysFont('Broadway', 40).render("Aaaaa", True, (0, 0, 0))
+        self.row1Username_position = [380,415]
+
+        self.row1Score = pygame.font.SysFont('Broadway', 40).render("999", True, (0, 0, 0))
+        self.row1Score_position = [684,415]
+        
+        # Set Row 2 data
+        self.row2Rank = pygame.font.SysFont('Broadway', 40).render("2", True, (0, 0, 0))
+        self.row2Rank_position = [210,480]
+
+        self.row2Username = pygame.font.SysFont('Broadway', 40).render("Bbbbb", True, (0, 0, 0))
+        self.row2Username_position = [380,480]
+
+        self.row2Score = pygame.font.SysFont('Broadway', 40).render("888", True, (0, 0, 0))
+        self.row2Score_position = [684,480]
+
+        # Set Row 3 data
+        self.row3Rank = pygame.font.SysFont('Broadway', 40).render("3", True, (0, 0, 0))
+        self.row3Rank_position = [210,542]
+
+        self.row3Username = pygame.font.SysFont('Broadway', 40).render("Ccccc", True, (0, 0, 0))
+        self.row3Username_position = [380,542]
+
+        self.row3Score = pygame.font.SysFont('Broadway', 40).render("777", True, (0, 0, 0))
+        self.row3Score_position = [684,542]
+
+        # Set Row 4 data
+        self.row4Rank = pygame.font.SysFont('Broadway', 40).render("4", True, (0, 0, 0))
+        self.row4Rank_position = [210,597]
+
+        self.row4Username = pygame.font.SysFont('Broadway', 40).render("Ddddd", True, (0, 0, 0))
+        self.row4Username_position = [380,597]
+
+        self.row4Score = pygame.font.SysFont('Broadway', 40).render("420", True, (0, 0, 0))
+        self.row4Score_position = [684,597]
+
+        # Set Row 5 data
+        self.row5Rank = pygame.font.SysFont('Broadway', 40).render("5", True, (0, 0, 0))
+        self.row5Rank_position = [210,660]
+
+        self.row5Username = pygame.font.SysFont('Broadway', 40).render("Eeeee", True, (0, 0, 0))
+        self.row5Username_position = [380,660]
+
+        self.row5Score = pygame.font.SysFont('Broadway', 40).render("69", True, (0, 0, 0))
+        self.row5Score_position = [684,660]
         
     def display(self):
         # Display background
@@ -71,6 +121,31 @@ class Leaderboard:
 
         # Display Score Text
         self.screen.blit(self.scoretext3, self.scoretext3_position)
+
+        # Display Row 1 Data
+        self.screen.blit(self.row1Rank, self.row1Rank_position)
+        self.screen.blit(self.row1Username, self.row1Username_position)
+        self.screen.blit(self.row1Score, self.row1Score_position)
+
+        # Display Row 2 Data
+        self.screen.blit(self.row2Rank, self.row2Rank_position)
+        self.screen.blit(self.row2Username, self.row2Username_position)
+        self.screen.blit(self.row2Score, self.row2Score_position)
+
+        # Display Row 3 Data
+        self.screen.blit(self.row3Rank, self.row3Rank_position)
+        self.screen.blit(self.row3Username, self.row3Username_position)
+        self.screen.blit(self.row3Score, self.row3Score_position)
+
+        # Display Row 4 Data
+        self.screen.blit(self.row4Rank, self.row4Rank_position)
+        self.screen.blit(self.row4Username, self.row4Username_position)
+        self.screen.blit(self.row4Score, self.row4Score_position)
+
+        # Display Row 5 Data
+        self.screen.blit(self.row5Rank, self.row5Rank_position)
+        self.screen.blit(self.row5Username, self.row5Username_position)
+        self.screen.blit(self.row5Score, self.row5Score_position)
 
     def action(self):
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
