@@ -153,7 +153,7 @@ while running:
             elif state == 1:
                 state = worldSelect.action()
             elif state == 4:
-                state = leaderboard.action()
+                state = leaderBoard.action()
             elif state == 5:
                 state = friends.action()
             elif state == 6:
