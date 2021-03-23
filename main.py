@@ -140,7 +140,7 @@ while running:
         register.display()
     elif state == -1:
         running = False
-
+ 
     # When user clicks the window close button.
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
