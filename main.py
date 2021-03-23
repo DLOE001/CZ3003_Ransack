@@ -21,7 +21,7 @@ import quizLevel
 # Leadeboard  Class
 import leaderboard
 
-# Friends  Class
+# Leadeboard  Class
 import friends
 
 # Import and initialize the pygame library
@@ -49,13 +49,31 @@ display_surface = pygame.display.set_mode((screen_width, screen_height))
 white = [255, 255, 255]
 
 # Sample User Data
-username = ""
-user = ""
+username = "Daniel Loe"
+user = "Student"
+loggedIn = False
+
+# Simulated Console Login
+# TODO: To be removed once Login page is done
+"""
+user = "nil"
+while user == "nil":
+    print("1: Student, 2: Teacher")
+    choice = input()
+    if choice == "1":
+        user = "Student"
+        print("Logged in as Student")
+    elif choice == "2":
+        user = "Teacher"
+        print("Logged in as Teacher")
+    else:
+        print("Input 1 or 2 only!")
+"""
 
 # Create Login Object
 login = loginPage.Login(username, user, screen, display_surface)
 login.loadAssets()
-    
+
 # Create Login Object
 register = registerPage.Register(username, user, screen, display_surface)
 register.loadAssets()
@@ -63,53 +81,21 @@ register.loadAssets()
 # Create Main Menu Object
 menu = mainmenu.MainMenu(username, user, screen, display_surface)
 menu.loadAssets()
-    
-# Create World Select Object
+
+#Create World Select Object
 worldSelect = worldselect.WorldSelect(username, user, screen, display_surface)
 worldSelect.loadAssets()
 
-# Create Leaderboard Object
-leaderBoard = leaderboard.Leaderboard(username, user, screen, display_surface)
-leaderBoard.loadAssets()
+#Create Leaderboard Object
+leaderboard = leaderboard.Leaderboard(username, user, screen, display_surface)
+leaderboard.loadAssets()
 
-# Create Friends Object
-friendMenu = friends.Friends(username, user, screen, display_surface)
-friendMenu.loadAssets()
+#Create Friends Object
+friends = friends.Friends(username, user, screen, display_surface)
+friends.loadAssets()
 
-# Create Quiz Level Object
-level = quizLevel.QuizLevel()
-
-# Recreates the UI Objects passing in the logged in user's username and user type
-def recreateUIObj(username, user):
-    global login
-    global menu
-    global worldSelect
-    global level
-    global leaderBoard
-    global friendMenu
-    
-     # Create Login Object
-    login = loginPage.Login(username, user, screen, display_surface)
-    login.loadAssets()
-                
-    # Create Main Menu Object
-    menu = mainmenu.MainMenu(username, user, screen, display_surface)
-    menu.loadAssets()
-                
-    #Create World Select Object
-    worldSelect = worldselect.WorldSelect(username, user, screen, display_surface)
-    worldSelect.loadAssets()
-                
-    # Create Leaderboard Object
-    leaderBoard = leaderboard.Leaderboard(username, user, screen, display_surface)
-    leaderBoard.loadAssets()
-    
-    # Create Friends Object
-    friendMenu = friends.Friends(username, user, screen, display_surface)
-    friendMenu.loadAssets()
-    
-    #Create Quiz Level Object
-    level = quizLevel.QuizLevel()
+#Create World Select Object
+quizLevel = quizLevel.QuizLevel()
 
 # Run until the user asks to quit
 while running:
@@ -119,28 +105,22 @@ while running:
     elif state == 1:
         worldSelect.display()
     elif state == 2:
-        if(getattr(register, 'backToLogin')):
-            setattr(login, 'done', False)
         login.display()
         if (getattr(login, 'done') and getattr(login, 'success')):
-            username = getattr(login, 'username')
-            user = getattr(login, 'user')
-            recreateUIObj(username, user)
             state = 0
-        elif (getattr(login, 'done') and getattr(login, 'registerClicked')):
-            state = 6
+            #loggedIn = True
     elif state == 3:
-        if level.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
+        if quizLevel.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
             state = 1
     elif state == 4:
-        leaderBoard.display()
+        leaderboard.display()
     elif state == 5:
-        friendMenu.display()
+        friends.display()
     elif state == 6:
-        register.display()
+        friends.display()
     elif state == -1:
         running = False
- 
+
     # When user clicks the window close button.
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -153,11 +133,9 @@ while running:
             elif state == 1:
                 state = worldSelect.action()
             elif state == 4:
-                state = leaderBoard.action()
-            elif state == 5:
-                state = friendMenu.action()
-            elif state == 6:
-                state = register.action()
+                state = leaderboard.action()
+            #elif state == 5:
+                #state = friends.action() 
             #elif state == 2:
                 #state = login.action()
                 
