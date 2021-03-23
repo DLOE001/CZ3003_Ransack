@@ -155,7 +155,7 @@ while running:
             elif state == 4:
                 state = leaderBoard.action()
             elif state == 5:
-                state = friends.action()
+                state = friendMenu.action()
             elif state == 6:
                 state = register.action()
             #elif state == 2:
