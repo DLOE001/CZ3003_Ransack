@@ -126,6 +126,8 @@ def recreateUIObj(username, user):
 while running:
     # Display the different menus according to state.
     if state == 0:
+        # Set done = false so to keep page refreshing 
+        setattr(friendMenu, 'done', False)
         menu.display()
     elif state == 1:
         worldSelect.display()
@@ -149,6 +151,8 @@ while running:
         leaderBoard.display()
     elif state == 5:
         friendMenu.display()
+        if (getattr(friendMenu, 'done')):
+            state = 0
     elif state == 6:
         register.display()
         if (getattr(register, 'done')):
@@ -172,8 +176,8 @@ while running:
                 state = worldSelect.action()
             elif state == 4:
                 state = leaderBoard.action()
-            elif state == 5:
-                state = friendMenu.action()
+            #elif state == 5:
+                #state = friendMenu.action()
             #elif state == 6:
                 #state = register.action()
             #elif state == 2:

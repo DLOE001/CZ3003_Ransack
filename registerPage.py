@@ -116,7 +116,7 @@ class Register:
             self.backToLogin = True
             print("Back Button Pressed!")
             clicksound()
-            return 2
+            return True
     
     # Method to check whether input fields have been properly filled 
     def checkInputFields(self, username, password, email):

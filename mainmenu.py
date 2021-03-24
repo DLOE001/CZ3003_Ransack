@@ -76,6 +76,8 @@ class MainMenu:
             self.button9_position = self.button9_image.get_rect().move(491, 514)
             self.button10_position = self.button10_image.get_rect().move(691, 514)
 
+            self.gotofriends = False
+
         elif self.user == "Teacher":
             #Set background for teacher
             self.background1_image = pygame.image.load("images/teacher_mainmenu.jpg")

@@ -44,19 +44,43 @@ class Friends:
         self.backbutton1_image = pygame.image.load("images/w2.png")
         self.backbutton1_position = self.backbutton1_image.get_rect().move(109, 78)
 
-    def display(self):
-        # Display background
-        self.display_surface.blit(self.background1_image, self.background1_position)
+        #Set friends input
+        self.friendsinput_box1 = InputBox(228, 667, 205, 35)
+        self.done = False
+        self.success = False
+        self.input_boxes = [self.friendsinput_box1]
         
-        # Display back button 
-        self.display_surface.blit(self.backbutton1_image, self.backbutton1_position)
+    def display(self):
 
-        # Hide all buttons 
-        self.backbutton1_image.set_alpha(0)
+        clock = pygame.time.Clock()        
+        while not self.done:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == MOUSEBUTTONDOWN:
+                    self.done = self.action()
+                for box in self.input_boxes:
+                    box.handle_event(event)
+                    
+            # Display background
+            self.display_surface.blit(self.background1_image, self.background1_position)
+            
+            # Display back button 
+            self.display_surface.blit(self.backbutton1_image, self.backbutton1_position)
+
+            # Hide all buttons 
+            self.backbutton1_image.set_alpha(0)
+
+            # Display user and password input
+            self.friendsinput_box1.draw(self.screen)
+
+            # Refresh RWgister Page on key press
+            pygame.display.update()
+            clock.tick(30)
 
     def action(self):
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
+            print("Back Button Pressed!")
             clicksound()
-            return 0
-        else:
-            return 5
+            return True
