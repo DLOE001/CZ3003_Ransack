@@ -118,7 +118,7 @@ def createStudentAccount(username, password, email):
     listStore = []
     listReturn = []
     worldsCleared = 0
-    title = "Software Newbie"
+    title = "Newbie"
     try:
        mySQLconnection = __mySQLconnection()
        sqlQuery = "INSERT INTO student (username, password, email, title, worldsCleared) \
@@ -136,8 +136,43 @@ def createStudentAccount(username, password, email):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()
             #print("\nMySQL connection is closed Now")
+        
+# Retrieve Top 5 student records based on overall score for story mode
+def retrieveLeaderboard():
+    listStore = []
+    listReturn = []
+    
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "SELECT s.title, sls.username, SUM(score) from storylevelscore sls \
+                    JOIN student s ON sls.username = s.username \
+                    GROUP BY sls.username \
+                    ORDER BY SUM(score) DESC;"
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+    return listReturn
             
 ### Quiz Score Functions ###
+
 # Retrieve User Quiz Score
 def retrieveUserQuizScore(username, level):
     listStore = []

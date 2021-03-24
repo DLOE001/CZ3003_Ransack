@@ -58,3 +58,5 @@ class Friends:
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             return 0
+        else:
+            return 5

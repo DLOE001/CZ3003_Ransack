@@ -96,7 +96,12 @@ class MainMenu:
             self.button4_position = self.button4_image.get_rect().move(0, 0)
             self.button5_position = self.button5_image.get_rect().move(0, 0)
             self.button6_position = self.button6_image.get_rect().move(0, 0)
-
+            
+            # Set login button
+            self.uploadAssignment_rect = pygame.Rect(385, 310, 450, 115)
+            pygame.draw.rect(self.screen, (255, 255, 255), self.uploadAssignment_rect)
+            self.uploadAssignment_rect_position = [0,0]
+        
             # Set Username Text
             self.teacherUsername = pygame.font.SysFont('Courier New', 40).render(self.username, True, (0, 0, 0))
             self.teacherUsername_position = [835,95]
@@ -105,6 +110,7 @@ class MainMenu:
             self.logoutbutton7_image = pygame.image.load("images/teacher_logout.png")
             self.logoutbutton7_position = self.logoutbutton7_image.get_rect().move(715, 168)
 
+            
             #Set logout popup confirmation for teacher
             self.logoutpopup_image = pygame.image.load("images/w9.png")
             self.button9_image = pygame.image.load("images/w10.png")
@@ -248,6 +254,9 @@ class MainMenu:
                 clicksound()
                 self.logout = True
                 return 0
+            elif self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos()):
+                if self.user == "Teacher":
+                    return 7
             else:
                 return 0
         elif self.logout:

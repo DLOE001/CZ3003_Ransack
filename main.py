@@ -24,6 +24,9 @@ import leaderboard
 # Friends  Class
 import friends
 
+# Upload Assignment Class
+import uploadAssignmentPage
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -76,6 +79,10 @@ leaderBoard.loadAssets()
 friendMenu = friends.Friends(username, user, screen, display_surface)
 friendMenu.loadAssets()
 
+# Create Upload Assignment Object
+uploadAssignment = uploadAssignmentPage.UploadAssignment(username, user, screen, display_surface)
+uploadAssignment.loadAssets()
+
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
 
@@ -108,6 +115,10 @@ def recreateUIObj(username, user):
     friendMenu = friends.Friends(username, user, screen, display_surface)
     friendMenu.loadAssets()
     
+    # Create Upload Assignment Object
+    uploadAssignment = uploadAssignmentPage.UploadAssignment(username, user, screen, display_surface)
+    uploadAssignment.loadAssets()
+    
     #Create Quiz Level Object
     level = quizLevel.QuizLevel()
 
@@ -132,6 +143,7 @@ while running:
             state = 6
     elif state == 3:
         if level.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
+            leaderBoard.loadAssets()
             state = 1
     elif state == 4:
         leaderBoard.display()
@@ -141,6 +153,8 @@ while running:
         register.display()
         if (getattr(register, 'done')):
             state = 2
+    elif state == 7:
+        uploadAssignment.display()
             
     elif state == -1:
         running = False
@@ -164,6 +178,8 @@ while running:
                 #state = register.action()
             #elif state == 2:
                 #state = login.action()
+            elif state == 7:
+                state = uploadAssignment.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()

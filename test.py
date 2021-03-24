@@ -15,5 +15,9 @@ for i in allUsers:
     print()
 """
 
-mysqlConnection.createStudentAccount("Tom", "Nice", "")
+#mysqlConnection.createStudentAccount("Tom", "Nice", "")
 
+list = ["Apple", "BEE", "CEE"]
+
+for i in list:
+    print(i)

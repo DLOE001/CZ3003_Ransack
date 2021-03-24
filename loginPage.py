@@ -48,8 +48,8 @@ class Login:
 
         #Set user and password input
         self.input_rect = pygame.Rect(566, 480, 309, 179)
-        self.username_box1 = InputBox(568, 397, 309, 66)
-        self.password_box2 = InputBox(567, 497, 309, 66)
+        self.username_box1 = InputBox(568, 397, 310, 66)
+        self.password_box2 = InputBox(568, 497, 310, 66)
         self.done = False
         self.success = False
         self.registerClicked = False
