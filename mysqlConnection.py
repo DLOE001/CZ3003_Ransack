@@ -240,3 +240,24 @@ def insertUserQuizScore(username, level, score):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()    
 
+# Retrieve Friend List for logged in user
+def retrieveFriendList(username, friendname):
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "SELECT friendlist from student \
+                   WHERE username = '%s';" % (username)
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+    
+    records.append(friendname)
+            
+    return records

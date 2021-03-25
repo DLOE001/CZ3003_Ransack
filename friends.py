@@ -8,7 +8,7 @@ pygame.init()
 pygame.font.init()
 
 # Imports Text Box
-from inputBox import InputBox
+from friendinputBox import InputBox
 
 # Import SQL Connection 
 import mysqlConnection
@@ -40,15 +40,20 @@ class Friends:
         self.background1_image = pygame.image.load("images/friends.jpg")
         self.background1_position = [0,0]
 
-        #Set back button 
+        # Set back button 
         self.backbutton1_image = pygame.image.load("images/w2.png")
         self.backbutton1_position = self.backbutton1_image.get_rect().move(109, 78)
 
-        #Set friends input
+        # Set friends input
         self.friendsinput_box1 = InputBox(228, 667, 205, 35)
         self.done = False
         self.success = False
         self.input_boxes = [self.friendsinput_box1]
+
+        # Set add friend button
+        self.addfriend_rect = pygame.Rect(143, 735, 285, 46)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.addfriend_rect)
+        self.addfriend_rect_position = [0,0]
         
     def display(self):
 
@@ -84,3 +89,12 @@ class Friends:
             print("Back Button Pressed!")
             clicksound()
             return True
+
+        if self.addfriend_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
+            friendname = self.friendsinput_box1.retrieveBoxValues()
+            # Check if friendname is empty 
+            if not friendname:
+                print("Empty")
+            else:
+                print(mysqlConnection.retrieveFriendList(self.username, friendname))
