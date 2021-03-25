@@ -242,6 +242,7 @@ def insertUserQuizScore(username, level, score):
 
 # Retrieve Friend List for logged in user
 def retrieveFriendList(username, friendname):
+
     try:
        mySQLconnection = __mySQLconnection()
        sqlQuery = "SELECT friendlist from student \
@@ -257,7 +258,14 @@ def retrieveFriendList(username, friendname):
         #closing database connection.
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()
-    
-    records.append(friendname)
+
+    #Covert from tuple to list
+    recordslist = list(records)
+
+    #Covert from index 0 of list (contains the names) to string
+    recordsstring = str(recordslist[0])
+
+    # Cut the string so to only contain names and add new name
+    recordsstring = (recordsstring[2:-3] + " " + friendname + ",")
             
-    return records
+    return recordsstring
