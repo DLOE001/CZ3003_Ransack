@@ -62,14 +62,14 @@ class PopUp:
         self.msgsize=0
 
     # Success Popup
-    def success(self, msg="Action was successful!", msgsize=40, hdr="Success", hdrsize=30):
+    def success(self, msg="Action was successful!", hdr="Success", msgsize=40, hdrsize=30):
         self.displaying = True
         self.header(hdr, hdrsize)
         self.message(msg, msgsize)
         self.display()
 
     # Error/Fail Popup
-    def fail(self, msg="Action failed!", msgsize=40, hdr="Error", hdrsize=30):
+    def fail(self, msg="Action failed!", hdr="Error", msgsize=40, hdrsize=30):
         self.displaying = True
         self.header(hdr, hdrsize)
         self.message(msg, msgsize)
