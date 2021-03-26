@@ -140,6 +140,7 @@ while running:
     if state == 0:
         # Set done = false so to keep page refreshing 
         setattr(friendMenu, 'done', False)
+        setattr(uploadAssignment, 'done', False)
         menu.display()
     elif state == 1:
         worldSelect.display()
@@ -196,8 +197,8 @@ while running:
                 #state = register.action()
             #elif state == 2:
                 #state = login.action()
-            elif state == 7:
-                state = uploadAssignment.action()
+            #elif state == 7:
+                #state = uploadAssignment.action()
             elif state == 8:
                 state = studentCustomQuizMenu.action()
                 

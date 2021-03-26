@@ -36,6 +36,8 @@ class UploadAssignment:
         # Button 2 is query button
 
     def loadAssets(self):
+
+        self.done = False
         # Set background
         self.background1_image = pygame.image.load("images/teacher_upload_assignment.jpg")
         self.background1_position = [0,0]
@@ -44,7 +46,44 @@ class UploadAssignment:
         self.backbutton1_image = pygame.image.load("images/w2.png")
         self.backbutton1_position = self.backbutton1_image.get_rect().move(22, 21)
 
+        # Set assignment name input
+        self.assignmentnameinput_box = InputBox(616, 279, 512, 40)
+        self.done = False
+        self.input_boxes = [self.assignmentnameinput_box]
+
+        # Set choose assignment file button
+        self.chooseassignment_rect = pygame.Rect(354, 488, 316, 43)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.chooseassignment_rect)
+        self.chooseassignment_rect_position = [0,0]
+
+        # Set upload assignment file button
+        self.uploadassignment_rect = pygame.Rect(845, 696, 223, 52)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.uploadassignment_rect)
+        self.uploadassignment_rect_position = [0,0]
+
+        # Set faceebook button
+        self.facebook_rect = pygame.Rect(420, 770, 49, 52)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.facebook_rect)
+        self.facebook_rect_position = [0,0]
+
+        # Set twitter button
+        self.twitter_rect = pygame.Rect(509, 773, 49, 52)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.twitter_rect)
+        self.twitter_rect_position = [0,0]
+
     def display(self):
+
+        clock = pygame.time.Clock()        
+        while not self.done:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == MOUSEBUTTONDOWN:
+                    self.done = self.action()
+                for box in self.input_boxes:
+                    box.handle_event(event)       
+
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
         
@@ -54,10 +93,27 @@ class UploadAssignment:
         # Hide all buttons 
         self.backbutton1_image.set_alpha(0)
 
+        # Display friend input
+        self.assignmentnameinput_box.draw(self.screen)
+
+        # Refresh Page on key press
+        pygame.display.update()
+        clock.tick(30)
+
     def action(self):
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
             clicksound()
-            print("Click")
-            return 0
-        else:
-            return 7
+            print("Back Button Clicked")
+            return True
+        if self.chooseassignment_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
+            print("Choose Button Clicked")
+        if self.uploadassignment_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
+            print("Upload Button Clicked")
+        if self.facebook_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
+            print("Facebook Button Clicked")
+        if self.twitter_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
+            print("Twitter Button Clicked")

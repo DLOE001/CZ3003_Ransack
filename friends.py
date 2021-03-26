@@ -77,12 +77,13 @@ class Friends:
             # Hide all buttons 
             self.backbutton1_image.set_alpha(0)
 
-            # Display user and password input
+            # Display friend input
             self.friendsinput_box1.draw(self.screen)
 
+            # Display current friend list
             self.displayfriendlist()
 
-            # Refresh RWgister Page on key press
+            # Refresh Page on key press
             pygame.display.update()
             clock.tick(30)
 
