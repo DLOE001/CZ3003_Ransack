@@ -105,7 +105,7 @@ class Friends:
                 # Add new friendname
                 newfriendlist.append(friendname)
 
-                # Convert list to string
+                # Convert list to string so that SQL can accept
                 newfriendstring = ''
                 for i in newfriendlist:
                     newfriendstring = newfriendstring + i + ', '
@@ -122,6 +122,13 @@ class Friends:
     def displayfriendlist(self):
         friendlist = mysqlConnection.retrieveFriendList(self.username)
         index = 0
+
+        # Set name of current chat
+        self.chat_text = pygame.font.SysFont('Broadway', 40).render(friendlist[0], True, (0, 0, 0))
+        self.chat_text_position = [490 ,193]
+
+        self.screen.blit(self.chat_text, self.chat_text_position)
+
 
         for v in friendlist:
             # For each friend, set and display the names accordingly
