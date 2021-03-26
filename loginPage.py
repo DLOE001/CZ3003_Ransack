@@ -13,6 +13,9 @@ from inputBox import InputBox
 # Import SQL Connection 
 import mysqlConnection
 
+# Import Popuo
+import popup
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -30,6 +33,7 @@ class Login:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
+        self.popup= popup.PopUp(display_surface)
 
     def loadAssets(self):
         # Set background
@@ -68,16 +72,13 @@ class Login:
                     self.done = self.action()
                 for box in self.input_boxes:
                     box.handle_event(event)
-                    
-            #for box in self.input_boxes:
-                #box.update()
             
             # Display background
             self.display_surface.blit(self.background1_image, self.background1_position)
 
             # Display user and password input
-            self.username_box1.draw(self.screen)
-            self.password_box2.draw(self.screen)
+            for box in self.input_boxes:
+                box.draw(self.screen)
             
             # Refresh Login Page
             pygame.display.update()
@@ -91,10 +92,12 @@ class Login:
             #self.input_box1.draw(self.screen)
             #self.input_box2.draw(self.screen)
             if(self.authenticate(username, password)):
+                for box in self.input_boxes:
+                    box.resetText()
                 return True
             else:
-                self.username_box1.resetText()
-                self.password_box2.resetText()
+                for box in self.input_boxes:
+                    box.resetText()
                 return False    
             
         # Transition to Register Page
@@ -130,8 +133,8 @@ class Login:
                     break
            
         if (self.success):
-            print("Success Login. Welcome : " + self.user + " " + username + "\n")
+            self.popup.success("Welcome : " + username)
             return True
         else:
-            print("Failed to login, Incorrect ID/Password \n")
+            self.popup.fail("Failed to login, Incorrect ID/Password")
             return False

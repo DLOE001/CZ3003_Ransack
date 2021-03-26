@@ -13,6 +13,9 @@ from inputBox import InputBox
 # Import SQL Connection 
 import mysqlConnection
 
+# Import Popup    
+import popup
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -31,6 +34,7 @@ class Register:
         self.display_surface = display_surface
         self.screen = screen
         self.successfulRegister = False
+        self.popup= popup.PopUp(display_surface)
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
@@ -61,7 +65,7 @@ class Register:
 
         self.done = False
         self.errorMessage = ""
-        self.successMessage = "Successfully Registered"
+        self.successMessage = "Successfully Registered Account"
         self.input_boxes = [self.username_box1, self.email_box2, self.password_box3]
 
     def display(self):
@@ -83,10 +87,9 @@ class Register:
             # Set back button
             self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
 
-            # Display user and password input
-            self.username_box1.draw(self.screen)
-            self.email_box2.draw(self.screen)
-            self.password_box3.draw(self.screen)
+            # Display user, email and password input
+            for box in self.input_boxes:
+                box.draw(self.screen)
         
             # Refresh Register Page on key press
             pygame.display.update()
@@ -102,13 +105,14 @@ class Register:
             if(self.checkInputFields(username, password, email)):
                 mysqlConnection.createStudentAccount(username, password, email)
                 self.successfulRegister = True
-                print(self.successMessage)
+                for box in self.input_boxes:
+                    box.resetText()
+                self.popup.success(self.successMessage)
                 return True
             else:
-                print(self.errorMessage)
-                self.username_box1.resetText()
-                self.email_box2.resetText()
-                self.password_box3.resetText()
+                self.popup.fail(self.errorMessage)
+                for box in self.input_boxes:
+                    box.resetText()
                 return False
          
         # Back button is selected

@@ -240,9 +240,9 @@ class MainMenu:
                     return 0
             elif self.button5_position.collidepoint(pygame.mouse.get_pos()):
                 if self.user == "Student":
-                    print("Issue Challenges Button Pressed!")
+                    print("Custom Quiz Button Pressed!")
                     clicksound()
-                    return 0
+                    return 8
                 elif self.user == "Teacher":
                     print("Upload Assignment Button Pressed!")
                     clicksound()
@@ -256,8 +256,8 @@ class MainMenu:
                 clicksound()
                 self.logout = True
                 return 0
-            elif self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos()):
-                if self.user == "Teacher":
+            elif (self.user == "Teacher"):
+                if(self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos())):
                     return 7
             else:
                 return 0

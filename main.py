@@ -27,6 +27,9 @@ import friends
 # Upload Assignment Class
 import uploadAssignmentPage
 
+# Student Custom Quiz Lobby
+import studentCustomQuizLobby
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -83,6 +86,10 @@ friendMenu.loadAssets()
 uploadAssignment = uploadAssignmentPage.UploadAssignment(username, user, screen, display_surface)
 uploadAssignment.loadAssets()
 
+# Student Custom Lobby Object
+studentCustomQuizMenu = studentCustomQuizLobby.StudentCustomQuizLobby(username, user, screen, display_surface)
+studentCustomQuizMenu.loadAssets()
+
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
 
@@ -94,6 +101,7 @@ def recreateUIObj(username, user):
     global level
     global leaderBoard
     global friendMenu
+    global studentCustomQuizMenu
     
      # Create Login Object
     login = loginPage.Login(username, user, screen, display_surface)
@@ -119,6 +127,10 @@ def recreateUIObj(username, user):
     uploadAssignment = uploadAssignmentPage.UploadAssignment(username, user, screen, display_surface)
     uploadAssignment.loadAssets()
     
+    # Student Custom Lobby Object
+    studentCustomQuizMenu = studentCustomQuizLobby.StudentCustomQuizLobby(username, user, screen, display_surface)
+    studentCustomQuizMenu.loadAssets()
+
     #Create Quiz Level Object
     level = quizLevel.QuizLevel()
 
@@ -159,7 +171,9 @@ while running:
             state = 2
     elif state == 7:
         uploadAssignment.display()
-            
+    elif state == 8:
+        setattr(studentCustomQuizMenu, 'reload', True)
+        studentCustomQuizMenu.display()
     elif state == -1:
         running = False
  
@@ -184,6 +198,8 @@ while running:
                 #state = login.action()
             elif state == 7:
                 state = uploadAssignment.action()
+            elif state == 8:
+                state = studentCustomQuizMenu.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()

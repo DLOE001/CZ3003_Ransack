@@ -8,7 +8,7 @@ pygame.init()
 pygame.font.init()
 
 # Imports Text Box
-from inputBox import InputBox
+from friendinputBox import InputBox
 
 # Import SQL Connection 
 import mysqlConnection
@@ -40,16 +40,21 @@ class Friends:
         self.background1_image = pygame.image.load("images/friends.jpg")
         self.background1_position = [0,0]
 
-        #Set back button 
+        # Set back button 
         self.backbutton1_image = pygame.image.load("images/w2.png")
         self.backbutton1_position = self.backbutton1_image.get_rect().move(109, 78)
 
-        #Set friends input
+        # Set friends input
         self.friendsinput_box1 = InputBox(228, 667, 205, 35)
         self.done = False
         self.success = False
         self.input_boxes = [self.friendsinput_box1]
-        
+
+        # Set add friend button
+        self.addfriend_rect = pygame.Rect(143, 735, 285, 46)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.addfriend_rect)
+        self.addfriend_rect_position = [0,0]
+
     def display(self):
 
         clock = pygame.time.Clock()        
@@ -75,6 +80,8 @@ class Friends:
             # Display user and password input
             self.friendsinput_box1.draw(self.screen)
 
+            self.displayfriendlist()
+
             # Refresh RWgister Page on key press
             pygame.display.update()
             clock.tick(30)
@@ -84,3 +91,51 @@ class Friends:
             print("Back Button Pressed!")
             clicksound()
             return True
+
+        if self.addfriend_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
+            friendname = self.friendsinput_box1.retrieveBoxValues()
+            # Check if friendname is empty 
+            if not friendname:
+                print("Empty")
+            else:
+                # Retrieve current friend list
+                newfriendlist = mysqlConnection.retrieveFriendList(self.username)
+
+                # Add new friendname
+                newfriendlist.append(friendname)
+
+                # Convert list to string so that SQL can accept
+                newfriendstring = ''
+                for i in newfriendlist:
+                    newfriendstring = newfriendstring + i + ', '
+
+                # Remove last two index of string as not needed
+                newfriendstring = newfriendstring[:-2]
+
+                print(newfriendstring)
+
+                # Proceed to update which will be reflect in SQL and system
+                mysqlConnection.updateFriendList(self.username, newfriendstring)
+
+
+    def displayfriendlist(self):
+        friendlist = mysqlConnection.retrieveFriendList(self.username)
+        index = 0
+
+        # Set name of current chat
+        self.chat_text = pygame.font.SysFont('Broadway', 40).render(friendlist[0], True, (0, 0, 0))
+        self.chat_text_position = [490 ,193]
+
+        self.screen.blit(self.chat_text, self.chat_text_position)
+
+
+        for v in friendlist:
+            # For each friend, set and display the names accordingly
+            self.friend_text1 = pygame.font.SysFont('Broadway', 30).render(v, True, (0, 0, 0))
+
+            # Each names have a interval of y = 112
+            self.friend_text1_position = [206 ,269 + index*112]
+
+            self.screen.blit(self.friend_text1, self.friend_text1_position)
+            index = index + 1
