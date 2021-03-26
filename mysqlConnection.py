@@ -198,8 +198,8 @@ def retrieveAllCustomQuiz():
     
     return listReturn
 
-# Update User Quiz Score
-def updateCustomQuizScore(quizName, newRating):
+# Update Custom Quiz Rating
+def updateCustomQuizRating(quizName, newRating):
 
     try:
         mySQLconnection = __mySQLconnection()

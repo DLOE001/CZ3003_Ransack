@@ -76,10 +76,10 @@ class CustomQuizObjAsset:
         if self.upArrow_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             self.rating += 1
-            mysqlConnection.updateCustomQuizScore(self.quizName, self.rating)
+            mysqlConnection.updateCustomQuizRating(self.quizName, self.rating)
         if self.downArrow_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             self.rating -= 1
-            mysqlConnection.updateCustomQuizScore(self.quizName, self.rating)
+            mysqlConnection.updateCustomQuizRating(self.quizName, self.rating)
         
 
