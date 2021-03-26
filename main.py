@@ -197,8 +197,8 @@ while running:
                 #state = register.action()
             #elif state == 2:
                 #state = login.action()
-            elif state == 7:
-                state = uploadAssignment.action()
+            #elif state == 7:
+                #state = uploadAssignment.action()
             elif state == 8:
                 state = studentCustomQuizMenu.action()
                 
