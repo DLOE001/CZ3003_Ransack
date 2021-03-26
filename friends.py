@@ -54,7 +54,7 @@ class Friends:
         self.addfriend_rect = pygame.Rect(143, 735, 285, 46)
         pygame.draw.rect(self.screen, (255, 255, 255), self.addfriend_rect)
         self.addfriend_rect_position = [0,0]
-        
+
     def display(self):
 
         clock = pygame.time.Clock()        
@@ -80,6 +80,8 @@ class Friends:
             # Display user and password input
             self.friendsinput_box1.draw(self.screen)
 
+            self.displayfriendlist()
+
             # Refresh RWgister Page on key press
             pygame.display.update()
             clock.tick(30)
@@ -97,4 +99,42 @@ class Friends:
             if not friendname:
                 print("Empty")
             else:
-                print(mysqlConnection.retrieveFriendList(self.username, friendname))
+                # Retrieve current friend list
+                newfriendlist = mysqlConnection.retrieveFriendList(self.username)
+
+                # Add new friendname
+                newfriendlist.append(friendname)
+
+                # Convert list to string
+                newfriendstring = ''
+                for i in newfriendlist:
+                    newfriendstring = newfriendstring + i + ', '
+
+                # Remove last two index of string as not needed
+                newfriendstring = newfriendstring[:-2]
+
+                print(newfriendstring)
+
+                # Proceed to update which will be reflect in SQL and system
+                mysqlConnection.updateFriendList(self.username, newfriendstring)
+
+
+    def displayfriendlist(self):
+        friendlist = mysqlConnection.retrieveFriendList(self.username)
+        index = 0
+
+        for v in friendlist:
+            # For each friend, set and display the names accordingly
+            self.friend_text1 = pygame.font.SysFont('Broadway', 30).render(v, True, (0, 0, 0))
+
+            # Each names have a interval of y = 112
+            self.friend_text1_position = [206 ,269 + index*112]
+
+            self.screen.blit(self.friend_text1, self.friend_text1_position)
+            index = index + 1
+
+
+
+
+
+
