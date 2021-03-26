@@ -140,9 +140,3 @@ class Friends:
 
             self.screen.blit(self.friend_text1, self.friend_text1_position)
             index = index + 1
-
-
-
-
-
-

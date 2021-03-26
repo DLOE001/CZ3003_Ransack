@@ -136,6 +136,111 @@ def createStudentAccount(username, password, email):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()
             #print("\nMySQL connection is closed Now")
+
+# Retrieves all Custom Quiz Name data
+def retrieveCustomQuizNames():
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select quizName from customcreatedquiz"
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listReturn.append(row[0])
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    
+    return listReturn
+
+# Retrieves all Custom Quiz Name data
+def retrieveAllCustomQuiz():
+    listStore = []
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select * from customcreatedquiz"
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listStore.append(row[3])
+           listStore.append(row[4])
+           listStore.append(row[5])
+           listStore.append(row[6])
+           listStore.append(row[7])
+           listStore.append(row[8])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    
+    return listReturn
+
+# Update User Quiz Score
+def updateCustomQuizScore(quizName, newRating):
+
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "UPDATE customcreatedquiz \
+                    SET rating = %d \
+                    WHERE quizName = '%s'" % (newRating, quizName)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+# Create a Custom Quiz Account
+def createCustomQuiz(createdBy, quizName, question, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3):
+    listStore = []
+    listReturn = []
+    rating = 0
+    status = "Approved"
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "INSERT INTO customcreatedquiz (createdBy, quizName, question, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, rating, status) \
+                    VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s');" % (createdBy, quizName, question, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, rating, status)
+                    
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       mySQLconnection.commit()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+            
         
 # Retrieve Top 5 student records based on overall score for story mode
 def retrieveLeaderboard():
@@ -170,7 +275,64 @@ def retrieveLeaderboard():
             mySQLconnection.close()
             
     return listReturn
+ 
+# Retrieve Friend List
+def retrieveFriendList(username):
+
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "SELECT friendlist from student \
+                   WHERE username = '%s';" % (username)
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+
+    #Covert from tuple to list
+    recordslist = list(records)
+
+    #Covert from index 0 of list (contains the names) to string
+    recordsstring = str(recordslist[0])
+
+    # Cut the string so to only contain names
+    recordsstring = recordsstring[2:-3]
+
+    # Spilt into list
+    recordslist = recordsstring.split(", ")
+
+    print(recordslist)
             
+    return recordslist
+
+# Update Friend List
+def updateFriendList(username, newfriendstring):
+    
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "UPDATE student \
+                    SET friendlist = '%s' \
+                    WHERE username = '%s';" % (newfriendstring, username)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+    
+    print("Updated")
+    
 ### Quiz Score Functions ###
 
 # Retrieve User Quiz Score
@@ -240,59 +402,3 @@ def insertUserQuizScore(username, level, score):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()    
 
-# Retrieve Friend List
-def retrieveFriendList(username):
-
-    try:
-       mySQLconnection = __mySQLconnection()
-       sqlQuery = "SELECT friendlist from student \
-                   WHERE username = '%s';" % (username)
-       
-       cursor = mySQLconnection.cursor()
-       cursor.execute(sqlQuery)
-       records = cursor.fetchall()
-
-    except Error as e :
-        print ("Error connecting MySQL", e)
-    finally:
-        #closing database connection.
-        if(mySQLconnection.is_connected()):
-            mySQLconnection.close()
-
-    #Covert from tuple to list
-    recordslist = list(records)
-
-    #Covert from index 0 of list (contains the names) to string
-    recordsstring = str(recordslist[0])
-
-    # Cut the string so to only contain names
-    recordsstring = recordsstring[2:-3]
-
-    # Spilt into list
-    recordslist = recordsstring.split(", ")
-
-    print(recordslist)
-            
-    return recordslist
-
-# Update Friend List
-def updateFriendList(username, newfriendstring):
-    
-    try:
-        mySQLconnection = __mySQLconnection()
-        sqlQuery = "UPDATE student \
-                    SET friendlist = '%s' \
-                    WHERE username = '%s';" % (newfriendstring, username)
-       
-        cursor = mySQLconnection.cursor()
-        cursor.execute(sqlQuery)
-        mySQLconnection.commit()
-        
-    except Error as e :
-        print ("Error connecting MySQL", e)
-    finally:
-        #closing database connection.
-        if(mySQLconnection.is_connected()):
-            mySQLconnection.close()
-    
-    print("Updated")
