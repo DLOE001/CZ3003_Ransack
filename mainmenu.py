@@ -258,6 +258,8 @@ class MainMenu:
                 return 0
             elif self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos()):
                 if self.user == "Teacher":
+                    print("Upload assigment Pressed!")
+                    clicksound()
                     return 7
             else:
                 return 0

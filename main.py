@@ -128,6 +128,7 @@ while running:
     if state == 0:
         # Set done = false so to keep page refreshing 
         setattr(friendMenu, 'done', False)
+        setattr(uploadAssignment, 'done', False)
         menu.display()
     elif state == 1:
         worldSelect.display()
@@ -159,6 +160,8 @@ while running:
             state = 2
     elif state == 7:
         uploadAssignment.display()
+        if (getattr(uploadAssignment, 'done')):
+            state = 0
             
     elif state == -1:
         running = False
@@ -182,8 +185,8 @@ while running:
                 #state = register.action()
             #elif state == 2:
                 #state = login.action()
-            elif state == 7:
-                state = uploadAssignment.action()
+            #elif state == 7:
+                #state = uploadAssignment.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()
