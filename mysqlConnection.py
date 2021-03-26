@@ -402,3 +402,59 @@ def insertUserQuizScore(username, level, score):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()    
 
+# Retrieve Friend List
+def retrieveFriendList(username):
+
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "SELECT friendlist from student \
+                   WHERE username = '%s';" % (username)
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+
+    #Covert from tuple to list
+    recordslist = list(records)
+
+    #Covert from index 0 of list (contains the names) to string
+    recordsstring = str(recordslist[0])
+
+    # Cut the string so to only contain names
+    recordsstring = recordsstring[2:-3]
+
+    # Spilt into list
+    recordslist = recordsstring.split(", ")
+
+    print(recordslist)
+            
+    return recordslist
+
+# Update Friend List
+def updateFriendList(username, newfriendstring):
+    
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "UPDATE student \
+                    SET friendlist = '%s' \
+                    WHERE username = '%s';" % (newfriendstring, username)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+    
+    print("Updated")
