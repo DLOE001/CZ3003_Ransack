@@ -15,6 +15,9 @@ import loginPage
 # Login Register Class
 import registerPage
 
+# Login Recover Class
+import recoverPage
+
 # Quiz Level Page Class
 import quizLevel
 
@@ -65,6 +68,10 @@ login.loadAssets()
 # Create Login Object
 register = registerPage.Register(username, user, screen, display_surface)
 register.loadAssets()
+
+# Create Login Object
+recover = recoverPage.Recover(username, user, screen, display_surface)
+recover.loadAssets()
 
 # Create Main Menu Object
 menu = mainmenu.MainMenu(username, user, screen, display_surface)
@@ -145,7 +152,7 @@ while running:
     elif state == 1:
         worldSelect.display()
     elif state == 2:
-        if(getattr(register, 'backToLogin') or getattr(register, 'successfulRegister')):
+        if(getattr(register, 'backToLogin') or getattr(recover, 'backToLogin') or getattr(register, 'successfulRegister')):
             setattr(login, 'done', False)
         login.display()
         if (getattr(login, 'done') and getattr(login, 'success')):
@@ -156,6 +163,9 @@ while running:
         elif (getattr(login, 'done') and getattr(login, 'registerClicked')):
             setattr(register, 'done', False)
             state = 6
+        elif (getattr(login, 'done') and getattr(login, 'recoverClicked')):
+            setattr(recover, 'done', False)
+            state = 9
     elif state == 3:
         if level.display(username, getattr(worldSelect, 'worldSelected'), getattr(worldSelect, 'levelSelected')):
             leaderBoard.loadAssets()
@@ -170,11 +180,17 @@ while running:
         register.display()
         if (getattr(register, 'done')):
             state = 2
+            login.registerClicked = False
     elif state == 7:
         uploadAssignment.display()
     elif state == 8:
         setattr(studentCustomQuizMenu, 'reload', True)
         studentCustomQuizMenu.display()
+    elif state == 9:
+        recover.display()
+        if (getattr(recover, 'backToLogin')):
+            state = 2
+            login.recoverClicked = False
     elif state == -1:
         running = False
  

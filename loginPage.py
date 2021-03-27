@@ -13,7 +13,7 @@ from inputBox import InputBox
 # Import SQL Connection 
 import mysqlConnection
 
-# Import Popuo
+# Import Popup
 import popup
 
 # Mouseover animation(Makes the image transparent if cursor is touching)
@@ -41,14 +41,19 @@ class Login:
         self.background1_position = [0,0]
 
         # Set login button
-        self.login_rect = pygame.Rect(460, 714, 309, 64)
+        self.login_rect = pygame.Rect(460, 612, 309, 64)
         pygame.draw.rect(self.screen, (255, 255, 255), self.login_rect)
         self.login_rect_position = [0,0]
 
         # Set register button
-        self.register_rect = pygame.Rect(575, 639, 69, 25)
+        self.register_rect = pygame.Rect(810, 709, 69, 25)
         pygame.draw.rect(self.screen, (255, 255, 255), self.register_rect)
         self.register_rect_position = [0,0]
+
+        # Set recover button
+        self.recover_rect = pygame.Rect(810, 761, 69, 25)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.recover_rect)
+        self.recover_rect_position = [0,0]
 
         #Set user and password input
         self.input_rect = pygame.Rect(566, 480, 309, 179)
@@ -57,6 +62,7 @@ class Login:
         self.done = False
         self.success = False
         self.registerClicked = False
+        self.recoverClicked = False
         self.input_boxes = [self.username_box1, self.password_box2]
         
     # Login Display
@@ -103,6 +109,12 @@ class Login:
         # Transition to Register Page
         if self.register_rect.collidepoint(pygame.mouse.get_pos()):
             self.registerClicked = True
+            clicksound()
+            return True
+
+        # Transition to Recover Page
+        if self.recover_rect.collidepoint(pygame.mouse.get_pos()):
+            self.recoverClicked = True
             clicksound()
             return True
             
