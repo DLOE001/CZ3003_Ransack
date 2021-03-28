@@ -49,6 +49,7 @@ class MainMenu:
             self.button4_image = tempimage
             self.button5_image = tempimage
             self.button6_image = tempimage
+            self.button11_image = tempimage
 
             self.button1_position = self.button1_image.get_rect().move(271, 293)
             self.button2_position = self.button2_image.get_rect().move(581, 351)
@@ -57,6 +58,10 @@ class MainMenu:
             self.button5_position = self.button5_image.get_rect().move(611, 616)
             self.button6_position = self.button6_image.get_rect().move(843, 611)
             
+            # Set mailbox button
+
+            self.button11_position = self.button11_image.get_rect().move(1057, 48)
+
             # Set Username Text
             self.studentUsername = pygame.font.SysFont('Courier New', 40).render(self.username, True, (0, 0, 0))
             self.studentUsername_position = [835,95]
@@ -84,13 +89,14 @@ class MainMenu:
             self.background1_position = [0,0]
 
             #Set various main menu button for teacher (needed as actions() checks for these buttons)
-            tempimage = pygame.image.load("images/w2.png")
+            tempimage = pygame.image.load("images/cross.png")
             self.button1_image = tempimage
             self.button2_image = tempimage
             self.button3_image = tempimage
             self.button4_image = tempimage
             self.button5_image = tempimage
             self.button6_image = tempimage
+            self.button11_image = tempimage
 
             self.button1_position = self.button1_image.get_rect().move(0, 0)
             self.button2_position = self.button2_image.get_rect().move(0, 0)
@@ -98,6 +104,7 @@ class MainMenu:
             self.button4_position = self.button4_image.get_rect().move(0, 0)
             self.button5_position = self.button5_image.get_rect().move(0, 0)
             self.button6_position = self.button6_image.get_rect().move(0, 0)
+            self.button11_position = self.button11_image.get_rect().move(0, 0)
             
             # Set login button
             self.uploadAssignment_rect = pygame.Rect(385, 310, 450, 115)
@@ -139,6 +146,8 @@ class MainMenu:
             self.display_surface.blit(self.button4_image, self.button4_position)
             self.display_surface.blit(self.button5_image, self.button5_position)
             self.display_surface.blit(self.button6_image, self.button6_position)
+            self.display_surface.blit(self.button11_image, self.button11_position)
+            
             
             # Hide above buttons 
             self.button1_image.set_alpha(0)
@@ -147,6 +156,7 @@ class MainMenu:
             self.button4_image.set_alpha(0)
             self.button5_image.set_alpha(0)
             self.button6_image.set_alpha(0)
+            self.button11_image.set_alpha(0)
 
             # Display Student Username
             self.screen.blit(self.studentUsername, self.studentUsername_position)
@@ -175,6 +185,7 @@ class MainMenu:
             self.display_surface.blit(self.button4_image, self.button4_position)
             self.display_surface.blit(self.button5_image, self.button5_position)
             self.display_surface.blit(self.button6_image, self.button6_position)
+            self.display_surface.blit(self.button11_image, self.button11_position)
             
             # Hide above buttons 
             self.button1_image.set_alpha(0)
@@ -183,6 +194,7 @@ class MainMenu:
             self.button4_image.set_alpha(0)
             self.button5_image.set_alpha(0)
             self.button6_image.set_alpha(0)
+            self.button11_image.set_alpha(0)
      
             # Display Teacher Username
             self.screen.blit(self.teacherUsername, self.teacherUsername_position)
@@ -256,6 +268,11 @@ class MainMenu:
                 clicksound()
                 self.logout = True
                 return 0
+            elif self.button11_position.collidepoint(pygame.mouse.get_pos()):
+                if self.user == "Student":
+                    print("Mailbox pressed")
+                    clicksound()
+                    return 0
             elif self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos()):
                 if self.user == "Teacher":
                     print("Upload assigment Pressed!")
