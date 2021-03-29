@@ -113,9 +113,13 @@ class MainMenu:
             self.customQuizManagement_rect = pygame.Rect(387, 434, 450, 82)
             pygame.draw.rect(self.screen, (255, 255, 255), self.customQuizManagement_rect)
 
-            # Set statistics report button
+            # Set summary report button
             self.generateSummaryReport_rect = pygame.Rect(387, 690, 450, 82)
             pygame.draw.rect(self.screen, (255, 255, 255), self.generateSummaryReport_rect)
+
+            # Set class management button
+            self.classManagement_rect = pygame.Rect(387, 565, 450, 82)
+            pygame.draw.rect(self.screen, (255, 255, 255), self.classManagement_rect)
             
             # Set Username Text
             self.teacherUsername = pygame.font.SysFont('Courier New', 40).render(self.username, True, (0, 0, 0))
@@ -289,6 +293,9 @@ class MainMenu:
                 elif  self.generateSummaryReport_rect.collidepoint(pygame.mouse.get_pos()):
                     clicksound()
                     return 11
+                elif  self.classManagement_rect.collidepoint(pygame.mouse.get_pos()):
+                    clicksound()
+                    return 12
                 else:
                     return 0
             else:

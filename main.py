@@ -39,6 +39,9 @@ import teacherCustomQuizLobby
 # Teacher Summary Report
 import teacherSummaryReport
 
+# Teacher Class Managementr
+import teacherClassManagement
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -109,6 +112,9 @@ teacherCustomQuizMenu.loadAssets()
 
 # Teacher Summary Report
 teacherReport = teacherSummaryReport.TeacherSummaryReport(username, user, screen, display_surface)
+
+# Teacher Class Management
+teacherClass = teacherClassManagement.TeacherClassManagement(username, user, screen, display_surface)
 
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
@@ -214,6 +220,8 @@ while running:
         teacherCustomQuizMenu.display()
     elif state == 11:
         teacherReport.display()
+    elif state == 12:
+        teacherClass.display()
     elif state == -1:
         running = False
  
@@ -244,6 +252,8 @@ while running:
                 state = teacherCustomQuizMenu.action()
             elif state == 11:
                 state = teacherReport.action()
+            elif state == 12:
+                state = teacherClass.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()
