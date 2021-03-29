@@ -36,6 +36,9 @@ import studentCustomQuizLobby
 # Teacher Custom Quiz Lobby
 import teacherCustomQuizLobby
 
+# Teacher Summary Report
+import teacherSummaryReport
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -103,6 +106,9 @@ studentCustomQuizMenu.loadAssets()
 # Student Custom Lobby Object
 teacherCustomQuizMenu = teacherCustomQuizLobby.TeacherCustomQuizLobby(username, user, screen, display_surface)
 teacherCustomQuizMenu.loadAssets()
+
+# Teacher Summary Report
+teacherReport = teacherSummaryReport.TeacherSummaryReport(username, user, screen, display_surface)
 
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
@@ -206,6 +212,8 @@ while running:
     elif state == 10:
         setattr(teacherCustomQuizMenu, 'reload', True)
         teacherCustomQuizMenu.display()
+    elif state == 11:
+        teacherReport.display()
     elif state == -1:
         running = False
  
@@ -234,6 +242,8 @@ while running:
                 state = studentCustomQuizMenu.action()
             elif state == 10:
                 state = teacherCustomQuizMenu.action()
+            elif state == 11:
+                state = teacherReport.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()
