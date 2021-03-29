@@ -30,6 +30,7 @@ def retrieveStudentAccountData():
            listStore.append(row[2])
            listStore.append(row[3])
            listStore.append(row[4])
+           listStore.append(row[5])
            listReturn.append(listStore)
        cursor.close()
     
@@ -623,6 +624,33 @@ def removeStudentCustomQuiz(quizName):
     
 
 ### Quiz Score Functions ###
+
+# Retrieve Overall User Quiz Score
+def retrieveOverallUserQuizScore(username):
+    score = 0
+    
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select score from storylevelscore \
+                   WHERE username = '%s';" % (username)
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           score+=row[0]
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+    return score
 
 # Retrieve User Quiz Score
 def retrieveUserQuizScore(username, level):
