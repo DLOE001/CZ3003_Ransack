@@ -39,7 +39,7 @@ class PopUp:
         self.messageText_rect = [0,0]
 
         # Message box dimensions
-        self.messageBox_rect = pygame.Rect(324, 387, 590, 617)
+        self.messageBox_rect = pygame.Rect(324, 387, 586, 220)
         self.messageBox_left = 324
         self.messageBox_right = 908
         self.messageBox_top = 387
