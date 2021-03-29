@@ -33,6 +33,9 @@ import uploadAssignmentPage
 # Student Custom Quiz Lobby
 import studentCustomQuizLobby
 
+# Teacher Custom Quiz Lobby
+import teacherCustomQuizLobby
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -97,6 +100,10 @@ uploadAssignment.loadAssets()
 studentCustomQuizMenu = studentCustomQuizLobby.StudentCustomQuizLobby(username, user, screen, display_surface)
 studentCustomQuizMenu.loadAssets()
 
+# Student Custom Lobby Object
+teacherCustomQuizMenu = teacherCustomQuizLobby.TeacherCustomQuizLobby(username, user, screen, display_surface)
+teacherCustomQuizMenu.loadAssets()
+
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
 
@@ -109,6 +116,7 @@ def recreateUIObj(username, user):
     global leaderBoard
     global friendMenu
     global studentCustomQuizMenu
+    global teacherCustomQuizMenu
     
      # Create Login Object
     login = loginPage.Login(username, user, screen, display_surface)
@@ -137,6 +145,10 @@ def recreateUIObj(username, user):
     # Student Custom Lobby Object
     studentCustomQuizMenu = studentCustomQuizLobby.StudentCustomQuizLobby(username, user, screen, display_surface)
     studentCustomQuizMenu.loadAssets()
+
+    # Student Custom Lobby Object
+    teacherCustomQuizMenu = teacherCustomQuizLobby.TeacherCustomQuizLobby(username, user, screen, display_surface)
+    teacherCustomQuizMenu.loadAssets()
 
     #Create Quiz Level Object
     level = quizLevel.QuizLevel()
@@ -191,6 +203,9 @@ while running:
         if (getattr(recover, 'backToLogin')):
             state = 2
             login.recoverClicked = False
+    elif state == 10:
+        setattr(teacherCustomQuizMenu, 'reload', True)
+        teacherCustomQuizMenu.display()
     elif state == -1:
         running = False
  
@@ -217,6 +232,8 @@ while running:
                 #state = uploadAssignment.action()
             elif state == 8:
                 state = studentCustomQuizMenu.action()
+            elif state == 10:
+                state = teacherCustomQuizMenu.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()

@@ -22,6 +22,12 @@ import customQuizObjAsset
 # Import Custom Quiz Object Asset
 import customQuizPendingObjAsset
 
+# Import Teacher Review Custom Quiz Object Asset
+import teacherReviewCustomQuizObjAsset
+
+# Import Teacher Review Custom Quiz Object Asset
+import teacherModifyCustomQuizObjAsset
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -33,21 +39,22 @@ def mouseover(img, pos):
 def clicksound():
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio\Click.wav'), maxtime=2000)
 
-class StudentCustomQuizLobby:
+class TeacherCustomQuizLobby:
     def __init__(self, username, user, screen, display_surface):
         self.username = username
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-        self.displayPending = False
         self.reload = True
+        self.displayReview = False
+        self.displayModify = False
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
 
     def loadAssets(self):
         # Set background
-        self.background1_image = pygame.image.load("images/student_custom_quiz_lobby.jpg")
+        self.background1_image = pygame.image.load("images/teacher_custom_quiz_lobby.jpg")
         self.background1_position = [0,0]
 
         #Set back button 
@@ -58,13 +65,13 @@ class StudentCustomQuizLobby:
         self.backbutton2_rect = pygame.Rect(195, 178, 46, 38)
         pygame.draw.rect(self.screen, (255, 255, 255), self.backbutton2_rect)
 
-        # Set create custom quiz button
-        self.createCustomQuiz_rect = pygame.Rect(26, 410, 144, 100)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.createCustomQuiz_rect)
+        # Set review custom quiz button
+        self.reviewCustomQuiz_rect = pygame.Rect(26, 410, 144, 100)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.reviewCustomQuiz_rect)
         
-        # Set pending custom quiz button
-        self.pendingCustomQuiz_rect = pygame.Rect(32, 518, 139, 98)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.pendingCustomQuiz_rect)
+        # Set modify custom quiz button
+        self.modifyCustomQuiz_rect = pygame.Rect(32, 518, 139, 98)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.modifyCustomQuiz_rect)
         
     # Student Custom Quiz Lobby
     def display(self):
@@ -77,7 +84,7 @@ class StudentCustomQuizLobby:
         # Hide all buttons 
         self.backbutton1_image.set_alpha(0)
     
-        if self.displayPending == False:
+        if (self.displayModify == False and self.displayReview == False):
             if (self.reload == True):
                 self.customQuizObjList = []
                 self.customQuiz = mysqlConnection.retrieveApprovedCustomQuiz()
@@ -93,55 +100,62 @@ class StudentCustomQuizLobby:
             if (len(self.customQuizObjList) > 0):
                 for j in self.customQuizObjList:
                     j.display()
-        else:
+        elif (self.displayReview == True and self.displayModify == False):
             if (self.reload == True):
-                self.customQuizPendingObjList = []
-                self.customQuiz = mysqlConnection.retrievePendingCustomQuiz(self.username)
-                # Create the Custom Quiz Objects here
+                self.customQuizObjList = []
+                self.customQuiz = mysqlConnection.retrieveAllPendingCustomQuiz()
+                
+                # Create the review Custom Quiz Objects here
                 if (len(self.customQuiz) <=0):
                     pass
                 else:
                     for i in range(len(self.customQuiz)):
-                        self.customQuizPendingObjList.append(customQuizPendingObjAsset.CustomQuizPendingObjAsset(self.customQuiz[i][2], self.customQuiz[i][8], i, self.display_surface))    
+                        self.customQuizObjList.append(teacherReviewCustomQuizObjAsset.TeacherReviewCustomQuizObjAsset(self.user, self.username, self.customQuiz[i][2], self.customQuiz[i][8], i, self.display_surface))    
                 self.reload = False
                 
-            if (len(self.customQuizPendingObjList) > 0):
-                for j in self.customQuizPendingObjList:
+            if (len(self.customQuizObjList) > 0):
+                for j in self.customQuizObjList:
                     j.display()
+        elif (self.displayReview == False and self.displayModify == True):
+            if (self.reload == True):
+                self.customQuizObjList = []
+                self.customQuiz = mysqlConnection.retrieveApprovedCustomQuiz()
+                
+                # Create the review Custom Quiz Objects here
+                if (len(self.customQuiz) <=0):
+                    pass
+                else:
+                    for i in range(len(self.customQuiz)):
+                        self.customQuizObjList.append(teacherModifyCustomQuizObjAsset.TeacherModifyCustomQuizObjAsset(self.user, self.username, self.customQuiz[i][2], self.customQuiz[i][8], i, self.display_surface))    
+                self.reload = False
+                
+            if (len(self.customQuizObjList) > 0):
+                for j in self.customQuizObjList:
+                    j.display()
+                    
     def action(self):
         for i in self.customQuizObjList:
             i.action()
             if(getattr(i, 'stopRunning')):
-                return 8
+                return 10
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
             clicksound()
-            self.displayPending = False
+            self.displayReview = False
+            self.displayModify = False
             return 0
         if self.backbutton2_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
-            self.displayPending = False
-        if self.pendingCustomQuiz_rect.collidepoint(pygame.mouse.get_pos()):
-            self.displayPending = True
-        
-        if self.createCustomQuiz_rect.collidepoint(pygame.mouse.get_pos()):
-            self.displayPending = False
-            # Create create custom quiz Object
-            self.createCustomQuizObj = createCustomQuiz.CreateCustomQuiz(self.username, self.user, self.screen, self.display_surface)
-            self.createCustomQuizObj.loadAssets()
-            clicksound()
-            self.stopRunning = False
-            while not self.stopRunning:
-                self.createCustomQuizObj.display()
-                if (getattr(self.createCustomQuizObj, 'done')):
-                    self.stopRunning = True
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        quit()
-                    
-                    pygame.display.update()
-            self.reload = True
-            return 8
-        else:
-            return 8
+            self.displayReview = False
+            self.displayModify = False
+        if self.reviewCustomQuiz_rect.collidepoint(pygame.mouse.get_pos()):
+            self.displayReview = True
+            self.displayModify = False
+        if self.modifyCustomQuiz_rect.collidepoint(pygame.mouse.get_pos()):
+            self.displayReview = False
+            self.displayModify = True
+        if (not self.backbutton1_position.collidepoint(pygame.mouse.get_pos())
+            or not self.backbutton2_rect.collidepoint(pygame.mouse.get_pos())
+            or not self.reviewCustomQuiz_rect.collidepoint(pygame.mouse.get_pos())
+            or not self.modifyCustomQuiz_rect.collidepoint(pygame.mouse.get_pos())):
+                return 10
     

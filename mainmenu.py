@@ -50,7 +50,7 @@ class MainMenu:
             self.button5_image = tempimage
             self.button6_image = tempimage
             self.button11_image = tempimage
-
+            
             self.button1_position = self.button1_image.get_rect().move(271, 293)
             self.button2_position = self.button2_image.get_rect().move(581, 351)
             self.button3_position = self.button3_image.get_rect().move(842 , 305)
@@ -59,9 +59,8 @@ class MainMenu:
             self.button6_position = self.button6_image.get_rect().move(843, 611)
             
             # Set mailbox button
-
             self.button11_position = self.button11_image.get_rect().move(1057, 48)
-
+            
             # Set Username Text
             self.studentUsername = pygame.font.SysFont('Courier New', 40).render(self.username, True, (0, 0, 0))
             self.studentUsername_position = [835,95]
@@ -89,7 +88,7 @@ class MainMenu:
             self.background1_position = [0,0]
 
             #Set various main menu button for teacher (needed as actions() checks for these buttons)
-            tempimage = pygame.image.load("images/cross.png")
+            tempimage = pygame.image.load("images/w2.png")
             self.button1_image = tempimage
             self.button2_image = tempimage
             self.button3_image = tempimage
@@ -97,7 +96,7 @@ class MainMenu:
             self.button5_image = tempimage
             self.button6_image = tempimage
             self.button11_image = tempimage
-
+            
             self.button1_position = self.button1_image.get_rect().move(0, 0)
             self.button2_position = self.button2_image.get_rect().move(0, 0)
             self.button3_position = self.button3_image.get_rect().move(0, 0)
@@ -106,11 +105,14 @@ class MainMenu:
             self.button6_position = self.button6_image.get_rect().move(0, 0)
             self.button11_position = self.button11_image.get_rect().move(0, 0)
             
-            # Set login button
-            self.uploadAssignment_rect = pygame.Rect(385, 310, 450, 115)
+            # Set upload assignment button
+            self.uploadAssignment_rect = pygame.Rect(387, 304, 450, 82)
             pygame.draw.rect(self.screen, (255, 255, 255), self.uploadAssignment_rect)
-            self.uploadAssignment_rect_position = [0,0]
         
+            # Set custom quiz managemnet button
+            self.customQuizManagement_rect = pygame.Rect(387, 434, 450, 82)
+            pygame.draw.rect(self.screen, (255, 255, 255), self.customQuizManagement_rect)
+            
             # Set Username Text
             self.teacherUsername = pygame.font.SysFont('Courier New', 40).render(self.username, True, (0, 0, 0))
             self.teacherUsername_position = [835,95]
@@ -148,7 +150,6 @@ class MainMenu:
             self.display_surface.blit(self.button6_image, self.button6_position)
             self.display_surface.blit(self.button11_image, self.button11_position)
             
-            
             # Hide above buttons 
             self.button1_image.set_alpha(0)
             self.button2_image.set_alpha(0)
@@ -157,7 +158,7 @@ class MainMenu:
             self.button5_image.set_alpha(0)
             self.button6_image.set_alpha(0)
             self.button11_image.set_alpha(0)
-
+            
             # Display Student Username
             self.screen.blit(self.studentUsername, self.studentUsername_position)
         
@@ -195,7 +196,7 @@ class MainMenu:
             self.button5_image.set_alpha(0)
             self.button6_image.set_alpha(0)
             self.button11_image.set_alpha(0)
-     
+            
             # Display Teacher Username
             self.screen.blit(self.teacherUsername, self.teacherUsername_position)
 
@@ -273,11 +274,15 @@ class MainMenu:
                     print("Mailbox pressed")
                     clicksound()
                     return 0
-            elif self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos()):
-                if self.user == "Teacher":
+            elif self.user == "Teacher":
+                if self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Upload assigment Pressed!")
                     clicksound()
                     return 7
+                elif  self.customQuizManagement_rect.collidepoint(pygame.mouse.get_pos()):
+                    return 10
+                else:
+                    return 0
             else:
                 return 0
         elif self.logout:

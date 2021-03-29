@@ -24,27 +24,27 @@ def mouseover(img, pos):
 def clicksound():
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio/Click.wav'), maxtime=2000)
 
-class CustomQuizObjAsset:
+class TeacherReviewCustomQuizObjAsset:
     def __init__(self, user, username, quizName, rating, iteration,  display_surface):
-        self.username = username
         self.user = user
+        self.username = username
         self.quizName = quizName
         self.rating = rating
         self.display_surface = display_surface
         self.ratingChange = ""
-        self.y_axis = 210
+        self.y_axis = 250
         self.iteration = iteration
         y_axis_offset = self.iteration * 100
         self.stopRunning = False
         
-        self.upArrow_rect = pygame.Rect(832, y_axis_offset + self.y_axis, 50, 62)
-        pygame.draw.rect(self.display_surface, (255, 255, 255), self.upArrow_rect)
+        self.approve_rect = pygame.Rect(757, y_axis_offset + self.y_axis, 90, 66)
+        pygame.draw.rect(self.display_surface, (255, 255, 255), self.approve_rect)
         
-        self.downArrow_rect = pygame.Rect(888, y_axis_offset + self.y_axis, 50, 62)
-        pygame.draw.rect(self.display_surface, (255, 255, 255), self.downArrow_rect)
+        self.reject_rect = pygame.Rect(854, y_axis_offset + self.y_axis, 90, 66)
+        pygame.draw.rect(self.display_surface, (255, 255, 255), self.reject_rect)
         
-        self.startQuiz_rect = pygame.Rect(294, y_axis_offset + self.y_axis, 532, 62)
-        pygame.draw.rect(self.display_surface, (255, 255, 255), self.startQuiz_rect)
+        self.selectQuiz_rect = pygame.Rect(294, y_axis_offset + self.y_axis, 459, 66)
+        pygame.draw.rect(self.display_surface, (255, 255, 255), self.reject_rect)
         
         # Set Rating Text
         self.ratingtext1 = pygame.font.SysFont('Courier New', 30).render(str(self.rating), True, (0, 0, 0))
@@ -55,8 +55,8 @@ class CustomQuizObjAsset:
         self.quizNametext1_position = [305,y_axis_offset + self.y_axis + 20]
         
         # Popup box iamge
-        self.popupbox_image = pygame.image.load("images/customQuizObjAsset.png")
-        self.popupbox_position = [224, y_axis_offset + self.y_axis]    
+        self.popupbox_image = pygame.image.load("images/teacherReviewCustomQuizObjAsset.png")
+        self.popupbox_position = [232, y_axis_offset + self.y_axis]    
         
     # Popup Display
     def display(self):
@@ -82,15 +82,14 @@ class CustomQuizObjAsset:
     
     # Popup Actions
     def action(self):
-        if self.upArrow_rect.collidepoint(pygame.mouse.get_pos()):
+        if self.approve_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
-            self.rating += 1
-            mysqlConnection.updateCustomQuizRating(self.quizName, self.rating)
-        if self.downArrow_rect.collidepoint(pygame.mouse.get_pos()):
+            mysqlConnection.updateUserCustomQuizStatus(self.quizName, "Approved")
+        if self.reject_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
-            self.rating -= 1
-            mysqlConnection.updateCustomQuizRating(self.quizName, self.rating)
-        if self.startQuiz_rect.collidepoint(pygame.mouse.get_pos()):
+            mysqlConnection.updateUserCustomQuizStatus(self.quizName, "Rejected")
+            mysqlConnection.removeRejectedCustomQuiz()
+        if self.selectQuiz_rect.collidepoint(pygame.mouse.get_pos()):
             # Create create custom quiz Object
             self.takingQuizUI = taking_custom_quiz.TakingQuizUI(self.user, self.quizName, self.username, self.display_surface)
             self.takingQuizUI.loadAssets()
@@ -107,4 +106,5 @@ class CustomQuizObjAsset:
                     if event.type == MOUSEBUTTONDOWN:
                         self.takingQuizUI.action()
                     pygame.display.update()
-            return 8
+            return 10
+
