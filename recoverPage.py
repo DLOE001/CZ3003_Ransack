@@ -33,8 +33,9 @@ class Recover:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-        self.successfulRecover = False
         self.popup= popup.PopUp(display_surface)
+        self.successfulRecover = False
+        self.emptyFields = False
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
@@ -54,7 +55,7 @@ class Recover:
         self.backbutton3_image.set_alpha(0)
         
         # Set recover button
-        self.recover_rect = pygame.Rect(460, 721, 309, 63)
+        self.recover_rect = pygame.Rect(464, 723, 309, 63)
         pygame.draw.rect(self.screen, (255, 255, 255), self.recover_rect)
         self.recover_rect_position = [0,0]
         
@@ -64,11 +65,10 @@ class Recover:
 
         self.done = False
         self.errorMessage = ""
-        self.successMessage = "Successfully Registered Account"
+        self.successMessage = ""
         self.input_boxes = [self.username_box1, self.email_box2]
 
     def display(self):
-        
         clock = pygame.time.Clock()        
         while not self.done:
             for event in pygame.event.get():
@@ -96,76 +96,69 @@ class Recover:
             
     # Register Page Actions
     def action(self):
-        # Register button is selected
-        #if self.register_rect.collidepoint(pygame.mouse.get_pos()):
-            #username = self.username_box1.retrieveBoxValues()
-            #email = self.email_box2.retrieveBoxValues()
-            #if(self.checkInputFields(username, password, email)):
-                #mysqlConnection.createStudentAccount(username, password, email)
-                #self.successfulRegister = True
-                #for box in self.input_boxes:
-                    #box.resetText()
-                #self.popup.success(self.successMessage)
-                #return True
-            #else:
-                #self.popup.fail(self.errorMessage)
-                #for box in self.input_boxes:
-                    #box.resetText()
-                #return False
+        # Recover button is selected
+        if self.recover_rect.collidepoint(pygame.mouse.get_pos()):
+            username = self.username_box1.retrieveBoxValues()
+            email = self.email_box2.retrieveBoxValues()
+            if(self.checkInputFields(username, email)):
+                self.successfulRecover = True
+                self.popup.success(self.successMessage)
+                for box in self.input_boxes:
+                    box.resetText()
+                return True
+            else:
+                self.popup.fail(self.errorMessage)
+                if self.emptyFields == False:
+                    for box in self.input_boxes:
+                        box.resetText()
+                return False
          
         # Back button is selected
         if self.backbutton3_position.collidepoint(pygame.mouse.get_pos()):
             self.backToLogin = True
+            for box in self.input_boxes:
+                box.resetText()
             print("Back Button Pressed!")
             clicksound()
             return True
     
     # Method to check whether input fields have been properly filled 
-    def checkInputFields(self, username, password, email):
+    def checkInputFields(self, username, email):
         passCheck = False
+        self.emptyFields = False
         self.errorMessage = ""
-        if(len(username) <= 0 or len(password) <= 0 or len(email) <=0):
-            if(len(username) <= 0):
-                if(len(self.errorMessage) <= 0):
-                    self.errorMessage = "Username field not filled\n"
-                else:
-                    self.errorMessage += "Username field not filled\n"
-            if(len(password) <= 0):
-                if(len(self.errorMessage) <= 0):
-                    self.errorMessage = "Password field not filled\n"
-                else:
-                    self.errorMessage += "Password field not filled\n"
-            if(len(email) <= 0):
-                if(len(self.errorMessage) <= 0):
-                    self.errorMessage = "Email field not filled\n"
-                else:
-                    self.errorMessage += "Email field not filled\n"
+        # Check if username or email field is empty
+        if(len(username) <= 0 or len(email) <=0):
+            if(len(username) <= 0 and len(email) <=0):
+                self.errorMessage = "Both username and email fields not filled"
+            elif(len(username) <= 0):
+                    self.errorMessage = "Username field not filled"
+            elif(len(email) <= 0):
+                    self.errorMessage = "Email field not filled"
+            self.emptyFields = True
         else:
-            # Check for duplicate username
-            duplicatedUsername = False
-            foundDuplicate = False
+            # Check if username exists
+            inputMatch = False
             allStudents = mysqlConnection.retrieveStudentAccountData()
             allTeachers = mysqlConnection.retrieveTeacherAccountData()
             
             for i in allStudents:
-                if(username == i[0]):
-                    duplicatedUsername = True
-                    foundDuplicate = True
-                    break
-            
-            if (foundDuplicate):
-                pass
-            else:
-                for i in allTeachers:
-                    if(username == i[0]):
-                        duplicatedUsername = True
+                if username == i[0]:
+                    if email == i[2]:
+                        inputMatch = True
                         break
-            if(duplicatedUsername):
-                if(len(self.errorMessage) <= 0):
-                    self.errorMessage = username + " is already taken\n"
-                else:
-                    self.errorMessage += username + " is already taken\n" 
+                    
+            if inputMatch == False:
+                for i in allTeachers:
+                    if username == i[0]:
+                        if email == i[2]:
+                            inputMatch = True
+                            break
+
+            if inputMatch == False:
+                self.errorMessage = "Invalid Username or Email"
             else:
+                self.successMessage = "Recovery Email has been sent to: " + email
                 passCheck = True
         return passCheck
         

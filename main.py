@@ -176,7 +176,7 @@ while running:
     elif state == 1:
         worldSelect.display()
     elif state == 2:
-        if(getattr(register, 'backToLogin') or getattr(recover, 'backToLogin') or getattr(register, 'successfulRegister')):
+        if(getattr(register, 'backToLogin') or getattr(recover, 'backToLogin') or getattr(register, 'successfulRegister') or getattr(recover, 'successfulRecover')):
             setattr(login, 'done', False)
         login.display()
         if (getattr(login, 'done') and getattr(login, 'success')):
@@ -212,7 +212,7 @@ while running:
         studentCustomQuizMenu.display()
     elif state == 9:
         recover.display()
-        if (getattr(recover, 'backToLogin')):
+        if (getattr(recover, 'done')):
             state = 2
             login.recoverClicked = False
     elif state == 10:
