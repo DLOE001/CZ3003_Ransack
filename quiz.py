@@ -36,7 +36,7 @@ class Quiz:
         self.background1_image = pygame.image.load("images/quiz.png")
         self.background1_position = [0,0]
 
-        self.box_rect = pygame.Rect(102, 595, 1000, 806) 
+        self.box_rect = pygame.Rect(102, 595, 1010, 211) 
 
     def draw(self, canvas):
         # Copy of background image
