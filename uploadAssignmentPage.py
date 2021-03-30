@@ -48,7 +48,6 @@ class UploadAssignment:
 
         # Set assignment name input
         self.assignmentnameinput_box = InputBox(616, 279, 512, 40)
-        self.done = False
         self.input_boxes = [self.assignmentnameinput_box]
 
         # Set choose assignment file button
