@@ -33,12 +33,9 @@ class Recover:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-        self.popup= popup.PopUp(display_surface)
+        self.popup = popup.PopUp(display_surface)
         self.successfulRecover = False
         self.emptyFields = False
-        # Background1 is for the header
-        # Button 1 is back button
-        # Button 2 is query button
 
     def loadAssets(self):
         self.backToLogin = False
@@ -77,9 +74,6 @@ class Recover:
                     
             # Display background
             self.display_surface.blit(self.background1_image, self.background1_position)
-
-            # Set back button
-            self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
 
             # Display user, email and password input
             for box in self.input_boxes:
