@@ -28,24 +28,13 @@ class PopUp:
         self.headerText = None
         self.headerText_rect = [0,0]
 
-        # Message box dimensions
-        self.headerBox_left = 324
-        self.headerBox_right = 908
-        self.headerBox_top = 343
-        self.headerBox_bottom = 383
-        
-        # Message
-        self.messageText = None
-        self.messageText_rect = [0,0]
+        # Header box dimensions
+        self.headerBox_rect = pygame.Rect(324, 343, 586, 40)
 
         # Message box dimensions
         self.messageBox_rect = pygame.Rect(324, 387, 586, 220)
-        self.messageBox_left = 324
-        self.messageBox_right = 908
-        self.messageBox_top = 387
-        self.messageBox_bottom = 617
 
-        # Popup box iamge
+        # Popup box image
         self.popupbox_image = pygame.image.load("images/popup.png")
         self.popupbox_position = [322,340]    
 
@@ -56,7 +45,7 @@ class PopUp:
         # Set ok button
         self.okbutton_image = pygame.image.load("images/ok2.png")
         self.okbutton_rect = self.okbutton_image.get_rect()
-        self.okbutton_rect.center = (((self.messageBox_left+self.messageBox_right)/2), 618)
+        self.okbutton_rect.center = (((self.messageBox_rect.left+self.messageBox_rect.right)/2), 618)
 
         self.msg=""
         self.msgsize=0
@@ -79,15 +68,12 @@ class PopUp:
     def header(self, hdr, size=30):
         self.headerText = pygame.font.SysFont('Arial', size, True).render(hdr, True, (0, 0, 0))
         self.headerText_rect = self.headerText.get_rect()
-        self.headerText_rect.center = ((self.headerBox_left+self.headerBox_right)/2), ((self.headerBox_top+self.headerBox_bottom)/2)
+        self.headerText_rect.center = ((self.headerBox_rect.left+self.headerBox_rect.right)/2), ((self.headerBox_rect.top+self.headerBox_rect.bottom)/2)
 
     # Define the popup message
     def message(self, msg, size=40):
         self.msg = msg
         self.msgsize = size
-        self.messageText = pygame.font.SysFont('Arial', size, True).render(msg, True, (0, 0, 0))
-        self.messageText_rect = self.messageText.get_rect()
-        self.messageText_rect.center = ((self.messageBox_left+self.messageBox_right)/2), ((self.messageBox_top+self.messageBox_bottom)/2)
 
     # Popup Display
     def display(self):
@@ -105,8 +91,7 @@ class PopUp:
             self.layer1.blit(self.headerText, self.headerText_rect)
 
             # Display message
-            if self.drawWrappedText(self.layer1, self.msg, (0, 0, 0), self.messageBox_rect, pygame.font.SysFont('Arial', self.msgsize)):
-                self.layer1.blit(self.messageText, self.messageText_rect)
+            self.drawWrappedText(self.layer1, self.msg, (0, 0, 0), self.messageBox_rect, pygame.font.SysFont('Arial', self.msgsize))
 
             # Mouseover animations
             mouseover(self.crossbutton_image, self.crossbutton_rect)
@@ -168,7 +153,7 @@ class PopUp:
                 image = font.render(text[:i], aa, color)
 
             image_rect = image.get_rect()
-            image_rect.center =((self.messageBox_left+self.messageBox_right)/2, y+image_rect.height*2)
+            image_rect.center =((self.messageBox_rect.left+self.messageBox_rect.right)/2, y+image_rect.height*2)
 
             surface.blit(image, image_rect)
             y += fontHeight + lineSpacing
