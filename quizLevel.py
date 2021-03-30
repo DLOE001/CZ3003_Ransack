@@ -13,6 +13,13 @@ import mysqlConnection
 # Import PopupYesNo
 import popupyesno
 
+# Mouseover animation(Makes the image transparent if cursor is touching)
+def mouseover(img, pos):
+    if pos.collidepoint(pygame.mouse.get_pos()):
+        img.set_alpha(50)
+    else:
+        img.set_alpha(255)
+
 # Click sound
 def clicksound():
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio/Click.wav'), maxtime=2000)
@@ -117,6 +124,8 @@ class QuizLevel:
             canvas.blit(background1_image, [0,0])
             #Display Exit button
             canvas.blit(redcrossImage, redcross_rect)
+            #Mouseover animation for exit button
+            mouseover(redcrossImage, redcross_rect)
             #Draw the level
             map.draw_map(canvas)
             #Draw player related UI
