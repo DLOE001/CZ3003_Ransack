@@ -133,10 +133,10 @@ class Friends:
 
         for v in friendlist:
             # For each friend, set and display the names accordingly
-            self.friend_text1 = pygame.font.SysFont('Broadway', 30).render(v, True, (0, 0, 0))
+            self.friend_text1 = pygame.font.SysFont('Broadway', 50).render(v, True, (0, 0, 0))
 
             # Each names have a interval of y = 112
-            self.friend_text1_position = [206 ,269 + index*112]
+            self.friend_text1_position = [170 ,214 + index*112]
 
             self.screen.blit(self.friend_text1, self.friend_text1_position)
             index = index + 1
