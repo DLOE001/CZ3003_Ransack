@@ -228,46 +228,26 @@ class MainMenu:
                     print("World Select Button Pressed!")
                     clicksound()
                     return 1
-                elif self.user == "Teacher":
-                    print("Data Analytics Button Pressed!")
-                    clicksound()
-                    return 0
             elif self.button2_position.collidepoint(pygame.mouse.get_pos()):
                 if self.user == "Student":
                     print("Friends Pressed!")
                     clicksound()
                     return 5
-                elif self.user == "Teacher":
-                    print("Modify Quiz Button Pressed!")
-                    clicksound()
-                    return 0
             elif self.button3_position.collidepoint(pygame.mouse.get_pos()):
                 if self.user == "Student":
                     print("View Leaderboard Pressed!")
                     clicksound()
                     return 4
-                elif self.user == "Teacher":
-                    print("Remove Quiz Button Pressed!")
-                    clicksound()
-                    return 0
             elif self.button4_position.collidepoint(pygame.mouse.get_pos()):
                 if self.user == "Student":
                     print("View Profile Button Pressed!")
                     clicksound()
-                    return 0
-                elif self.user == "Teacher":
-                    print("Review Quiz Button Pressed!")
-                    clicksound()
-                    return 0
+                    return 13
             elif self.button5_position.collidepoint(pygame.mouse.get_pos()):
                 if self.user == "Student":
                     print("Custom Quiz Button Pressed!")
                     clicksound()
                     return 8
-                elif self.user == "Teacher":
-                    print("Upload Assignment Button Pressed!")
-                    clicksound()
-                    return 0
             elif self.user == "Student" and self.button6_position.collidepoint(pygame.mouse.get_pos()):
                 print("Problem Community Pressed!")
                 clicksound()

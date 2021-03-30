@@ -42,6 +42,9 @@ import teacherSummaryReport
 # Teacher Class Managementr
 import teacherClassManagement
 
+# Profile Class
+import profile
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -116,6 +119,9 @@ teacherReport = teacherSummaryReport.TeacherSummaryReport(username, user, screen
 # Teacher Class Management
 teacherClass = teacherClassManagement.TeacherClassManagement(username, user, screen, display_surface)
 
+# Create Profile Object
+profileObject = profile.Profile(username, user, display_surface)
+
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
 
@@ -129,6 +135,7 @@ def recreateUIObj(username, user):
     global friendMenu
     global studentCustomQuizMenu
     global teacherCustomQuizMenu
+    global profileObject
     
      # Create Login Object
     login = loginPage.Login(username, user, screen, display_surface)
@@ -161,6 +168,9 @@ def recreateUIObj(username, user):
     # Student Custom Lobby Object
     teacherCustomQuizMenu = teacherCustomQuizLobby.TeacherCustomQuizLobby(username, user, screen, display_surface)
     teacherCustomQuizMenu.loadAssets()
+
+    #Profile Object
+    profileObject = profile.Profile(username, user, display_surface)
 
     #Create Quiz Level Object
     level = quizLevel.QuizLevel()
@@ -222,6 +232,8 @@ while running:
         teacherReport.display()
     elif state == 12:
         teacherClass.display()
+    elif state == 13:
+        profileObject.display()
     elif state == -1:
         running = False
  
@@ -254,6 +266,8 @@ while running:
                 state = teacherReport.action()
             elif state == 12:
                 state = teacherClass.action()
+            elif state == 13:
+                state = profileObject.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()

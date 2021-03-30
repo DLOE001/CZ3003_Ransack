@@ -44,6 +44,34 @@ def retrieveStudentAccountData():
     
     return listReturn
 
+# Retrieve profile data
+def retrieveProfileData(username):
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select * from student\
+                   WHERE username = '%s';" % (username)
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # Append the student record to the return list
+       for row in records:
+           listReturn.append(row[3])
+           listReturn.append(row[4])
+           listReturn.append(row[5])
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    
+    return listReturn
+
 # Retrieves all Teacher account data
 def retrieveTeacherAccountData():
     listStore = []
