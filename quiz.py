@@ -7,6 +7,10 @@ import pygame
 pygame.init()
 pygame.font.init()
 
+# Click sound
+def clicksound():
+    pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio/Click.wav'), maxtime=2000)
+
 class Quiz:
     def __init__(self, question, answer, dummy1, dummy2, dummy3):
         self.question = question
@@ -51,6 +55,7 @@ class Quiz:
 
     def attempt(self, player):
         if self.answer1_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
             if self.answers[0] == self.answer:
                 player.score += 100
                 self.completed = True
@@ -59,6 +64,7 @@ class Quiz:
                 player.hearts -= 1
                 player.score -= 25
         elif self.answer2_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
             if self.answers[1] == self.answer:
                 player.score += 100
                 self.completed = True
@@ -67,6 +73,7 @@ class Quiz:
                 player.hearts -= 1
                 player.score -= 25
         elif self.answer3_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
             if self.answers[2] == self.answer:
                 player.score += 100
                 self.completed = True
@@ -75,6 +82,7 @@ class Quiz:
                 player.hearts -= 1
                 player.score -= 25
         elif self.answer4_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
             if self.answers[3] == self.answer:
                 player.score += 100
                 self.completed = True
