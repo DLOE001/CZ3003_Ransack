@@ -8,6 +8,9 @@ from tkinter import filedialog
 # Get file name
 import os
 
+# Get today's date
+from datetime import date
+
 # Import and initialize the pygame library
 import pygame
 pygame.mixer.pre_init(44100, -16, 1, 512)
@@ -19,6 +22,9 @@ from friendinputBox import InputBox
 
 # Import SQL Connection 
 import mysqlConnection
+
+# Import Popup
+import popup
 
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
@@ -37,13 +43,13 @@ class UploadAssignment:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-        # Background1 is for the header
-        # Button 1 is back button
-        # Button 2 is query button
+        self.popup= popup.PopUp(display_surface)
 
     def loadAssets(self):
-
+        # false means will contiune staying on this page
         self.done = False
+        self.platform = ""
+
         # Set background
         self.background1_image = pygame.image.load("images/teacher_upload_assignment.jpg")
         self.background1_position = [0,0]
@@ -113,21 +119,36 @@ class UploadAssignment:
         if self.chooseassignment_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             print("Choose File Button Clicked")
-
             # Get filename
             self.filepath = openfile()
             # Set filename to postion
             self.uploadpathtext = pygame.font.SysFont('Broadway', 30).render(self.filepath, True, (0, 0, 0))
-        if self.uploadassignment_rect.collidepoint(pygame.mouse.get_pos()):
-            clicksound()
-            print("Upload Button Clicked")
         if self.facebook_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             print("Facebook Button Clicked")
+            self.platform = 'facebook'
         if self.twitter_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             print("Twitter Button Clicked")
+            self.platform = 'twitter'
+        if self.uploadassignment_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
+            print("Upload Button Clicked")
 
+            # assignment name 
+            assignmentname = self.assignmentnameinput_box.retrieveBoxValues()
+
+            # upload date
+            today = date.today()
+            uploaddate = today.strftime("%d/%m/%Y")
+
+            # Check all inputs are filled
+            if (len(assignmentname) == 0 or len(self.platform) == 0 or len(self.filepath) == 0):
+                self.popup.fail("Please input all the fields!")
+            else :
+                mysqlConnection.insertAssignment(self.username, assignmentname, self.platform, uploaddate)
+                self.popup.success("Assignment Uploaded!")
+ 
 # Select file from file directory
 def openfile():
     root = tk.Tk()

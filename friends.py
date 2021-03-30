@@ -35,10 +35,6 @@ class Friends:
         self.screen = screen
         self.popup= popup.PopUp(display_surface)
 
-        # Background1 is for the header
-        # Button 1 is back button
-        # Button 2 is query button
-
     def loadAssets(self):
         # Set background
         self.background1_image = pygame.image.load("images/friends.jpg")

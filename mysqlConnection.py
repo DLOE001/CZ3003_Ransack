@@ -747,3 +747,20 @@ def insertUserQuizScore(username, level, score):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()    
 
+# Add assignment by teacher
+def insertAssignment(teachername, assignmentname, platform, date):
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "INSERT INTO assignment(teacherUserName, assignmentName, platformUploadedTo, uploadedDate) \
+                    VALUES('%s','%s', '%s', '%s');" % (teachername, assignmentname, platform, date)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()  
