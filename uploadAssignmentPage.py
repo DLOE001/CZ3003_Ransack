@@ -135,10 +135,10 @@ class UploadAssignment:
             clicksound()
             print("Upload Button Clicked")
 
-            # assignment name 
+            # Assignment name 
             assignmentname = self.assignmentnameinput_box.retrieveBoxValues()
 
-            # upload date
+            # Upload date
             today = date.today()
             uploaddate = today.strftime("%d/%m/%Y")
 
