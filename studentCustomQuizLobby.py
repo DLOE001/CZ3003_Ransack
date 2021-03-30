@@ -51,8 +51,7 @@ class StudentCustomQuizLobby:
         self.background1_position = [0,0]
 
         #Set back button 
-        self.backbutton1_image = pygame.image.load("images/w2.png")
-        self.backbutton1_position = self.backbutton1_image.get_rect().move(22, 21)
+        self.backbutton1_position = pygame.Rect(28, 28, 61, 53)
         
          #Set back button 2
         self.backbutton2_rect = pygame.Rect(195, 178, 46, 38)
@@ -70,12 +69,6 @@ class StudentCustomQuizLobby:
     def display(self):
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
-        
-        # Display back button 
-        self.display_surface.blit(self.backbutton1_image, self.backbutton1_position)
-
-        # Hide all buttons 
-        self.backbutton1_image.set_alpha(0)
     
         if self.displayPending == False:
             if (self.reload == True):

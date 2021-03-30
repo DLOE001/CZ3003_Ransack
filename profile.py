@@ -25,8 +25,7 @@ class Profile:
         self.background1_position = [0,0]
 
         # Set back button rectangle 
-        self.backbutton1_rect = pygame.Rect(40, 38, 100, 60)
-        pygame.draw.rect(self.display_surface, (255, 255, 255), self.backbutton1_rect)
+        self.backbutton1_rect = pygame.Rect(28, 28, 61, 53)
                 
     def display(self):
         # Display background

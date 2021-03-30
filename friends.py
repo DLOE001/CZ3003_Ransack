@@ -45,8 +45,7 @@ class Friends:
         self.background1_position = [0,0]
 
         # Set back button 
-        self.backbutton1_image = pygame.image.load("images/w2.png")
-        self.backbutton1_position = self.backbutton1_image.get_rect().move(109, 78)
+        self.backbutton1_position = pygame.Rect(125, 96, 63, 55)
 
         # Set friends input
         self.friendsinput_box1 = InputBox(228, 667, 205, 35)
@@ -74,12 +73,6 @@ class Friends:
                     
             # Display background
             self.display_surface.blit(self.background1_image, self.background1_position)
-            
-            # Display back button 
-            self.display_surface.blit(self.backbutton1_image, self.backbutton1_position)
-
-            # Hide all buttons 
-            self.backbutton1_image.set_alpha(0)
 
             # Display friend input
             self.friendsinput_box1.draw(self.screen)

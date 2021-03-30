@@ -49,8 +49,7 @@ class Leaderboard:
         self.background1_position = [0,0]
 
         #Set back button 
-        self.backbutton1_image = pygame.image.load("images/w2.png")
-        self.backbutton1_position = self.backbutton1_image.get_rect().move(23, 23)
+        self.backbutton1_position = pygame.Rect(40, 39, 67, 56)
 
         # Set Rank Text
         self.ranktext1 = pygame.font.SysFont('Broadway', 30).render("Rank", True, (0, 0, 0))
@@ -174,12 +173,6 @@ class Leaderboard:
         
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
-        
-        # Display back button 
-        self.display_surface.blit(self.backbutton1_image, self.backbutton1_position)
-
-        # Hide all buttons 
-        self.backbutton1_image.set_alpha(0)
 
         # Display Ranking
         self.screen.blit(self.row1Rank, self.row1Rank_position)

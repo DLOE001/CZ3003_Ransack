@@ -48,15 +48,10 @@ class Recover:
         self.background1_position = [0,0]
         
         # Set back button
-        self.backbutton3_image = pygame.image.load("images/w2.png")
-        self.backbutton3_position = self.backbutton3_image.get_rect().move(275, 260)
-        
-        # Hide Buttons
-        self.backbutton3_image.set_alpha(0)
+        self.backbutton3_position = pygame.Rect(320, 302, 67, 58)
         
         # Set recover button
         self.recover_rect = pygame.Rect(464, 723, 309, 63)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.recover_rect)
         self.recover_rect_position = [0,0]
         
         # Set the fields for user to key in

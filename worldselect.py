@@ -41,35 +41,18 @@ class WorldSelect:
         self.background1_position = [0,0]
 
         # Set world 1 button 
-        self.button1_image = pygame.image.load("images/w2.png")
-        self.button1_position = self.button1_image.get_rect().move(102, 379)
+        self.button1_position = pygame.Rect(90, 365, 101, 141)
 
         # Set world 2 button
-        self.button2_image = pygame.image.load("images/w2.png")
-        self.button2_position = self.button2_image.get_rect().move(718, 349)
+        self.button2_position = pygame.Rect(702, 328, 799-702, 460-328)
 
         # Set back button
-        self.backbutton3_image = pygame.image.load("images/w2.png")
-        self.backbutton3_position = self.backbutton3_image.get_rect().move(22, 21)
+        self.backbutton3_position = pygame.Rect(29, 29, 60, 50)
 
     # Main Menu Display
     def display(self):
         # Display background 
         self.display_surface.blit(self.background1_image, self.background1_position)
-
-        # Display world 1 button 
-        self.display_surface.blit(self.button1_image, self.button1_position)
-
-        # Set world 2 button
-        self.display_surface.blit(self.button2_image, self.button2_position)
-
-        # Set back button
-        self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
-
-        # Hide all buttons 
-        self.button1_image.set_alpha(0)
-        self.button2_image.set_alpha(0)
-        self.backbutton3_image.set_alpha(0)
     
     # Main Menu Actions
     def action(self):

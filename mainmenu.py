@@ -169,6 +169,8 @@ class MainMenu:
                         print("Mailbox pressed")
                         clicksound()
                         return 0
+                else:
+                    return 0
             elif self.user == "Teacher":
                 if self.uploadAssignment_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Upload Assigment Pressed!")
@@ -188,8 +190,6 @@ class MainMenu:
                     return 12
                 else:
                     return 0
-            else:
-                return 0
         elif self.logout:
             if self.button8_position.collidepoint(pygame.mouse.get_pos()):
                 print("Cancel Button on Pop Up Pressed!")

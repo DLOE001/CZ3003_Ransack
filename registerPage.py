@@ -47,15 +47,10 @@ class Register:
         self.background1_position = [0,0]
         
         # Set back button
-        self.backbutton3_image = pygame.image.load("images/w2.png")
-        self.backbutton3_position = self.backbutton3_image.get_rect().move(275, 260)
-        
-        # Hide Buttons
-        self.backbutton3_image.set_alpha(0)
+        self.backbutton3_position = pygame.Rect(308, 292, 50, 43)
         
         # Set register button
         self.register_rect = pygame.Rect(460, 714, 309, 63)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.register_rect)
         self.register_rect_position = [0,0]
         
         # Set the fields for user to key in
@@ -83,9 +78,6 @@ class Register:
                     
             # Display background
             self.display_surface.blit(self.background1_image, self.background1_position)
-
-            # Set back button
-            self.display_surface.blit(self.backbutton3_image, self.backbutton3_position)
 
             # Display user, email and password input
             for box in self.input_boxes:
