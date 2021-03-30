@@ -216,6 +216,8 @@ while running:
             state = 2
             login.registerClicked = False
     elif state == 7:
+        if (getattr(uploadAssignment, 'done')):
+            state = 0
         uploadAssignment.display()
     elif state == 8:
         setattr(studentCustomQuizMenu, 'reload', True)
