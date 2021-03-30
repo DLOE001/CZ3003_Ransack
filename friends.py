@@ -13,6 +13,9 @@ from friendinputBox import InputBox
 # Import SQL Connection 
 import mysqlConnection
 
+# Import Popup
+import popup
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -30,6 +33,7 @@ class Friends:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
+        self.popup= popup.PopUp(display_surface)
 
         # Background1 is for the header
         # Button 1 is back button
@@ -98,6 +102,7 @@ class Friends:
             friendname = self.friendsinput_box1.retrieveBoxValues()
             # Check if friendname is empty 
             if not friendname:
+                self.popup.fail("Friend name is empty!")
                 print("Empty")
             else:
                 # Retrieve current friend list
@@ -118,6 +123,8 @@ class Friends:
 
                 # Proceed to update which will be reflect in SQL and system
                 mysqlConnection.updateFriendList(self.username, newfriendstring)
+
+                self.popup.success("Friend added!")
 
 
     def displayfriendlist(self):
