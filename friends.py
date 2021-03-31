@@ -120,7 +120,7 @@ class Friends:
             if(ableToBattle == False):
                 self.popup.fail("Failed to initiate battle, already have an existing battle with " + self.usernameSelected)
             else:
-                if self.popupyesno.confirmation("You will take the challenge quiz first then send the challenge over to the target. Continue?"):
+                if self.popupyesno.confirmation("Quiz have to be taken before challenging the player. Continue?"):
                     self.quizIndexToUse = 0
                     self.storeChallengeQues = mysqlConnection.retrieveChallengeQuizData()
                     if (len(self.storeChallengeQues) > 0):

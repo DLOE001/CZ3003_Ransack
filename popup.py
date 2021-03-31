@@ -32,7 +32,7 @@ class PopUp:
         self.headerBox_rect = pygame.Rect(324, 343, 589, 40)
 
         # Message box dimensions
-        self.messageBox_rect = pygame.Rect(339, 387, 557, 220)
+        self.messageBox_rect = pygame.Rect(339, 387, 559, 220)
 
         # Popup box image
         self.popupbox_image = pygame.image.load("images/popup.png")
@@ -131,6 +131,7 @@ class PopUp:
         fontHeight = font.size("Tg")[1]
 
         while text:
+            wrap = False
             i = 1
 
             # determine if the row of text will be outside our area
@@ -142,15 +143,23 @@ class PopUp:
                 i += 1
 
             # if we've wrapped the text, then adjust the wrap to the last word      
-            if i < len(text): 
+            if i < len(text):
                 i = text.rfind(" ", 0, i) + 1
+                wrap = True
 
             # render the line and blit it to the surface
-            if bkg:
-                image = font.render(text[:i], 1, color, bkg)
-                image.set_colorkey(bkg)
+            if wrap:
+                if bkg:
+                    image = font.render(text[:i-1], 1, color, bkg)
+                    image.set_colorkey(bkg)
+                else:
+                    image = font.render(text[:i-1], aa, color)
             else:
-                image = font.render(text[:i], aa, color)
+                if bkg:
+                    image = font.render(text[:i], 1, color, bkg)
+                    image.set_colorkey(bkg)
+                else:
+                    image = font.render(text[:i], aa, color)
 
             image_rect = image.get_rect()
             image_rect.center =((self.messageBox_rect.left+self.messageBox_rect.right)/2, y+image_rect.height*2)

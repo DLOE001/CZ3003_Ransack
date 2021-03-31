@@ -50,9 +50,9 @@ class StudentCustomQuizLobby:
         #Set back button 
         self.backbutton1_position = pygame.Rect(28, 28, 61, 53)
         
-         #Set back button 2
-        self.backbutton2_rect = pygame.Rect(195, 178, 46, 38)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.backbutton2_rect)
+        #Set back button 2
+        self.backbutton2_image = pygame.image.load("images/custom_quiz_lobby_back.jpg")
+        self.backbutton2_rect = self.backbutton2_image.get_rect().move(193, 177)
 
         # Set create custom quiz button
         self.createCustomQuiz_rect = pygame.Rect(26, 410, 144, 100)
@@ -61,11 +61,27 @@ class StudentCustomQuizLobby:
         # Set pending custom quiz button
         self.pendingCustomQuiz_rect = pygame.Rect(32, 518, 139, 98)
         pygame.draw.rect(self.screen, (255, 255, 255), self.pendingCustomQuiz_rect)
-        
+
+        # Set header text
+        self.headerText = pygame.font.SysFont('Courier New', 45, True).render("Custom Quiz", True, (247, 230, 82))
+        self.headerText_rect = self.headerText.get_rect().move(0, 70)
+        self.headerText_rect.centerx = 596
+
+    def changeHeader(self):
+        if self.displayPending:
+            self.headerText = pygame.font.SysFont('Courier New', 45, True).render("Pending Custom Quiz", True, (247, 230, 82))
+        else:
+            self.headerText = pygame.font.SysFont('Courier New', 45, True).render("Custom Quiz", True, (247, 230, 82))
+        self.headerText_rect = self.headerText.get_rect().move(0, 70)
+        self.headerText_rect.centerx = 596
+    
     # Student Custom Quiz Lobby
     def display(self):
         # Display background
         self.display_surface.blit(self.background1_image, self.background1_position)
+
+        # Display header text
+        self.display_surface.blit(self.headerText, self.headerText_rect)
     
         if self.displayPending == False:
             if (self.reload == True):
@@ -84,6 +100,9 @@ class StudentCustomQuizLobby:
                 for j in self.customQuizObjList:
                     j.display()
         else:
+            # Display Back Button
+            self.display_surface.blit(self.backbutton2_image, self.backbutton2_rect)
+            
             if (self.reload == True):
                 self.customQuizPendingObjList = []
                 self.customQuiz = mysqlConnection.retrievePendingCustomQuiz(self.username)
@@ -112,15 +131,19 @@ class StudentCustomQuizLobby:
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             self.displayPending = False
+            self.changeHeader()
             return 0
-        if self.backbutton2_rect.collidepoint(pygame.mouse.get_pos()):
+        if self.backbutton2_rect.collidepoint(pygame.mouse.get_pos()) and self.displayPending:
             clicksound()
             self.displayPending = False
+            self.changeHeader()
         if self.pendingCustomQuiz_rect.collidepoint(pygame.mouse.get_pos()):
+            clicksound()
             self.displayPending = True
-        
+            self.changeHeader()
         if self.createCustomQuiz_rect.collidepoint(pygame.mouse.get_pos()):
             self.displayPending = False
+            self.changeHeader()
             # Create create custom quiz Object
             self.createCustomQuizObj = createCustomQuiz.CreateCustomQuiz(self.username, self.user, self.screen, self.display_surface)
             self.createCustomQuizObj.loadAssets()

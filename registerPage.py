@@ -64,7 +64,6 @@ class Register:
         self.input_boxes = [self.username_box1, self.email_box2, self.password_box3]
 
     def display(self):
-        
         clock = pygame.time.Clock()        
         while not self.done:
             for event in pygame.event.get():
@@ -87,6 +86,9 @@ class Register:
             pygame.display.update()
             clock.tick(30)
             
+        for box in self.input_boxes:
+            box.resetText()
+            
     # Register Page Actions
     def action(self):
         # Register button is selected
@@ -103,8 +105,9 @@ class Register:
                 return True
             else:
                 self.popup.fail(self.errorMessage)
-                for box in self.input_boxes:
-                    box.resetText()
+                if self.errorMessage != "Please fill in all fields":
+                    for box in self.input_boxes:
+                        box.resetText()
                 return False
          
         # Back button is selected
@@ -119,7 +122,8 @@ class Register:
         passCheck = False
         self.errorMessage = ""
         if(len(username) <= 0 or len(password) <= 0 or len(email) <=0):
-            if(len(username) <= 0):
+            self.errorMessage = "Please fill in all fields"
+            '''if(len(username) <= 0):
                 if(len(self.errorMessage) <= 0):
                     self.errorMessage = "Username field not filled\n"
                 else:
@@ -133,7 +137,7 @@ class Register:
                 if(len(self.errorMessage) <= 0):
                     self.errorMessage = "Email field not filled\n"
                 else:
-                    self.errorMessage += "Email field not filled\n"
+                    self.errorMessage += "Email field not filled\n"'''
         else:
             # Check for duplicate username
             duplicatedUsername = False
@@ -156,9 +160,9 @@ class Register:
                         break
             if(duplicatedUsername):
                 if(len(self.errorMessage) <= 0):
-                    self.errorMessage = username + " is already taken\n"
-                else:
-                    self.errorMessage += username + " is already taken\n" 
+                    self.errorMessage = username + " is already taken"
+                '''else:
+                    self.errorMessage += username + " is already taken\n"'''
             else:
                 passCheck = True
         return passCheck

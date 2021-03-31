@@ -48,11 +48,11 @@ class CustomQuizObjAsset:
         pygame.draw.rect(self.display_surface, (255, 255, 255), self.startQuiz_rect)
         
         # Set Rating Text
-        self.ratingtext1 = pygame.font.SysFont('Courier New', 30).render(str(self.rating), True, (0, 0, 0))
+        self.ratingtext1 = pygame.font.SysFont('Courier New', 30).render(str(self.rating), True, (247, 230, 82))
         self.ratingtext1_position = [250,y_axis_offset + self.y_axis + 20]
         
         # Set Quiz Name Text
-        self.quizNametext1 = pygame.font.SysFont('Courier New', 30).render(self.quizName, True, (0, 0, 0))
+        self.quizNametext1 = pygame.font.SysFont('Courier New', 30).render(self.quizName, True, (247, 230, 82))
         self.quizNametext1_position = [305,y_axis_offset + self.y_axis + 20]
         
         # Popup box iamge
