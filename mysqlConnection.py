@@ -955,6 +955,49 @@ def insertUserQuizScore(username, level, score):
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()    
 
+# Update Custom Quiz Rating
+def updateCustomQuizRating(quizName, newRating):
+
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "UPDATE customcreatedquiz \
+                    SET rating = %d \
+                    WHERE quizName = '%s'" % (newRating, quizName)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+# Create a Custom Quiz Account
+def createCustomQuiz(createdBy, quizName, question, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3):
+    listStore = []
+    listReturn = []
+    rating = 0
+    status = "Pending"
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "INSERT INTO customcreatedquiz (createdBy, quizName, question, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, rating, status) \
+                    VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s');" % (createdBy, quizName, question, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, rating, status)
+                    
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       mySQLconnection.commit()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+            
 # Add assignment by teacher
 def insertAssignment(teachername, assignmentname, platform, date):
     try:
@@ -972,3 +1015,35 @@ def insertAssignment(teachername, assignmentname, platform, date):
         #closing database connection.
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()  
+
+# Retrieve assignment by teacher
+def retrieveAssignment():
+    listStore = []
+    listReturn = []
+    
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "SELECT assignmentName, platformUploadedTo, uploadedDate \
+                    FROM assignment;"
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+    return listReturn
