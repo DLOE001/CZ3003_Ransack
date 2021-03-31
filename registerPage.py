@@ -35,6 +35,7 @@ class Register:
         self.screen = screen
         self.successfulRegister = False
         self.popup= popup.PopUp(display_surface)
+        self.enterkey = False
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
@@ -72,6 +73,32 @@ class Register:
                     quit()
                 if event.type == MOUSEBUTTONDOWN:
                     self.done = self.action()
+                elif event.type == pygame.KEYDOWN:
+                    # If player press enter key, check all fields
+                    if event.key == pygame.K_RETURN:
+                        self.enterkey = True
+                        self.done = self.action()
+                    # If player press tab key, switch between the fields
+                    elif event.key == pygame.K_TAB:
+                        boxswitched = False
+                        for i in range(len(self.input_boxes)):
+                            if self.input_boxes[i].active and i == len(self.input_boxes)-1:
+                                self.input_boxes[i].active = False
+                                self.input_boxes[i].color = pygame.Color('lightskyblue3')
+                                boxswitched = True
+                                break
+                            elif self.input_boxes[i].active:
+                                self.input_boxes[i].active = False
+                                self.input_boxes[i].color = pygame.Color('lightskyblue3')
+                                self.input_boxes[i+1].active = True
+                                self.input_boxes[i+1].color = pygame.Color('dodgerblue2')
+                                boxswitched = True
+                                break
+                        if boxswitched == False:
+                            self.input_boxes[0].active = True
+                            self.input_boxes[0].color = pygame.Color('dodgerblue2')
+                                
+                
                 for box in self.input_boxes:
                     box.handle_event(event)
                     
@@ -92,7 +119,7 @@ class Register:
     # Register Page Actions
     def action(self):
         # Register button is selected
-        if self.register_rect.collidepoint(pygame.mouse.get_pos()):
+        if self.register_rect.collidepoint(pygame.mouse.get_pos()) or self.enterkey:
             username = self.username_box1.retrieveBoxValues()
             email = self.email_box2.retrieveBoxValues()
             password = self.password_box3.retrieveBoxValues()
@@ -102,12 +129,14 @@ class Register:
                 for box in self.input_boxes:
                     box.resetText()
                 self.popup.success(self.successMessage)
+                self.enterkey = False
                 return True
             else:
                 self.popup.fail(self.errorMessage)
                 if self.errorMessage != "Please fill in all fields":
                     for box in self.input_boxes:
                         box.resetText()
+                self.enterkey = False
                 return False
          
         # Back button is selected

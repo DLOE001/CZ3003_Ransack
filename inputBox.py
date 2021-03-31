@@ -28,13 +28,13 @@ class InputBox():
             self.color = COLOR_ACTIVE if self.active else COLOR_INACTIVE
         if event.type == pygame.KEYDOWN:
             if self.active:
-                if event.key == pygame.K_RETURN:
-                    print("REDRAW")
-                    print(self.text)
-                    self.text = ''
-                elif event.key == pygame.K_BACKSPACE:
+                #if event.key == pygame.K_RETURN:
+                    #print("REDRAW")
+                    #print(self.text)
+                    #self.text = ''
+                if event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
-                else:
+                elif event.key != pygame.K_RETURN and event.key != pygame.K_TAB:
                     self.text += event.unicode
                 # Re-render the text.
                 self.txt_surface = FONT.render(self.text, True, self.color)

@@ -34,6 +34,7 @@ class Login:
         self.display_surface = display_surface
         self.screen = screen
         self.popup= popup.PopUp(display_surface)
+        self.enterkey = False
 
     def loadAssets(self):
         # Set background
@@ -76,6 +77,30 @@ class Login:
                     quit()
                 if event.type == MOUSEBUTTONDOWN:
                     self.done = self.action()
+                elif event.type == pygame.KEYDOWN:
+                    # If player press enter key, check all fields
+                    if event.key == pygame.K_RETURN:
+                        self.enterkey = True
+                        self.done = self.action()
+                    # If player press tab key, switch between the fields
+                    elif event.key == pygame.K_TAB:
+                        boxswitched = False
+                        for i in range(len(self.input_boxes)):
+                            if self.input_boxes[i].active and i == len(self.input_boxes)-1:
+                                self.input_boxes[i].active = False
+                                self.input_boxes[i].color = pygame.Color('lightskyblue3')
+                                boxswitched = True
+                                break
+                            elif self.input_boxes[i].active:
+                                self.input_boxes[i].active = False
+                                self.input_boxes[i].color = pygame.Color('lightskyblue3')
+                                self.input_boxes[i+1].active = True
+                                self.input_boxes[i+1].color = pygame.Color('dodgerblue2')
+                                boxswitched = True
+                                break
+                        if boxswitched == False:
+                            self.input_boxes[0].active = True
+                            self.input_boxes[0].color = pygame.Color('dodgerblue2')
                 for box in self.input_boxes:
                     box.handle_event(event)
             
@@ -92,7 +117,8 @@ class Login:
             
     # Login Page Actions
     def action(self):
-        if self.login_rect.collidepoint(pygame.mouse.get_pos()):
+        if self.login_rect.collidepoint(pygame.mouse.get_pos()) or self.enterkey:
+            self.enterkey = False
             username = self.username_box1.retrieveBoxValues()
             password = self.password_box2.retrieveBoxValues()
             #self.input_box1.draw(self.screen)

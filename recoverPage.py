@@ -36,6 +36,7 @@ class Recover:
         self.popup= popup.PopUp(display_surface)
         self.successfulRecover = False
         self.emptyFields = False
+        self.enterkey = False
         # Background1 is for the header
         # Button 1 is back button
         # Button 2 is query button
@@ -72,6 +73,30 @@ class Recover:
                     quit()
                 if event.type == MOUSEBUTTONDOWN:
                     self.done = self.action()
+                elif event.type == pygame.KEYDOWN:
+                    # If player press enter key, check all fields
+                    if event.key == pygame.K_RETURN:
+                        self.enterkey = True
+                        self.done = self.action()
+                    # If player press tab key, switch between the fields
+                    elif event.key == pygame.K_TAB:
+                        boxswitched = False
+                        for i in range(len(self.input_boxes)):
+                            if self.input_boxes[i].active and i == len(self.input_boxes)-1:
+                                self.input_boxes[i].active = False
+                                self.input_boxes[i].color = pygame.Color('lightskyblue3')
+                                boxswitched = True
+                                break
+                            elif self.input_boxes[i].active:
+                                self.input_boxes[i].active = False
+                                self.input_boxes[i].color = pygame.Color('lightskyblue3')
+                                self.input_boxes[i+1].active = True
+                                self.input_boxes[i+1].color = pygame.Color('dodgerblue2')
+                                boxswitched = True
+                                break
+                        if boxswitched == False:
+                            self.input_boxes[0].active = True
+                            self.input_boxes[0].color = pygame.Color('dodgerblue2')
                 for box in self.input_boxes:
                     box.handle_event(event)
                     
@@ -89,7 +114,8 @@ class Recover:
     # Register Page Actions
     def action(self):
         # Recover button is selected
-        if self.recover_rect.collidepoint(pygame.mouse.get_pos()):
+        if self.recover_rect.collidepoint(pygame.mouse.get_pos()) or self.enterkey:
+            self.enterkey = False
             username = self.username_box1.retrieveBoxValues()
             email = self.email_box2.retrieveBoxValues()
             if(self.checkInputFields(username, email)):

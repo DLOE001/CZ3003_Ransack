@@ -208,6 +208,7 @@ while running:
             user = getattr(login, 'user')
             recreateUIObj(username, user)
             state = 0
+            menu.display()
         elif (getattr(login, 'done') and getattr(login, 'registerClicked')):
             setattr(register, 'done', False)
             state = 6
