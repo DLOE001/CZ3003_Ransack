@@ -162,14 +162,14 @@ class Recover:
             
             for i in allStudents:
                 if username == i[0]:
-                    if email == i[2]:
+                    if email.lower() == i[2].lower():
                         inputMatch = True
                         break
                     
             if inputMatch == False:
                 for i in allTeachers:
                     if username == i[0]:
-                        if email == i[2]:
+                        if email.lower() == i[2].lower():
                             inputMatch = True
                             break
 
