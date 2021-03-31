@@ -36,13 +36,15 @@ class InputBox():
                     #print("REDRAW")
                     #print(self.text)
                     #self.text = ''
+                
                 if self.ctrlbutton:
-                    print("hi")
                     if event.key == pygame.K_v:
                         self.text = tk.Tk().clipboard_get()
                 else:
                     if event.key == pygame.K_LCTRL:
                         self.ctrlbutton = True
+                    if event.key == pygame.K_DELETE:
+                        self.text = ''
                     elif event.key == pygame.K_BACKSPACE:
                         self.text = self.text[:-1]
                     elif event.key != pygame.K_RETURN and event.key != pygame.K_TAB:
