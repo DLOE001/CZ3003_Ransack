@@ -1,6 +1,8 @@
 import pygame
+import tkinter as tk
 
 pygame.init()
+pygame.scrap.init()
 screen = pygame.display.set_mode((640, 480))
 COLOR_INACTIVE = pygame.Color('lightskyblue3')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
@@ -15,6 +17,7 @@ class InputBox():
         self.text = text
         self.txt_surface = FONT.render(text, True, self.color)
         self.active = False
+        self.ctrlbutton = False
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -24,6 +27,7 @@ class InputBox():
                 self.active = not self.active
             else:
                 self.active = False
+                self.ctrlbutton = False
             # Change the current color of the input box.
             self.color = COLOR_ACTIVE if self.active else COLOR_INACTIVE
         if event.type == pygame.KEYDOWN:
@@ -32,13 +36,23 @@ class InputBox():
                     #print("REDRAW")
                     #print(self.text)
                     #self.text = ''
-                if event.key == pygame.K_BACKSPACE:
-                    self.text = self.text[:-1]
-                elif event.key != pygame.K_RETURN and event.key != pygame.K_TAB:
-                    self.text += event.unicode
+                if self.ctrlbutton:
+                    print("hi")
+                    if event.key == pygame.K_v:
+                        self.text = tk.Tk().clipboard_get()
+                else:
+                    if event.key == pygame.K_LCTRL:
+                        self.ctrlbutton = True
+                    elif event.key == pygame.K_BACKSPACE:
+                        self.text = self.text[:-1]
+                    elif event.key != pygame.K_RETURN and event.key != pygame.K_TAB:
+                        self.text += event.unicode
                 # Re-render the text.
                 self.txt_surface = FONT.render(self.text, True, self.color)
 
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LCTRL:
+                self.ctrlbutton = False
     
     def update(self):
         # Resize the box if the text is too long.
