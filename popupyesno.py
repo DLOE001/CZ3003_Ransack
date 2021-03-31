@@ -33,7 +33,7 @@ class PopUpYesNo:
         self.headerBox_rect = pygame.Rect(324, 343, 586, 40)
 
         # Message box dimensions
-        self.messageBox_rect = pygame.Rect(324, 387, 586, 220)
+        self.messageBox_rect = pygame.Rect(324, 387, 557, 220)
 
         # Popup box image
         self.popupbox_image = pygame.image.load("images/popup.png")
