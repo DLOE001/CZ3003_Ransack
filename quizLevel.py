@@ -81,6 +81,12 @@ class QuizLevel:
                         player.acceleration = pygame.math.Vector2(0, 0)
                         windowmoved = True
                     elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            popupopened = True
+                            #Set acceleration to zero to prevent player from disappearing
+                            player.acceleration = pygame.math.Vector2(0, 0)
+                            if popup.confirmation("Do you want to go back to world select?", "Exit Level"):
+                                return True
                         if player.monster == None:
                             if event.key == pygame.K_LEFT:
                                 player.LEFT_KEY = True
