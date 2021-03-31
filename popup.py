@@ -107,6 +107,10 @@ class PopUp:
                     quit()
                 if event.type == MOUSEBUTTONDOWN:
                     self.displaying = self.action()
+                elif event.type == pygame.KEYDOWN:
+                    # If player press enter key, exit popup 
+                    if event.key == pygame.K_RETURN:
+                        self.displaying = False
 
             self.layer1.fill((0,0,0,0))
 
