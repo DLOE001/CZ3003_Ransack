@@ -110,6 +110,7 @@ class UploadAssignment:
                 for box in self.input_boxes:
                     box.handle_event(event)      
 
+            # At upload page
             if (self.state == True): 
                 # Display background
                 self.background1_image = pygame.image.load("images/teacher_upload_assignment.jpg")
@@ -124,6 +125,7 @@ class UploadAssignment:
                 # Display assignment input
                 self.assignmentnameinput_box.draw(self.screen)
             
+            # At view upload page
             elif (self.state == False): 
                 # Set background
                 self.background1_image = pygame.image.load("images/teacher_viewuploadedassignment.jpg")
