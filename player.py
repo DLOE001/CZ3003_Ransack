@@ -52,10 +52,10 @@ class Player(pygame.sprite.Sprite):
     def draw(self, display):
         #Update score label
         self.scoreLabel = pygame.font.SysFont('Arial', 50, True).render("Score: " + str(self.score), True, (0, 0, 0))
-        self.scoreLabel_position = (15, 65)
+        self.scoreLabel_position = (0, 50)
         #Update remaining hearts
         for i in range(self.hearts):
-            self.heartImage_position = (i*50+15, 15)
+            self.heartImage_position = (i*50, 0)
             display.blit(self.heartImage, self.heartImage_position)
         #Display score and hearts
         display.blit(self.scoreLabel, self.scoreLabel_position)

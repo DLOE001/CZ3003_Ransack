@@ -44,10 +44,8 @@ class CreateCustomQuiz:
         self.background1_image = pygame.image.load("images/student_create_custom_quiz.jpg")
         self.background1_position = [0,0]
 
-        #Set back button 
-        self.backbutton1_image = pygame.image.load("images/w2.png")
-        self.backbutton1_position = self.backbutton1_image.get_rect().move(22, 21)
-        self.backbutton1_image.set_alpha(0)
+        # Set back button
+        self.backbutton1_position = pygame.Rect(29, 29, 60, 50)
         
         # Set register button
         self.create_rect = pygame.Rect(754, 628, 179, 44)
@@ -81,9 +79,6 @@ class CreateCustomQuiz:
                     
             # Display background
             self.display_surface.blit(self.background1_image, self.background1_position)
-            
-            # Display back button 
-            self.display_surface.blit(self.backbutton1_image, self.backbutton1_position)
     
             # Display quiz name, question, answer and 3 wrong answer input
             for box in self.input_boxes:

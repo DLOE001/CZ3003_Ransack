@@ -40,6 +40,7 @@ class TeacherModifyCustomQuizObjAsset:
         y_axis_offset = self.iteration * 100
         self.stopRunning = False
         self.popup= popup.PopUp(display_surface)
+        self.typeOfQuiz = "Custom"
         
         self.remove_rect = pygame.Rect(852, y_axis_offset + self.y_axis, 90, 66)
         pygame.draw.rect(self.display_surface, (255, 255, 255), self.remove_rect)
@@ -89,7 +90,7 @@ class TeacherModifyCustomQuizObjAsset:
             self.popup.success("Successfully Removed")
         if self.selectQuiz_rect.collidepoint(pygame.mouse.get_pos()):
             # Create create custom quiz Object
-            self.takingQuizUI = taking_custom_quiz.TakingQuizUI(self.user, self.quizName, self.username, self.display_surface)
+            self.takingQuizUI = taking_custom_quiz.TakingQuizUI(self.user, self.quizName, self.username, self.display_surface, self.typeOfQuiz)
             self.takingQuizUI.loadAssets()
             clicksound()
             self.stopRunning = False

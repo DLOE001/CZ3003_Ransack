@@ -168,7 +168,7 @@ class MainMenu:
                 elif self.button11_position.collidepoint(pygame.mouse.get_pos()):
                         print("Mailbox pressed")
                         clicksound()
-                        return 0
+                        return 14
                 else:
                     return 0
             elif self.user == "Teacher":

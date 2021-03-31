@@ -41,9 +41,6 @@ class StudentCustomQuizLobby:
         self.screen = screen
         self.displayPending = False
         self.reload = True
-        # Background1 is for the header
-        # Button 1 is back button
-        # Button 2 is query button
 
     def loadAssets(self):
         # Set background
@@ -95,17 +92,23 @@ class StudentCustomQuizLobby:
                     pass
                 else:
                     for i in range(len(self.customQuiz)):
-                        self.customQuizPendingObjList.append(customQuizPendingObjAsset.CustomQuizPendingObjAsset(self.customQuiz[i][2], self.customQuiz[i][8], i, self.display_surface))    
+                        self.customQuizPendingObjList.append(customQuizPendingObjAsset.CustomQuizPendingObjAsset(self.user, self.username, self.customQuiz[i][2], self.customQuiz[i][8], i, self.display_surface))    
                 self.reload = False
                 
             if (len(self.customQuizPendingObjList) > 0):
                 for j in self.customQuizPendingObjList:
                     j.display()
     def action(self):
-        for i in self.customQuizObjList:
-            i.action()
-            if(getattr(i, 'stopRunning')):
-                return 8
+        if( self.displayPending == False):
+            for i in self.customQuizObjList:
+                i.action()
+                if(getattr(i, 'stopRunning')):
+                    return 8
+        else:
+            for i in self.customQuizPendingObjList:
+                i.action()
+                if(getattr(i, 'stopRunning')):
+                    return 8
         if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             self.displayPending = False

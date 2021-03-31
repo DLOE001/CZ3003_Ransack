@@ -33,9 +33,12 @@ class Recover:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-        self.popup = popup.PopUp(display_surface)
+        self.popup= popup.PopUp(display_surface)
         self.successfulRecover = False
         self.emptyFields = False
+        # Background1 is for the header
+        # Button 1 is back button
+        # Button 2 is query button
 
     def loadAssets(self):
         self.backToLogin = False

@@ -36,6 +36,7 @@ class CustomQuizObjAsset:
         self.iteration = iteration
         y_axis_offset = self.iteration * 100
         self.stopRunning = False
+        self.typeOfQuiz = "Custom"
         
         self.upArrow_rect = pygame.Rect(832, y_axis_offset + self.y_axis, 50, 62)
         pygame.draw.rect(self.display_surface, (255, 255, 255), self.upArrow_rect)
@@ -92,7 +93,7 @@ class CustomQuizObjAsset:
             mysqlConnection.updateCustomQuizRating(self.quizName, self.rating)
         if self.startQuiz_rect.collidepoint(pygame.mouse.get_pos()):
             # Create create custom quiz Object
-            self.takingQuizUI = taking_custom_quiz.TakingQuizUI(self.user, self.quizName, self.username, self.display_surface)
+            self.takingQuizUI = taking_custom_quiz.TakingQuizUI(self.user, self.quizName, self.username, self.display_surface, self.typeOfQuiz)
             self.takingQuizUI.loadAssets()
             clicksound()
             self.stopRunning = False

@@ -138,7 +138,41 @@ def retrieveQuizLevelData(worldSelected, levelSelected):
             
     return listReturn
 
-
+# Retrieves all Challenge quiz data
+def retrieveChallengeQuizData():
+    listStore = []
+    listReturn = []
+  
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select * from challengequizbank;"
+       
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listStore.append(row[3])
+           listStore.append(row[4])
+           listStore.append(row[5])
+           listStore.append(row[6])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+            
+    return listReturn
 
 ### Student Specific Functions ###
 
@@ -214,6 +248,181 @@ def retrieveAllCustomQuiz():
            listStore.append(row[6])
            listStore.append(row[7])
            listStore.append(row[8])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    
+    return listReturn
+
+# Retrieves specific challenge quiz data by quiz name
+def retrieveSpecificChallengeQuizByQuizName(quizName):
+    listStore = []
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select * from challengequizbank \
+                  WHERE challengeQuizName = '%s'" % (quizName)
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listStore.append(row[3])
+           listStore.append(row[4])
+           listStore.append(row[5])
+           listStore.append(row[6])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    return listReturn
+
+# Retrieves pending battle status data
+def retrievePendingBattleStatus(challenger, challengee):
+    listStore = []
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select * from challengescore \
+                  WHERE challengerUsername = '%s' \
+                  AND challengeeUsername = '%s';" % (challenger, challengee)
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
+           listStore.append(row[1])
+           listStore.append(row[2])
+           listStore.append(row[3])
+           listStore.append(row[4])
+           listStore.append(row[5])
+           listStore.append(row[6])
+           listStore.append(row[7])
+           listReturn.append(listStore)
+       cursor.close()
+    
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            #print("\nMySQL connection is closed Now")
+    return listReturn
+
+# Add Student Challenge Quiz Score
+def insertStudentChallengeQuizScore(challengeQuizID, quizName, username, score, challengeeUsername):
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "INSERT INTO challengeScore (challengeQuizID, challengeQuizName, challengerUsername, challengerScore, challengeeUsername) \
+                    VALUES(%d,'%s', '%s', %d, '%s');" % (challengeQuizID, quizName, username, score, challengeeUsername)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()  
+
+# Update Custom Quiz Score/Attempt
+def updateStudentChallengeQuizScore(battleID, score, winner):
+
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "UPDATE challengescore \
+                    SET challengeeScore = %d,\
+                    battleWonBy = '%s' \
+                    WHERE battleID = %d;" % (score, winner, battleID)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+# Add notification message
+def insertNotification(username, message):
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "INSERT INTO notification \
+                    VALUES('%s', '%s');" % (username, message)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+
+# Approves the User Created Custom Quiz
+def removeNotification(username, message):
+    try:
+        mySQLconnection = __mySQLconnection()
+        sqlQuery = "DELETE FROM notification \
+                    WHERE username = '%s' \
+                    AND notificationMessage = '%s';" % (username, message)
+       
+        cursor = mySQLconnection.cursor()
+        cursor.execute(sqlQuery)
+        mySQLconnection.commit()
+        
+    except Error as e :
+        print ("Error connecting MySQL", e)
+    finally:
+        #closing database connection.
+        if(mySQLconnection.is_connected()):
+            mySQLconnection.close()
+            
+# Retrieves specific custom quiz data
+def retrieveNotification(username):
+    listStore = []
+    listReturn = []
+    try:
+       mySQLconnection = __mySQLconnection()
+       sqlQuery = "select notificationMessage from notification \
+                  WHERE username = '%s'" % (username)
+       cursor = mySQLconnection.cursor()
+       cursor.execute(sqlQuery)
+       records = cursor.fetchall()
+    
+       # For each record in the DB, append it to the return list
+       for row in records:
+           listStore = []
+           listStore.append(row[0])
            listReturn.append(listStore)
        cursor.close()
     
@@ -559,7 +768,7 @@ def retrieveFriendList(username):
     # Spilt into list
     recordslist = recordsstring.split(", ")
 
-    print(recordslist)
+    #print(recordslist)
             
     return recordslist
 
@@ -627,8 +836,7 @@ def removeRejectedCustomQuiz():
         #closing database connection.
         if(mySQLconnection.is_connected()):
             mySQLconnection.close()
-    
-    print("Updated")
+
     
 # Remove Selected Custom Quiz
 def removeStudentCustomQuiz(quizName):

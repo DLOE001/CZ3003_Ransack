@@ -10,6 +10,9 @@ pygame.font.init()
 # Import SQL Connection 
 import mysqlConnection
 
+# Import Taking Custom Quiz UI 
+import taking_custom_quiz
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -22,7 +25,9 @@ def clicksound():
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio/Click.wav'), maxtime=2000)
 
 class CustomQuizPendingObjAsset:
-    def __init__(self, quizName, rating, iteration,  display_surface):
+    def __init__(self, user, username, quizName, rating, iteration,  display_surface):
+        self.user = user
+        self.username = username
         self.quizName = quizName
         self.rating = rating
         self.display_surface = display_surface
@@ -30,6 +35,8 @@ class CustomQuizPendingObjAsset:
         self.y_axis = 210
         self.iteration = iteration
         y_axis_offset = self.iteration * 100
+        self.stopRunning = False
+        self.typeOfQuiz = "View Pending Quiz"
     
         # Set Rating Text
         self.ratingtext1 = pygame.font.SysFont('Courier New', 30).render("0", True, (0, 0, 0))
@@ -42,6 +49,8 @@ class CustomQuizPendingObjAsset:
         # Popup box iamge
         self.popupbox_image = pygame.image.load("images/customQuizPendingObjAsset.png")
         self.popupbox_position = [224, y_axis_offset + self.y_axis]    
+        
+        self.checkQuiz_rect = pygame.Rect(295, y_axis_offset + self.y_axis + 10, 645, 63)
         
     # Popup Display
     def display(self):
@@ -67,6 +76,22 @@ class CustomQuizPendingObjAsset:
     
     # Popup Actions
     def action(self):
-        pass
+        if self.checkQuiz_rect.collidepoint(pygame.mouse.get_pos()):
+            self.takingQuizUI = taking_custom_quiz.TakingQuizUI(self.user, self.quizName, self.username, self.display_surface, self.typeOfQuiz)
+            self.takingQuizUI.loadAssets()
+            clicksound()
+            self.stopRunning = False
+            while not self.stopRunning:  
+                self.takingQuizUI.display()
+                if(getattr(self.takingQuizUI, 'finished')):
+                    self.stopRunning = True
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        quit()
+                    if event.type == MOUSEBUTTONDOWN:
+                        self.takingQuizUI.action()
+                    pygame.display.update()
+            return 8
         
 

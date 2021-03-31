@@ -45,6 +45,9 @@ import teacherClassManagement
 # Profile Class
 import profile
 
+# Profile Class
+import mailboxPage
+
 # Import and initialize the pygame library
 import pygame
 pygame.init()
@@ -122,6 +125,9 @@ teacherClass = teacherClassManagement.TeacherClassManagement(username, user, scr
 # Create Profile Object
 profileObject = profile.Profile(username, user, display_surface)
 
+# Create Profile Object
+mailBoxObject = mailboxPage.Mailbox(username, user, display_surface)
+
 # Create Quiz Level Object
 level = quizLevel.QuizLevel()
 
@@ -133,9 +139,11 @@ def recreateUIObj(username, user):
     global level
     global leaderBoard
     global friendMenu
+    global uploadAssignment
     global studentCustomQuizMenu
     global teacherCustomQuizMenu
     global profileObject
+    global mailBoxObject
     
      # Create Login Object
     login = loginPage.Login(username, user, screen, display_surface)
@@ -171,6 +179,9 @@ def recreateUIObj(username, user):
 
     #Profile Object
     profileObject = profile.Profile(username, user, display_surface)
+
+    # Create Profile Object
+    mailBoxObject = mailboxPage.Mailbox(username, user, display_surface)
 
     #Create Quiz Level Object
     level = quizLevel.QuizLevel()
@@ -236,6 +247,9 @@ while running:
         teacherClass.display()
     elif state == 13:
         profileObject.display()
+    elif state == 14:
+        setattr(mailBoxObject, 'reload', True)
+        mailBoxObject.display()
     elif state == -1:
         running = False
  
@@ -270,6 +284,8 @@ while running:
                 state = teacherClass.action()
             elif state == 13:
                 state = profileObject.action()
+            elif state == 14:
+                state = mailBoxObject.action()
                 
         # Draws the surface object to the screen.   
         pygame.display.update()

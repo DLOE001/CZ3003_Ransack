@@ -13,6 +13,9 @@ import mysqlConnection
 # Import Popup
 import popup
 
+# Import Friend
+import friends
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -25,13 +28,22 @@ def clicksound():
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio/Click.wav'), maxtime=2000)
 
 class TakingQuizUI:
-    def __init__(self, user, quizName, username, display_surface):
+    def __init__(self, user, quizName, username, display_surface, typeOfQuiz):
         self.user = user
         self.username = username
         self.quizName = quizName
         self.display_surface = display_surface
+        self.typeOfQuiz = typeOfQuiz
         self.finished = False
-        self.quiz = mysqlConnection.retrieveStudentCustomQuiz(self.quizName)
+        if (self.typeOfQuiz == "Custom" or self.typeOfQuiz == "View Pending Quiz"):
+            self.quiz = mysqlConnection.retrieveStudentCustomQuiz(self.quizName)
+        elif (self.typeOfQuiz == "Challenge"):
+            self.quiz = mysqlConnection.retrieveSpecificChallengeQuizByQuizName(self.quizName)
+            self.usernameSelectedFromFriendMenu = ""
+            self.replyChallenge = False
+            self.battleID = 0
+            self.challengerUsername = ""
+            self.notificationMessage = ""
         self.score = 0
         self.popup= popup.PopUp(display_surface)
         
@@ -89,6 +101,21 @@ class TakingQuizUI:
         self.wrongAnswer3text_position = [293, 569]
         self.wrongAnswer3_rect = pygame.Rect(264, 553, 684, 78)
         pygame.draw.rect(self.display_surface, (255, 255, 255), self.wrongAnswer3_rect)
+     
+    def passSelectedUsername(self, usernameSelected):
+        self.usernameSelectedFromFriendMenu = usernameSelected
+        
+    def passChallengerUsername(self, challengerUsername):
+        self.challengerUsername = challengerUsername
+        
+    def setReplyChallenge(self, replyChallenge):
+        self.replyChallenge = replyChallenge
+        
+    def setBattleID(self, battleID):
+        self.battleID = battleID
+        
+    def setNotificationMsg(self, notificationMessage):
+        self.notificationMessage = notificationMessage
         
     def loadAssets(self):
 
@@ -97,16 +124,12 @@ class TakingQuizUI:
         self.background1_position = [0,0]
 
         # Set back button
-        self.backbutton1 = pygame.image.load("images/w2.png")
-        self.backbutton1_position = self.backbutton1.get_rect().move(22, 21)
+        self.backbutton1_position = pygame.Rect(29, 29, 60, 50)
 
     # Main Menu Display
     def display(self):
         # Display background 
         self.display_surface.blit(self.background1_image, self.background1_position)
-
-        # Display world 1 button 
-        self.display_surface.blit(self.backbutton1, self.backbutton1_position)
 
         # Displays Custom Quiz Info
         self.display_surface.blit(self.quizNametext, self.quizNametext_rect)
@@ -115,53 +138,159 @@ class TakingQuizUI:
         self.display_surface.blit(self.wrongAnswer1text, self.wrongAnswer1text_position)
         self.display_surface.blit(self.wrongAnswer2text, self.wrongAnswer2text_position)
         self.display_surface.blit(self.wrongAnswer3text, self.wrongAnswer3text_position)
-     
-        # Hide all buttons 
-        self.backbutton1.set_alpha(0)
-
     
     # Main Menu Actions
     def action(self):
-        if self.user == "Student":
-            if self.answer_rect.collidepoint(pygame.mouse.get_pos()):
-                self.popup.success("Correct")
-                self.score = 100
-                currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
-                if len(currentScore) > 0:
-                    if currentScore[0][0] < self.score:
-                        mysqlConnection.updateStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
-                elif len(currentScore) == 0:
-                    mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
-                self.finished = True
-                return 8
-            if self.wrongAnswer1_rect.collidepoint(pygame.mouse.get_pos()):
-                self.popup.fail("Wrong")
-                currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
-                if len(currentScore) == 0:
-                    mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
-                self.finished = True
-                return 8
-            if self.wrongAnswer2_rect.collidepoint(pygame.mouse.get_pos()):
-                self.popup.fail("Wrong")
-                currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
-                if len(currentScore) == 0:
-                    mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
-                self.finished = True
-                return 8
-            if self.wrongAnswer3_rect.collidepoint(pygame.mouse.get_pos()):
-                self.popup.fail("Wrong")
-                currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
-                if len(currentScore) == 0:
-                    mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
-                self.finished = True
-                return 8
+        if self.typeOfQuiz == "View Pending Quiz":
             if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
-                clicksound()
-                self.finished = True
-                return 8
-        elif self.user == "Teacher":
-            if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
-                clicksound()
-                self.finished = True
-                return 10
-        
+                    clicksound()
+                    self.finished = True
+                    return 8
+        if self.typeOfQuiz == "Custom":
+            if self.user == "Student":
+                correctMessage = "Correct"
+                wrongMessage = "Wrong"
+                if self.answer_rect.collidepoint(pygame.mouse.get_pos()):
+                    self.popup.success(correctMessage)
+                    self.score = 100
+                    currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
+                    if len(currentScore) > 0:
+                        if currentScore[0][0] < self.score:
+                            mysqlConnection.updateStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
+                    elif len(currentScore) == 0:
+                        mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
+                    self.finished = True
+                    return 8
+                if self.wrongAnswer1_rect.collidepoint(pygame.mouse.get_pos()):
+                    self.popup.fail(wrongMessage)
+                    currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
+                    if len(currentScore) == 0:
+                        mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
+                    self.finished = True
+                    return 8
+                if self.wrongAnswer2_rect.collidepoint(pygame.mouse.get_pos()):
+                    self.popup.fail(wrongMessage)
+                    currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
+                    if len(currentScore) == 0:
+                        mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
+                    self.finished = True
+                    return 8
+                if self.wrongAnswer3_rect.collidepoint(pygame.mouse.get_pos()):
+                    self.popup.fail(wrongMessage)
+                    currentScore = mysqlConnection.retrieveStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username)
+                    if len(currentScore) == 0:
+                        mysqlConnection.insertStudentCustomQuizScore(int(self.quiz[0][0]), self.quizName, self.username, self.score)
+                    self.finished = True
+                    return 8
+                if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
+                    clicksound()
+                    self.finished = True
+                    return 8
+                
+            elif self.user == "Teacher":
+                if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
+                    clicksound()
+                    self.finished = True
+                    return 10
+        elif self.typeOfQuiz == "Challenge":
+            if self.user == "Student":
+                if (self.replyChallenge):
+                    checkWinner = mysqlConnection.retrievePendingBattleStatus(self.challengerUsername, self.username)
+                    challengerScore = 0
+                    battleResult = ""
+                    winner = ""
+                    if(len(checkWinner) > 0):
+                        for i in range(len(checkWinner)):
+                            if(checkWinner[i][6] != None and checkWinner[i][7] != None):
+                                pass
+                            else:
+                                if (checkWinner[i][6] == None and checkWinner[i][7] == None):
+                                    challengerScore = checkWinner[i][4]
+                                    break
+                    if self.answer_rect.collidepoint(pygame.mouse.get_pos()):
+                        self.score = 100
+                        if (challengerScore == self.score):
+                            battleResult = "Drew"
+                            winner = "Drew Battle"
+                        elif (challengerScore < self.score):
+                            battleResult = "Won"
+                            winner = self.username
+                        self.popup.success("Correct, " + battleResult + " your battle against " + self.challengerUsername)
+                        mysqlConnection.updateStudentChallengeQuizScore(int(self.battleID), self.score, winner)
+                        mysqlConnection.removeNotification(self.username, self.notificationMessage)
+                        self.finished = True
+                        return 14
+                    if self.wrongAnswer1_rect.collidepoint(pygame.mouse.get_pos()):
+                        if (challengerScore == self.score):
+                            battleResult = "Drew"
+                            winner = "Drew Battle"
+                        elif (challengerScore > self.score):
+                            battleResult = "Lost"
+                            winner = self.challengerUsername
+                        self.popup.fail("Wrong, " + battleResult + " your battle against " + self.challengerUsername)
+                        mysqlConnection.updateStudentChallengeQuizScore(int(self.battleID), self.score, winner)
+                        mysqlConnection.removeNotification(self.username, self.notificationMessage)
+                        self.finished = True
+                        return 14
+                    if self.wrongAnswer2_rect.collidepoint(pygame.mouse.get_pos()):
+                        if (challengerScore == self.score):
+                            battleResult = "Drew"
+                            winner = "Drew"
+                        elif (challengerScore > self.score):
+                            battleResult = "Lost"
+                            winner = self.challengerUsername
+                        self.popup.fail("Wrong, " + battleResult + " your battle against " + self.challengerUsername)
+                        mysqlConnection.updateStudentChallengeQuizScore(int(self.battleID), self.score, winner)
+                        mysqlConnection.removeNotification(self.username, self.notificationMessage)
+                        self.finished = True
+                        return 14
+                    if self.wrongAnswer3_rect.collidepoint(pygame.mouse.get_pos()):
+                        if (challengerScore == self.score):
+                            battleResult = "Drew"
+                            winner = "Drew"
+                        elif (challengerScore > self.score):
+                            battleResult = "Lost"
+                            winner = self.challengerUsername
+                        self.popup.fail("Wrong, " + battleResult + " your battle against " + self.challengerUsername)
+                        mysqlConnection.updateStudentChallengeQuizScore(int(self.battleID), self.score, winner)
+                        mysqlConnection.removeNotification(self.username, self.notificationMessage)
+                        self.finished = True
+                        return 14
+                    if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
+                        clicksound()
+                        self.finished = True
+                        return 14
+                    
+                else:
+                    correctMessage = "Correct, score saved for current challenge"
+                    wrongMessage = "Wrong, score saved for current challenge"
+                    notificationMessage = self.username + " sent you a challenge"
+                    if self.answer_rect.collidepoint(pygame.mouse.get_pos()):
+                        self.popup.success(correctMessage)
+                        self.score = 100
+                        mysqlConnection.insertStudentChallengeQuizScore(int(self.quiz[0][0]), self.quiz[0][1], self.username, self.score, self.usernameSelectedFromFriendMenu)
+                        mysqlConnection.insertNotification(self.usernameSelectedFromFriendMenu, notificationMessage)
+                        self.finished = True
+                        return 5
+                    if self.wrongAnswer1_rect.collidepoint(pygame.mouse.get_pos()):
+                        self.popup.fail(wrongMessage)
+                        mysqlConnection.insertStudentChallengeQuizScore(int(self.quiz[0][0]), self.quiz[0][1], self.username, self.score, self.usernameSelectedFromFriendMenu)
+                        mysqlConnection.insertNotification(self.usernameSelectedFromFriendMenu, notificationMessage)
+                        self.finished = True
+                        return 5
+                    if self.wrongAnswer2_rect.collidepoint(pygame.mouse.get_pos()):
+                        self.popup.fail(wrongMessage)
+                        mysqlConnection.insertStudentChallengeQuizScore(int(self.quiz[0][0]), self.quiz[0][1], self.username, self.score, self.usernameSelectedFromFriendMenu)
+                        mysqlConnection.insertNotification(self.usernameSelectedFromFriendMenu, notificationMessage)
+                        self.finished = True
+                        return 5
+                    if self.wrongAnswer3_rect.collidepoint(pygame.mouse.get_pos()):
+                        self.popup.fail(wrongMessage)
+                        mysqlConnection.insertStudentChallengeQuizScore(int(self.quiz[0][0]), self.quiz[0][1], self.username, self.score, self.usernameSelectedFromFriendMenu)
+                        mysqlConnection.insertNotification(self.usernameSelectedFromFriendMenu, notificationMessage)
+                        self.finished = True
+                        return 5
+                    if self.backbutton1_position.collidepoint(pygame.mouse.get_pos()):
+                        clicksound()
+                        self.finished = True
+                        return 5
