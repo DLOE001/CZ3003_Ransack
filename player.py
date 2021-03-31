@@ -238,34 +238,28 @@ class Player(pygame.sprite.Sprite):
             for monster in monsters:
                 monster.dead = False
             print("YOU DIED")
-        
-
-    #LEVEL 1 SPAWN POINTS
-    #Origin spawn point
-    def playerRespawn1(self):
-        self.freezePlayer()
-        self.position.x = 0
-        self.rect.x = self.position.x
-        self.position.y = 825
-        self.rect.y = self.position.y
-
-    #When player dies to spike
-    def playerRespawn2(self):
-        self.freezePlayer()
-        self.position.x = 375
-        self.rect.x = self.position.x
-        self.position.y = 525
-        self.rect.y = self.position.y
-
-    #When player dies to water
-    def playerRespawn3(self):
-        self.freezePlayer()
-        self.position.x = 675
-        self.rect.x = self.position.x
-        self.position.y = 525
-        self.rect.y = self.position.y
 
     #Stop all player movements
     def freezePlayer(self):
         self.velocity = pygame.math.Vector2(0, 0)
         self.LEFT_KEY, self.RIGHT_KEY = False, False
+
+    #Teleports player to defined x and y coordinates
+    def teleport(self, x, y):
+        self.freezePlayer()
+        self.position.x = x
+        self.rect.x = self.position.x
+        self.position.y = y
+        self.rect.y = self.position.y
+
+    #LEVEL 1 SPAWN POINTS
+    #Origin spawn point
+    def playerRespawn1(self):
+        self.teleport(0, 825)
+    #When player dies to spike
+    def playerRespawn2(self):
+        self.teleport(375, 525)
+
+    #When player dies to water
+    def playerRespawn3(self):
+        self.teleport(675, 525)

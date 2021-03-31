@@ -66,8 +66,7 @@ class QuizLevel:
         player.position.x, player.position.y = 0, 800
         ################################# GAME LOOP ##########################
         while running:
-            windowmoved = False
-            popupopened = False
+            stopmovement = False
             dt = clock.tick(60) * .001 * TARGET_FPS
             ################################# CHECK PLAYER INPUT #################################
             for event in pygame.event.get():
@@ -79,10 +78,10 @@ class QuizLevel:
                     if event.type == pygame.VIDEOEXPOSE:
                         #Set acceleration to zero to prevent player from disappearing
                         player.acceleration = pygame.math.Vector2(0, 0)
-                        windowmoved = True
+                        stopmovement = True
                     elif event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
-                            popupopened = True
+                            stopmovement = True
                             #Set acceleration to zero to prevent player from disappearing
                             player.acceleration = pygame.math.Vector2(0, 0)
                             if popup.confirmation("Do you want to go back to world select?", "Exit Level"):
@@ -112,10 +111,9 @@ class QuizLevel:
                     if event.type == MOUSEBUTTONDOWN:
                         if cbutton:
                             mousex, mousey = pygame.mouse.get_pos()
-                            player.position.x = mousex
-                            player.position.y = mousey
+                            player.teleport(mousex, mousey)
                         elif redcross_rect.collidepoint(pygame.mouse.get_pos()):
-                            popupopened = True
+                            stopmovement = True
                             clicksound()
                             #Set acceleration to zero to prevent player from disappearing
                             player.acceleration = pygame.math.Vector2(0, 0)
@@ -136,7 +134,7 @@ class QuizLevel:
             ################################# UPDATE/ Animate SPRITE #################################
             player.update(dt, map.tiles, monsters)
             # Set back Y axis acceleration when game window is not moving and popup is not opened
-            if windowmoved == False and popupopened == False:
+            if stopmovement == False:
                 player.acceleration.y = player.gravity
             ################################# DRAW SURFACE OBJECTS #################################
             #Display Background image
