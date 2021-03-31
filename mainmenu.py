@@ -7,6 +7,9 @@ pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 pygame.font.init()
 
+# Import SQL Connection 
+import mysqlConnection
+
 # Mouseover animation(Makes the image transparent if cursor is touching)
 def mouseover(img, pos):
     if pos.collidepoint(pygame.mouse.get_pos()):
@@ -25,7 +28,7 @@ class MainMenu:
         self.user = user
         self.display_surface = display_surface
         self.screen = screen
-
+        self.checkNotification = []
         # Background1 is for the background
         # Popup is for the logout confirmation
         # Buttons 1-6 are function buttons
@@ -52,6 +55,17 @@ class MainMenu:
             self.background1_image = pygame.image.load("images/student_mainmenu.jpg")
             self.background1_position = [0,0]
 
+            self.checkNotification = mysqlConnection.retrieveNotification(self.username)
+            
+            if(len(self.checkNotification) > 0):
+                # circle image
+                self.circle_image = pygame.image.load("images/circle.png")
+                self.circle_image_position = [1126, 44]    
+                
+                # Set notification count text
+                self.notificationCount = pygame.font.SysFont('Courier New', 30).render(str(len(self.checkNotification)), True, (255, 255, 255))
+                self.notificationCount_position = [1142, 54]
+        
             # Set World Select Button
             self.button1_position = pygame.Rect(208, 236, 275, 312)
             
@@ -117,6 +131,12 @@ class MainMenu:
             # Display Student Username
             self.screen.blit(self.studentUsername, self.studentUsername_position)
             
+            if(len(self.checkNotification) > 0):
+                # Display circle for notification
+                self.screen.blit(self.circle_image, self.circle_image_position)
+                # Display notification count
+                self.screen.blit(self.notificationCount, self.notificationCount_position)
+                
         #Main Menu Display for Teacher
         elif self.user == "Teacher":
             #Display background for teacher

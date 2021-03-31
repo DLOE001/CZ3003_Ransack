@@ -10,6 +10,20 @@ from quiz import Quiz
 # Import SQL Connection 
 import mysqlConnection
 
+# Import PopupYesNo
+import popupyesno
+
+# Mouseover animation(Makes the image transparent if cursor is touching)
+def mouseover(img, pos):
+    if pos.collidepoint(pygame.mouse.get_pos()):
+        img.set_alpha(50)
+    else:
+        img.set_alpha(255)
+
+# Click sound
+def clicksound():
+    pygame.mixer.Channel(0).play(pygame.mixer.Sound('audio/Click.wav'), maxtime=2000)
+
 ################################# LOAD UP A BASIC WINDOW AND CLOCK #################################
 pygame.init()
 pygame.display.set_caption("EyeLearnSE")
@@ -23,6 +37,7 @@ class QuizLevel:
         clock = pygame.time.Clock()
         TARGET_FPS = 60
         finished = False
+        popup = popupyesno.PopUpYesNo(window)
         ################################# LOAD SPRITESHEET PLAYER, MONSTERS AND QUIZ ###################################
         level1spritesheet = Spritesheet('level1spritesheet.png')
         player = Player()
@@ -39,6 +54,10 @@ class QuizLevel:
         monsters.append(monster1)
         monsters.append(monster2)
         monsters.append(monster3)
+        
+        #Exit Button
+        redcrossImage = pygame.image.load("images/redcross.png")
+        redcross_rect = redcrossImage.get_rect().move(1135, 15)
         #################################### LOAD THE LEVEL #######################################
         background1_image = pygame.image.load('images/single_background.png')
         map = TileMap('level1.csv', level1spritesheet)
@@ -47,13 +66,16 @@ class QuizLevel:
         ################################# GAME LOOP ##########################
         while running:
             windowmoved = False
+            popupopened = False
             dt = clock.tick(60) * .001 * TARGET_FPS
             ################################# CHECK PLAYER INPUT #################################
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                
+
+                #When yser moves the game window
                 if event.type == pygame.VIDEOEXPOSE:
+                    #Set acceleration to zero to prevent player from disappearing
                     player.acceleration = pygame.math.Vector2(0, 0)
                     windowmoved = True
                 elif event.type == pygame.KEYDOWN:
@@ -77,7 +99,15 @@ class QuizLevel:
                             player.is_jumping = False
         
                 if event.type == MOUSEBUTTONDOWN:
-                    if player.monster != None:
+                    if redcross_rect.collidepoint(pygame.mouse.get_pos()):
+                        popupopened = True
+                        clicksound()
+                        #Set acceleration to zero to prevent player from disappearing
+                        player.acceleration = pygame.math.Vector2(0, 0)
+                        #Exit confirmation popup
+                        if popup.confirmation("Do you want to go back to world select?", "Exit Level"):
+                            return True
+                    elif player.monster != None:
                         player.monster.quiz.attempt(player)
                     elif player.finished:
                         finished = player.victoryAction(username, levelSelected)
@@ -86,12 +116,19 @@ class QuizLevel:
         
             ################################# UPDATE/ Animate SPRITE #################################
             player.update(dt, map.tiles, monsters)
-            # Set back Y axis acceleration when game window is is not moving
-            if windowmoved == False:
+            # Set back Y axis acceleration when game window is not moving and popup is not opened
+            if windowmoved == False and popupopened == False:
                 player.acceleration.y = player.gravity
             ################################# DRAW SURFACE OBJECTS #################################
+            #Display Background image
             canvas.blit(background1_image, [0,0])
+            #Display Exit button
+            canvas.blit(redcrossImage, redcross_rect)
+            #Mouseover animation for exit button
+            mouseover(redcrossImage, redcross_rect)
+            #Draw the level
             map.draw_map(canvas)
+            #Draw player related UI
             player.draw(canvas)
             allmonstersdead = True
             for monster in monsters:

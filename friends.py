@@ -186,7 +186,7 @@ class Friends:
         self.usernameSelected = friendlist[0]
         
         # Set name of current chat
-        self.chat_text = pygame.font.SysFont('Broadway', 40).render(friendlist[0], True, (0, 0, 0))
+        self.chat_text = pygame.font.SysFont('Courier New', 40).render(friendlist[0], True, (0, 0, 0))
         self.chat_text_position = [490 ,193]
 
         self.screen.blit(self.chat_text, self.chat_text_position)
@@ -194,7 +194,7 @@ class Friends:
 
         for v in friendlist:
             # For each friend, set and display the names accordingly
-            self.friend_text1 = pygame.font.SysFont('Broadway', 50).render(v, True, (0, 0, 0))
+            self.friend_text1 = pygame.font.SysFont('Courier New', 50).render(v, True, (0, 0, 0))
 
             # Each names have a interval of y = 112
             self.friend_text1_position = [170 ,214 + index*112]

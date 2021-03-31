@@ -148,17 +148,17 @@ class UploadAssignment:
             # Get filename
             self.filepath = openfile()
             # Set filename to postion
-            self.uploadpathtext = pygame.font.SysFont('Broadway', 30).render(self.filepath, True, (0, 0, 0))
+            self.uploadpathtext = pygame.font.SysFont('Courier New', 25).render(self.filepath, True, (0, 0, 0))
         if self.facebook_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             print("Facebook Button Clicked")
             self.platform = 'facebook'
-            self.platformtext = pygame.font.SysFont('Broadway', 30).render(self.platform, True, (0, 0, 0))
+            self.platformtext = pygame.font.SysFont('Courier New', 20).render(self.platform, True, (0, 0, 0))
         if self.twitter_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             print("Twitter Button Clicked")
             self.platform = 'twitter'
-            self.platformtext = pygame.font.SysFont('Broadway', 30).render(self.platform, True, (0, 0, 0))
+            self.platformtext = pygame.font.SysFont('Courier New', 20).render(self.platform, True, (0, 0, 0))
         if self.uploadassignment_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
             print("Upload Button Clicked")

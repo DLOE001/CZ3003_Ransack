@@ -26,9 +26,9 @@ class Mailbox:
         # Set background
         self.background1_image = pygame.image.load("images/mailbox.jpg")
         self.background1_position = [0,0]
-
+        self.reloadNotification = False
         # Set back button rectangle 
-        self.backbutton1_rect = pygame.Rect(28, 28, 61, 53)
+        self.backbutton1_rect = pygame.Rect(29, 29, 60, 50)
         
         
     def display(self):
@@ -56,6 +56,7 @@ class Mailbox:
                 return 14
         if self.backbutton1_rect.collidepoint(pygame.mouse.get_pos()):
             clicksound()
+            self.reloadNotification = True
             return 0
         else:
             return 14

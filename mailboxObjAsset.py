@@ -53,7 +53,12 @@ class MailboxObjAsset:
         
         # Set Notfication Text
         self.notificationtext1 = pygame.font.SysFont('Courier New', 30).render(self.notificationMessage, True, (0, 0, 0))
-        self.notificationtext1_position = [250,y_axis_offset + self.y_axis + 20]
+        self.notificationtext1_position = [250,y_axis_offset + self.y_axis + 30]
+        
+        # Set line separator
+        self.lineSeparator = pygame.Rect(196, (y_axis_offset + self.y_axis) + 89 , 859, 1)
+        pygame.draw.rect(self.display_surface, (0, 0, 0), self.lineSeparator)
+        
         
     # Popup Display
     def display(self):

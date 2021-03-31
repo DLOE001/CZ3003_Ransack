@@ -193,6 +193,9 @@ while running:
         # Set done = false so to keep page refreshing 
         setattr(friendMenu, 'done', False)
         setattr(uploadAssignment, 'done', False)
+        if(getattr(mailBoxObject, 'reloadNotification')):
+           menu.loadAssets()
+           setattr(mailBoxObject, 'reloadNotification', False)
         menu.display()
     elif state == 1:
         worldSelect.display()
