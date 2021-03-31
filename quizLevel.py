@@ -38,6 +38,7 @@ class QuizLevel:
         TARGET_FPS = 60
         finished = False
         popup = popupyesno.PopUpYesNo(window)
+        cbutton = False
         ################################# LOAD SPRITESHEET PLAYER, MONSTERS AND QUIZ ###################################
         level1spritesheet = Spritesheet('level1spritesheet.png')
         player = Player()
@@ -57,7 +58,7 @@ class QuizLevel:
         
         #Exit Button
         redcrossImage = pygame.image.load("images/redcross.png")
-        redcross_rect = redcrossImage.get_rect().move(1135, 15)
+        redcross_rect = redcrossImage.get_rect().move(1150, 0)
         #################################### LOAD THE LEVEL #######################################
         background1_image = pygame.image.load('images/single_background.png')
         map = TileMap('level1.csv', level1spritesheet)
@@ -73,46 +74,58 @@ class QuizLevel:
                 if event.type == pygame.QUIT:
                     running = False
 
-                #When yser moves the game window
-                if event.type == pygame.VIDEOEXPOSE:
-                    #Set acceleration to zero to prevent player from disappearing
-                    player.acceleration = pygame.math.Vector2(0, 0)
-                    windowmoved = True
-                elif event.type == pygame.KEYDOWN:
-                    if player.monster == None:
-                        if event.key == pygame.K_LEFT:
-                            player.LEFT_KEY = True
-                        elif event.key == pygame.K_RIGHT:
-                            player.RIGHT_KEY = True
-                        elif event.key == pygame.K_SPACE:
-                            player.jump()
-        
-        
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT:
-                        player.LEFT_KEY = False
-                    elif event.key == pygame.K_RIGHT:
-                        player.RIGHT_KEY = False
-                    elif event.key == pygame.K_SPACE:
-                        if player.is_jumping:
-                            player.velocity.y *= .25
-                            player.is_jumping = False
-        
-                if event.type == MOUSEBUTTONDOWN:
-                    if redcross_rect.collidepoint(pygame.mouse.get_pos()):
-                        popupopened = True
-                        clicksound()
+                if player.finished == False:
+                    #When yser moves the game window
+                    if event.type == pygame.VIDEOEXPOSE:
                         #Set acceleration to zero to prevent player from disappearing
                         player.acceleration = pygame.math.Vector2(0, 0)
-                        #Exit confirmation popup
-                        if popup.confirmation("Do you want to go back to world select?", "Exit Level"):
-                            return True
-                    elif player.monster != None:
-                        player.monster.quiz.attempt(player)
-                    elif player.finished:
+                        windowmoved = True
+                    elif event.type == pygame.KEYDOWN:
+                        if player.monster == None:
+                            if event.key == pygame.K_LEFT:
+                                player.LEFT_KEY = True
+                            elif event.key == pygame.K_RIGHT:
+                                player.RIGHT_KEY = True
+                            elif event.key == pygame.K_SPACE:
+                                player.jump()
+                            elif event.key == pygame.K_c:
+                                cbutton = True
+            
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_LEFT:
+                            player.LEFT_KEY = False
+                        elif event.key == pygame.K_RIGHT:
+                            player.RIGHT_KEY = False
+                        elif event.key == pygame.K_SPACE:
+                            if player.is_jumping:
+                                player.velocity.y *= .25
+                                player.is_jumping = False
+                        elif event.key == pygame.K_c:
+                            cbutton = False
+            
+                    if event.type == MOUSEBUTTONDOWN:
+                        if cbutton:
+                            mousex, mousey = pygame.mouse.get_pos()
+                            player.position.x = mousex
+                            player.position.y = mousey
+                        elif redcross_rect.collidepoint(pygame.mouse.get_pos()):
+                            popupopened = True
+                            clicksound()
+                            #Set acceleration to zero to prevent player from disappearing
+                            player.acceleration = pygame.math.Vector2(0, 0)
+                            #Exit confirmation popup
+                            if popup.confirmation("Do you want to go back to world select?", "Exit Level"):
+                                return True
+                        elif player.monster != None:
+                            player.monster.quiz.attempt(player)
+                elif player.finished:
+                    if event.type == MOUSEBUTTONDOWN:
                         finished = player.victoryAction(username, levelSelected)
-                        if finished:
-                            return True
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_RETURN:
+                            finished = True
+                    if finished:
+                        return True
         
             ################################# UPDATE/ Animate SPRITE #################################
             player.update(dt, map.tiles, monsters)
